@@ -67,4 +67,31 @@ public class Ennemi {
     public int dmg() {
     	return this.dmg;
     }
+    
+    @Override
+    public int hashCode() {
+    	return Objects.hash(nom,hp,intentions,dmg,block,tendanceATTACK,tendanceBUFF,tendanceDEFEND,tendanceHEAL,tendanceSKILL);
+    }
+    
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	return super.toString();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	return obj instanceof Ennemi e &&
+    			this.intentions.equals(e.intentions) &&
+    			this.nom.equals(e.nom) &&
+    			this.hp.equals(e.hp) &&
+    			this.dmg==e.dmg &&
+    			this.block==e.block &&
+    			this.tendanceATTACK==e.tendanceATTACK &&
+    			this.tendanceBUFF==e.tendanceBUFF &&
+    			this.tendanceDEFEND==e.tendanceDEFEND &&
+    			this.tendanceHEAL==e.tendanceHEAL &&
+    			this.tendanceSKILL==e.tendanceSKILL;
+    }
+    
 }

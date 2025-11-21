@@ -32,5 +32,12 @@ public  class Hp {
     public int max() { 
     	return maxHp; 
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	return obj instanceof Hp h &&
+    			this.maxHp==h.maxHp &&
+    			this.hp==h.hp;
+    }
 }
 
