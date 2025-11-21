@@ -4,14 +4,18 @@ import java.io.*;
 
 class Combat {
     private final Hero hero;
-    private final HashMap<Integerte,Ennemi> ennemis;
+    private final List<Ennemi> ennemis;
 
-    public Combat(Hero h, Map<Integerte,Ennemi e>) {
+    public Combat(Hero h, List<Ennemi> e) {
         this.hero = h;
         this.ennemis = e;
     }
     
-    public HashMap<Integerte,Ennemi> getEnnemis() {
+    public Ennemi getEnnemi(int index) {
+    	return ennemis.get(index);
+    }
+    
+    public List<Ennemi> getEnnemis(int index) {
     	return ennemis;
     }
     
@@ -24,7 +28,7 @@ class Combat {
     }
 
     public void tourEnnemis() {
-    	for (Ennemi e: ennemis) {
+    	for (var e:ennemis) {
     		if (!e.estMort()) {
     			EnnemyActionType a = e.choisirIntent(hero);
     			// a.executer()
