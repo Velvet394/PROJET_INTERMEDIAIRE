@@ -1,5 +1,7 @@
 package modelisation;
 
+import java.util.Objects;
+
 public  class Hp {
     private int maxHp;
     private int hp;
@@ -38,6 +40,12 @@ public  class Hp {
     	return obj instanceof Hp h &&
     			this.maxHp==h.maxHp &&
     			this.hp==h.hp;
+    }
+    
+    @Override
+    public int hashCode() {
+    	// TODO Auto-generated method stub
+    	return Objects.hash(hp,maxHp);
     }
 }
 

@@ -27,10 +27,10 @@ class Combat {
     	hero.rechargerCombat();
     }
 
-    public void tourEnnemis() {
+    public void tourEnnemis(Random random) {
     	for (var e:ennemis) {
     		if (!e.estMort()) {
-    			EnnemyActionType a = e.choisirIntent(hero);
+    			EnnemyActionType a = e.choisirIntent(hero,random);
     			// a.executer()
     		}
     	}

@@ -15,7 +15,7 @@ public class Ennemi {
     //private final int tendanceCURSE;
     private final int tendanceBUFF;
 
-    public Ennemi(String nom, int pv, int d ,List<EnnemyActionType> skills,int att,int sk,int def, int heal,/*int cur,*/int buf) {
+    public Ennemi(String nom, int pv, int d ,/*List<EnnemyActionType> skills,*/int att,int sk,int def, int heal,/*int cur,*/int buf) {
     	Objects.requireNonNull(nom);
     	Objects.requireNonNull(skills);
     	if(pv<=0||d<0||att<0||sk<0||def<0||heal<0||/*cur<0||*/buf<0) {
@@ -23,7 +23,7 @@ public class Ennemi {
     	}
         this.nom = nom;
         this.hp = new Hp(pv);
-        this.intentions = skills;
+        this.intentions = /*skills;*/new ArrayList<>();
         this.block = 0;
         this.dmg=d;
         tendanceATTACK=att;
