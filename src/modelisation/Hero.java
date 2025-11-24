@@ -77,6 +77,36 @@ class Hero {
     public void use(int val) { 
     	mana = Math.max(0, mana - val); 
     }
+    
+    public boolean ifcost(int cost) {
+    	if(energie<cost) {
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public void cost(int cost) {
+    	if(energie<cost) {
+    		return;
+    	}
+    	energie-=cost;
+    }
+    
+    private void defend(int b) { 
+    	if(b<0){
+    		throw new IllegalArgumentException("Hero defend error");
+    	}
+        block += b;
+    }
+    
+    public void charge(int m) {
+    	if(m<0) {
+    		throw new IllegalArgumentException("charge argument error");
+    	}
+    	hp = Math.min(maxHp, hp + m); 
+    	
+    }
+    
     /*public void damage(int dmg) { 
     	hp.damage(dmg); 
     }

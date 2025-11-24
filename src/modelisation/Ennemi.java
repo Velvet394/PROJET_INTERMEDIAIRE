@@ -27,7 +27,7 @@ public class Ennemi {
     public Ennemi(String nom, int pv, int d ,/*List<EnnemyActionType> skills,*/int b,int h, int att,int sk,int def, int heal,/*int cur,*/int buf) {
     	Objects.requireNonNull(nom);
     	//Objects.requireNonNull(skills);
-    	if(pv<=0||d<0||att<0||sk<0||def<0||heal<0||/*cur<0||*/buf<0) {
+    	if(pv<=0||b<0||h<0||d<0||att<0||sk<0||def<0||heal<0||/*cur<0||*/buf<0) {
     		throw new IllegalArgumentException("Argument(s) de ennemi est/sont inferieur que 0");
     	}
         this.nom = nom;
@@ -124,6 +124,7 @@ public class Ennemi {
     }
     
     public void executerAction(Hero hero) {
+    	Objects.requireNonNull(hero);
         for(var i:intentions) {
         	switch (i) {
             case ATTACK:
@@ -153,6 +154,7 @@ public class Ennemi {
     }
     
     private void attack(Hero hero) {
+    	Objects.requireNonNull(hero);
         if (!estMort()) {
             hero.damage(this.dmg);
             IO.println(nom + " attaque et inflige " + dmg + " points de dégât.");
@@ -178,6 +180,7 @@ public class Ennemi {
     }
     
     private void curse(Hero hero) {
+    	Objects.requireNonNull(hero);
         int curseStrength = 1;
         hero.addMalediction(curseStrength);
         IO.println(nom + " applique une malédiction au héros.");
@@ -209,7 +212,7 @@ public class Ennemi {
     
     @Override
     public int hashCode() {
-    	return Objects.hash(nom,hp,intentions,dmg,block,tendanceATTACK,tendanceBUFF,tendanceDEFEND,tendanceHEAL,tendanceSKILL);
+    	return Objects.hash(nom,hp,blockPoint,healPoint,maxHp,intentions,dmg,block,tendanceATTACK,tendanceBUFF,tendanceDEFEND,tendanceHEAL,tendanceSKILL);
     }
     
     @Override
@@ -228,6 +231,8 @@ public class Ennemi {
     			this.maxHp==e.maxHp &&
     			this.dmg==e.dmg &&
     			this.block==e.block &&
+    			this.blockPoint==e.blockPoint &&
+    			this.healPoint==e.healPoint &&
     			this.tendanceATTACK==e.tendanceATTACK &&
     			this.tendanceBUFF==e.tendanceBUFF &&
     			this.tendanceDEFEND==e.tendanceDEFEND &&

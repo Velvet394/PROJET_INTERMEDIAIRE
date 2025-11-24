@@ -15,7 +15,7 @@ class Combat {
     	return ennemis.get(index);
     }
     
-    public List<Ennemi> getEnnemis(int index) {
+    public List<Ennemi> getEnnemis() {
     	return ennemis;
     }
     
