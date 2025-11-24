@@ -14,6 +14,6 @@ public class Effect_Def implements Effect {
 	@Override
 	public void apply(Hero h, Ennemi e, Combat c) {
 		// TODO Auto-generated method stub
-		
+		h.defend(blockPoint);
 	}
 }

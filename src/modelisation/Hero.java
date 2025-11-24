@@ -73,6 +73,13 @@ class Hero {
     public void recharge() { 
     	mana = maxMana; 
     }
+    
+    public boolean ifuse(int cost) {
+    	if(mana<cost) {
+    		return false;
+    	}
+    	return true;
+    }
 
     public void use(int val) { 
     	mana = Math.max(0, mana - val); 
@@ -89,10 +96,10 @@ class Hero {
     	if(energie<cost) {
     		return;
     	}
-    	energie-=cost;
+    	mana = Math.max(0, mana - cost);
     }
     
-    private void defend(int b) { 
+    public void defend(int b) { 
     	if(b<0){
     		throw new IllegalArgumentException("Hero defend error");
     	}

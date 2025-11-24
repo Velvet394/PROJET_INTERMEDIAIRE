@@ -3,10 +3,9 @@ import java.util.*;
 import java.io.*;
 
 class Backpack {
-    private final Map<Coord, Item> contenu = new HashMap<>();
+    private final Map<Coord, TheItem> contenu = new HashMap<>();
     private int width = 7;
     private int height = 5;
-
     public void initialiser15Cases() {
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 3; y++) {
@@ -33,7 +32,7 @@ class Backpack {
         }
     }
     
-    public boolean peutPlacerMalediction(Item item) {
+    public boolean peutPlacerMalediction(TheItem item) {
     	Objects.requireNonNull(item);
     	
     	if (item.estMalediction()) {
@@ -47,7 +46,7 @@ class Backpack {
 		return false;
     }
     
-    public void ajouterMalediction(Item item) {
+    public void ajouterMalediction(TheItem item) {
     	if (peutPlacerMalediction(item) == false) {
     		throw new IllegalArgumentException();
     	}
@@ -60,7 +59,7 @@ class Backpack {
  	   width += 1;
     }
 
-    public Map<Coord, Item> contenu() { 
+    public Map<Coord, TheItem> contenu() { 
     	return contenu; 
     }
 
