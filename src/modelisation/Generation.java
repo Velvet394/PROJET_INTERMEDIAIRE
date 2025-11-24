@@ -7,9 +7,9 @@ import java.util.Random;
 public class Generation {
 	public List<Ennemi> genererEnnemis(Random r){
 		Objects.requireNonNull(r);
-		var num=r.nextInt(10);//nombres des ennemis max
+		var num=r.nextInt(10);//nombres des ennemis max ss
 		for(int i=0;i<num;i++) {
-			
+			s
 		}
 	}
 	
