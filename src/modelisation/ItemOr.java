@@ -1,4 +1,4 @@
-package modelisation;
+/*package modelisation;
 
 import java.util.List;
 
@@ -19,3 +19,4 @@ public class ItemOr extends Item {
     	return quantite; 
     }
 }
+*/

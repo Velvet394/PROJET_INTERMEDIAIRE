@@ -26,5 +26,17 @@ public class ItemMaldiction implements Item {
 		// TODO Auto-generated method stub
 		return offsetCoord;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    return o instanceof ItemMaldiction other
+	    		&& Objects.equals(forme, other.forme)
+	            && Objects.equals(offsetCoord, other.offsetCoord);
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(forme, offsetCoord);
+	}
 }
 

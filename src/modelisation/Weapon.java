@@ -62,8 +62,8 @@ public class Weapon implements Item {
 	    		cost == weapon.cost &&
 	            mana == weapon.mana &&
 	            estConsommable == weapon.estConsommable &&
-	            Objects.equals(name, weapon.name) &&
-	            Objects.equals(forme, weapon.forme) &&
+	            name.equals(weapon.name) &&
+	            forme.equals(weapon.forme) &&
 	            Objects.equals(effects, weapon.effects) &&
 	            Objects.equals(offsetCoord, weapon.offsetCoord);
 	 }
