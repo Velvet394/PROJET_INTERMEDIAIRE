@@ -27,8 +27,15 @@ class Hero {
         sac.initialiser15Cases();
     }
     
-    public void damage(int dmg) { 
-    	hp = Math.max(0, hp - dmg); 
+    public void damage(int dmg) {
+    	var res=block-dmg;
+    	if(res>0) {
+    		this.block=res;
+    		return;
+    	}
+    	hp = Math.max(0, hp + block - dmg);
+    	block = 0;
+    	return;
     }
 
     public void heal(int val) { 
@@ -82,12 +89,18 @@ class Hero {
     	exp.add(v); 
     }*/
 
-    public void rechargerCombat() {
+    public void startCombat() {
         recharge();
         energie = 3;
     }
+    
+    public void rechargerCombat() {
+        energie = 3;
+    }
+    
     public void addMalediction(int n) {
     	foisMalediction += n;
+    	
     	IO.println("Le hero a subi " + foisMalediction + " de malédictions.");
     }
 

@@ -30,16 +30,17 @@ class Combat {
     public void tourEnnemis(Random random) {
     	for (var e:ennemis) {
     		if (!e.estMort()) {
-    			EnnemyActionType a = e.choisirIntent(hero,random);
+    			//EnnemyActionType a = e.choisirIntent(hero,random);
     			// a.executer()
-    			e.executerAction(hero, a);
+    			e.Action();
+    			e.executerAction(hero);
     		}
     	}
     }
     
     public boolean estCombatTermine() {
         
-        if (hero.hp().isDead()) {
+        if (hero.isDead()) {
             IO.println("Le héros est mort ! Le combat est terminé.");
             return true;
         }
