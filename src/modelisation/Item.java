@@ -16,6 +16,16 @@ public abstract class Item {
     public List<Coord> forme() { return forme; }
 
     public abstract void utiliser(Hero hero, Combat combat);
+    
+    public boolean estMalediction() {
+		return switch(nom) {
+			case "Anneau de la bête" -> true;
+			case "Anneau corrompu" -> true;
+			case "Batterie Maudite" -> true;
+			case "Main maléfique" -> true;
+			default -> false;
+		};
+	}
 
 	public boolean estConsommable() {
 		// TODO Auto-generated method stub

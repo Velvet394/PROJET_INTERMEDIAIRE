@@ -32,8 +32,32 @@ class Combat {
     		if (!e.estMort()) {
     			EnnemyActionType a = e.choisirIntent(hero,random);
     			// a.executer()
+    			e.executerAction(hero, a);
     		}
     	}
+    }
+    
+    public boolean estCombatTermine() {
+        
+        if (hero.hp().isDead()) {
+            IO.println("Le héros est mort ! Le combat est terminé.");
+            return true;
+        }
+
+        boolean tousEnnemisMorts = true;
+        for (Ennemi e : ennemis) {
+            if (!e.estMort()) {
+                tousEnnemisMorts = false;
+                break;
+            }
+        }
+
+        if (tousEnnemisMorts) {
+            IO.println("Tous les ennemis sont morts ! Vous avez gagné.");
+            return true;
+        }
+
+        return false; 
     }
 }
 

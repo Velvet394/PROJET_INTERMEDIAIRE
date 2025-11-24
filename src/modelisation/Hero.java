@@ -11,9 +11,10 @@ class Hero {
     private int hp=20;
     private int maxHp=20;
     private int mana=20;
-    private int mqxMana=20;
+    private int maxMana=20;
     private int exp=0;
     private int expMax=10;
+    private int block=0;
 
     private int energie = 3;
     private int niveau = 1;
@@ -42,9 +43,10 @@ class Hero {
     	return hp > 0; 
     }
     
+    /*
     public int current() { 
     	return hp; 
-    }
+    }*/
 
     public int max() { 
     	return maxHp; 
@@ -81,7 +83,7 @@ class Hero {
     }*/
 
     public void rechargerCombat() {
-        mana.recharge();
+        recharge();
         energie = 3;
     }
     public void addMalediction(int n) {
@@ -95,6 +97,21 @@ class Hero {
     
     public Backpack getBackpack() { 
     	return sac; 
+    }
+    
+    public int hp() {
+    	return hp;
+    }
+    public int maxHp() {
+    	return hp;
+    }
+    
+    public int mana() {
+    	return mana;
+    }
+    
+    public int maxMana() {
+    	return maxMana;
     }
 
     public void ajouterDansSac(Item item) {

@@ -32,12 +32,43 @@ class Backpack {
             contenu.put(abs, item);
         }
     }
+    
+    public boolean peutPlacerMalediction(Item item) {
+    	Objects.requireNonNull(item);
+    	
+    	if (item.estMalediction()) {
+    		for (Coord c : item.forme()) {
+    			if (!contenu.containsKey(c)) return false;
+    			if (contenu.get(c) != null) return false;
+    		}
+    		
+    		return true;
+    	}
+		return false;
+    }
+    
+    public void ajouterMalediction(Item item) {
+    	if (peutPlacerMalediction(item) == false) {
+    		throw new IllegalArgumentException();
+    	}
+    	for (Coord c: item.forme()) {
+    		contenu.putIfAbsent(c, item);
+    	}
+    }
+    
+    public void augmenterCapaciteBag() {
+ 	   width += 1;
+    }
 
     public Map<Coord, Item> contenu() { 
     	return contenu; 
     }
 
-	public void retirerItem(Potion potion) {
-		// TODO Auto-generated method stub
+    public void retirerItem(Item item) {
+		for (Coord c : item.forme()) {
+	        if (contenu.get(c) == item) {
+	            contenu.put(c, null);  
+	        }
+	    }
 	}
 }

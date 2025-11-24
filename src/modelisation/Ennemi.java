@@ -4,7 +4,9 @@ import java.io.*;
 
 public class Ennemi {
     private final String nom;
-    private final Hp hp;
+    //private final Hp hp;
+    private int hp;
+    private final int maxHp;
     private final int dmg;
     private int block;
     private final ArrayList<EnnemyActionType> intentions;
@@ -19,10 +21,11 @@ public class Ennemi {
     	Objects.requireNonNull(nom);
     	//Objects.requireNonNull(skills);
     	if(pv<=0||d<0||att<0||sk<0||def<0||heal<0||/*cur<0||*/buf<0) {
-    		throw new IllegalArgumentException("Hp/DMG de ennemi est inferieur que 0");
+    		throw new IllegalArgumentException("Argument(s) de ennemi est/sont inferieur que 0");
     	}
         this.nom = nom;
-        this.hp = new Hp(pv);
+        this.hp = pv;
+        maxHp=pv;
         this.intentions = /*skills;*/new ArrayList<>();
         this.block = 0;
         this.dmg=d;
@@ -35,11 +38,11 @@ public class Ennemi {
     }
 
     public boolean estMort() { 
-    	return hp.isDead(); 
+    	return hp<=0; 
     }
 
     public EnnemyActionType choisirIntent(Hero hero,Random r) {
-    	if (this.hp.current() <= this.hp.max()/2) {
+    	if (hp <= maxHp/2) {
     		if(r.nextInt(101)<=tendanceHEAL)
     			{return EnnemyActionType.HEAL;}
     		else if(r.nextInt(101)<=tendanceDEFEND) {
@@ -60,8 +63,41 @@ public class Ennemi {
     	return EnnemyActionType.CURSE;
     	} 
 
-    public Hp getHp() { 
+    public int hp() { 
     	return hp; 
+    }
+    
+    public void executerAction(Hero hero, EnnemyActionType action) {
+        switch (action) {
+            case ATTACK:
+                attack(hero);
+                break;
+            case DEFEND:
+                defend();
+                break;
+            case HEAL:
+                heal();
+                break;
+            case CURSE:
+                curse(hero);
+                break;
+            case BUFF:
+                buff();
+                break;
+            case SKILL:
+                skill();
+                break;
+            default:
+                throw new IllegalArgumentException("Action inconnue : " + action);
+        }
+    }
+    
+    private void attack(Hero hero) {
+        int damage = 10;
+        if (!estMort()) {
+            hero.damage(damage);
+            IO.println(nom + " attaque et inflige " + damage + " points de dégât.");
+        }
     }
     
     public int dmg() {
@@ -84,7 +120,9 @@ public class Ennemi {
     	return obj instanceof Ennemi e &&
     			this.intentions.equals(e.intentions) &&
     			this.nom.equals(e.nom) &&
-    			this.hp.equals(e.hp) &&
+    			//this.hp.equals(e.hp) &&
+    			this.hp==e.hp &&
+    			this.maxHp==e.maxHp &&
     			this.dmg==e.dmg &&
     			this.block==e.block &&
     			this.tendanceATTACK==e.tendanceATTACK &&
