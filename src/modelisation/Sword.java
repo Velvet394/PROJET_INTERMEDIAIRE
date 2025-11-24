@@ -1,4 +1,4 @@
-package modelisation;
+/*package modelisation;
 import java.util.*;
 import java.io.*;
 
@@ -17,4 +17,4 @@ class Sword extends Item {
             e.getHp().damage(6);
         }
     }
-}
+}*/

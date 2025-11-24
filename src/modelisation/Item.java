@@ -1,4 +1,14 @@
 package modelisation;
+
+import java.util.List;
+
+public interface Item {
+	List<Coord> forme();
+	Coord offsetCoord();
+}
+
+
+/*package modelisation;
 import java.util.*;
 import java.io.*;
 
@@ -32,4 +42,4 @@ public abstract class Item {
 		return false;
 	}
 }
-
+*/

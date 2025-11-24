@@ -3,7 +3,7 @@ import java.util.*;
 import java.io.*;
 
 class Backpack {
-    private final Map<Coord, TheItem> contenu = new HashMap<>();
+    private final Map<Coord, Item> contenu = new HashMap<>();
     private int width = 7;
     private int height = 5;
     public void initialiser15Cases() {
@@ -32,21 +32,44 @@ class Backpack {
         }
     }
     
-    public boolean peutPlacerMalediction(TheItem item) {
+    //hero.getBackpack().contenu().entrySet().removeIf(entry -> entry.getValue()==this);
+    
+    public void PlacerMalediction(Item item,Coord base) {
     	Objects.requireNonNull(item);
-    	
-    	if (item.estMalediction()) {
+    	if(!peutPlacerMalediction(item,base)) {
+    		throw new IllegalArgumentException("error");
+    	}
+    	ArrayList<Item> list=new ArrayList<>();
+    	//if (item.estMalediction()) {
     		for (Coord c : item.forme()) {
-    			if (!contenu.containsKey(c)) return false;
-    			if (contenu.get(c) != null) return false;
+    			Coord abs = new Coord(base.x() + c.x(), base.y() + c.y());
+    			if (contenu.containsKey(abs)) {
+    				var res=contenu.get(abs);
+    				if (!list.contains(res)) {
+    					list.add(contenu.get(abs));
+    				}
+    			}
+    		}
+    		for(var i:list) {
+    			contenu().entrySet().removeIf(entry -> entry.getValue()==i);
+    		}
+    		
+    	//}
+    }
+
+    public boolean peutPlacerMalediction(Item item,Coord base) {
+    	Objects.requireNonNull(item);
+    	//if (item.estMalediction()) {
+    		for (Coord c : item.forme()) {
+    			Coord abs = new Coord(base.x() + c.x(), base.y() + c.y());
+    			if (!contenu.containsKey(abs)) return false;
     		}
     		
     		return true;
-    	}
-		return false;
+    	//}
     }
-    
-    public void ajouterMalediction(TheItem item) {
+    /*
+    public void ajouterMalediction(Item item) {
     	if (peutPlacerMalediction(item) == false) {
     		throw new IllegalArgumentException();
     	}
@@ -54,12 +77,12 @@ class Backpack {
     		contenu.putIfAbsent(c, item);
     	}
     }
-    
+    */
     public void augmenterCapaciteBag() {
  	   width += 1;
     }
 
-    public Map<Coord, TheItem> contenu() { 
+    public Map<Coord, Item> contenu() { 
     	return contenu; 
     }
 

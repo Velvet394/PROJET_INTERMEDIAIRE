@@ -1,4 +1,4 @@
-package modelisation;
+/*package modelisation;
 
 import java.util.List;
 
@@ -18,4 +18,4 @@ public class Armor extends Item{
 	@Override
 	public void utiliser(Hero hero, Combat combat) {
 	}
-}
+}*/

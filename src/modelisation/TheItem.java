@@ -1,5 +1,7 @@
 package modelisation;
 
-public interface TheItem {
+import java.util.List;
 
+public interface TheItem {
+	List<Coord> forme();
 }

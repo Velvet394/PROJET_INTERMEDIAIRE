@@ -1,4 +1,4 @@
-package modelisation;
+/*package modelisation;
 import java.util.*;
 
 public class Shield extends Item {
@@ -15,3 +15,4 @@ public class Shield extends Item {
         hero.heal(0);
     }
 }
+*/
