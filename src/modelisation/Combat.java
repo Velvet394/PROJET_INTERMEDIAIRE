@@ -45,7 +45,7 @@ class Combat {
     }
     
     public void RefreshListEnnemis() { // l'appliquer chaque action de hero et ennemi
-    	var list=new ArrayList<Integer>();
+    	/*var list=new ArrayList<Integer>();
     	int index=0;
     	for (Ennemi e : ennemis) {
     		if(e.estMort()) {
@@ -55,7 +55,8 @@ class Combat {
     	}
     	for(var i:list) {
     		ennemis.remove(i);
-    	}
+    	}*/
+    	ennemis.removeIf(Ennemi::estMort);
     }
     
     public int estCombatTermine() {

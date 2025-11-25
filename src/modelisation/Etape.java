@@ -4,14 +4,26 @@ import java.io.*;
 
 public class Etape {
     private final Map<Coord, Room> salles;
+    private final List<Room> sallesNeighborNonVisite;
     
     public Etape() {
     	salles = new HashMap<>();
+    	sallesNeighborNonVisite=new ArrayList<>();
     }
     
     public Etape(Map<Coord, Room> s) {
+    	Objects.requireNonNull(s);
 		salles = new HashMap<>(s);
+		sallesNeighborNonVisite=new ArrayList<>();
 	}
+    
+    public void RefreshListNeighbor() {
+    	var list=new ArrayList<Room>();
+    	sallesNeighborNonVisite.clear();
+    	for(var i:salles.entrySet()) {
+    		
+    	}
+    }
     
     public void ajouterSalle(Coord c, Room s) {
         salles.put(c, s);

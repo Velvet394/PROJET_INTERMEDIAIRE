@@ -54,10 +54,10 @@ class Hero {
     public int current() { 
     	return hp; 
     }*/
-
+/*
     public int max() { 
     	return maxHp; 
-    }
+    }*/
     
     public void activateProtection() {
     	estProteger = true;
@@ -70,6 +70,7 @@ class Hero {
     public boolean estProteger() {
     	return estProteger;
     }
+    
     public void recharge() { 
     	mana = maxMana; 
     }
@@ -96,7 +97,7 @@ class Hero {
     	if(energie<cost) {
     		return;
     	}
-    	mana = Math.max(0, mana - cost);
+    	mana = Math.max(0, energie - cost);
     }
     
     public void defend(int b) { 
@@ -110,7 +111,7 @@ class Hero {
     	if(m<0) {
     		throw new IllegalArgumentException("charge argument error");
     	}
-    	hp = Math.min(maxHp, hp + m); 
+    	hp = Math.min(maxMana, mana + m); 
     	
     }
     
@@ -153,7 +154,7 @@ class Hero {
     	return hp;
     }
     public int maxHp() {
-    	return hp;
+    	return maxHp;
     }
     
     public int mana() {
