@@ -1,16 +1,18 @@
 package modelisation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
 public class Generation {
-	public List<Ennemi> genererEnnemis(Random r){
-		Objects.requireNonNull(r);
-		var num=r.nextInt(10);//nombres des ennemis max
+	public List<Ennemi> genererEnnemis(){
+		var num=Dice.roll(1, 5);//nombres des ennemis max [1,5] tous inclus
+		ArrayList<Ennemi> list=new ArrayList<>();
 		for(int i=0;i<num;i++) {
-			s
+			list.add(new Ennemi(ennemisBase.templates.get(Dice.roll(0, ennemisBase.NUMENN-1))));
 		}
+		return list;
 	}
 	
 	public List<Item> genererItems(){}
