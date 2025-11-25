@@ -165,6 +165,8 @@ class Hero {
     }
     
     public void tresor(List<Item> list) {}
+    
+    public void afficheAnduse() {}
 
     public void ajouterDansSac(Item item) {
         // TODO: gestion rotation, placement

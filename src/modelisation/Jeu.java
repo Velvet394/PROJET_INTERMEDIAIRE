@@ -11,6 +11,8 @@ public class Jeu {
         this.hero = new Hero();
         this.donjon = new Donjon();
     }
+    
+    public static void jeuTermine() {}
 
     public void deplacerHero(Coord vers) {
     	

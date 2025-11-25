@@ -24,10 +24,14 @@ class Combat {
     }
 
     public void tourHero() {
+    	boolean termine=false; // ATTENTION!!! quand on clique termine round, il est mettre en true
     	hero.rechargerCombat();
+    	while(!termine) {
+    		hero.afficheAnduse();//fonction pour affiche en graphique et choisir item
+    	}
     }
 
-    public void tourEnnemis(Random random) {
+    public void tourEnnemis() {
     	for (var e:ennemis) {
     		if (!e.estMort()) {
     			//EnnemyActionType a = e.choisirIntent(hero,random);
@@ -38,30 +42,51 @@ class Combat {
     	}
     }
     
-    public boolean estCombatTermine() {
+    public void RefreshListEnnemis() { // l'appliquer chaque action de hero et ennemi
+    	var list=new ArrayList<Integer>();
+    	int index=0;
+    	for (Ennemi e : ennemis) {
+    		if(e.estMort()) {
+    			list.add(index);
+    		}
+    		index++;
+    	}
+    	for(var i:list) {
+    		ennemis.remove(i);
+    	}
+    }
+    
+    public int estCombatTermine() {
         
         if (hero.isDead()) {
             IO.println("Le héros est mort ! Le combat est terminé.");
-            return true;
+            Jeu.jeuTermine();
+            return 3;
         }
-
-        boolean tousEnnemisMorts = true;
-        for (Ennemi e : ennemis) {
-            if (!e.estMort()) {
-                tousEnnemisMorts = false;
-                break;
-            }
+        if(ennemis.isEmpty()) {
+        	return 2;
         }
-
-        if (tousEnnemisMorts) {
-            IO.println("Tous les ennemis sont morts ! Vous avez gagné.");
-            return true;
-        }
-
-        return false; 
+        return 1; 
     }
     
-    public void startCombat() {}
+    public void startCombat() {
+    	var state=CombatState.HERO_TURN;
+    	while (state != CombatState.FINISHED) {
+    	    switch (state) {
+    	        case HERO_TURN -> {
+    	            tourHero();
+    	            if (estCombatTermine()==2) state = CombatState.FINISHED;
+    	            else state = CombatState.ENEMY_TURN;
+    	        }
+    	        case ENEMY_TURN -> {
+    	            tourEnnemis();
+    	            if (estCombatTermine()==2) state = CombatState.FINISHED;
+    	            else state = CombatState.HERO_TURN;
+    	        }
+    	    }
+    	}
+    	hero.tresor(Generation.genererItems());
+    }
     
 }
 

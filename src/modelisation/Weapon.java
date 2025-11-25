@@ -66,6 +66,15 @@ public class Weapon implements Item {
 		 }
 	 }
 	 
+	 public void rotation() {
+		 var list=new ArrayList<Coord>();
+		 for(var i:forme) {
+			 list.add(new Coord(i.y(),-i.x()));
+		 }
+		 forme.clear();
+		 forme.addAll(list);
+	 }
+	 
 	 
 	 
 	 @Override

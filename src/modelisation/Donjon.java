@@ -10,4 +10,8 @@ public class Donjon {
     }
 
     public Etape getEtape(int num) { return etapes.get(num); }
+    
+    public Map<Integer, Etape> etapes() {
+    	return etapes;
+    }
 }
