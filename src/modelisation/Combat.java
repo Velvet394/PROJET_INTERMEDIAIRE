@@ -28,6 +28,7 @@ class Combat {
     	hero.rechargerCombat();
     	while(!termine) {
     		hero.afficheAnduse();//fonction pour affiche en graphique et choisir item
+    		RefreshListEnnemis();
     	}
     }
 
@@ -38,6 +39,7 @@ class Combat {
     			// a.executer()
     			e.Action();
     			e.executerAction(hero);
+    			RefreshListEnnemis();
     		}
     	}
     }
