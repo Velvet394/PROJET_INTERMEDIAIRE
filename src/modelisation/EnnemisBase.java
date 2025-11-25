@@ -3,7 +3,7 @@ package modelisation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ennemisBase {
+public class EnnemisBase {
 	public static final List<Ennemi> templates = new ArrayList<>();
 	public static final int NUMENN = 3;
 

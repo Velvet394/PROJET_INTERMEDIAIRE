@@ -10,10 +10,10 @@ public class Generation {
 		var num=Dice.roll(1, 5);//nombres des ennemis max [1,5] tous inclus
 		ArrayList<Ennemi> list=new ArrayList<>();
 		for(int i=0;i<num;i++) {
-			list.add(new Ennemi(ennemisBase.templates.get(Dice.roll(0, ennemisBase.NUMENN-1))));
+			list.add(new Ennemi(EnnemisBase.templates.get(Dice.roll(0, EnnemisBase.NUMENN-1))));
 		}
 		return list;
 	}
 	
-	public List<Item> genererItems(){}
+	//public List<Item> genererItems(){}
 }

@@ -1,5 +1,5 @@
 package modelisation;
 
-public class Enter_Combat implements Enter {
+//public class Enter_Combat implements Enter {
 	
-}
+//}
