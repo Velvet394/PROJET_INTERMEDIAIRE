@@ -1,8 +1,7 @@
 package controller;
 
-public class TestZen implements GameView {
-
-    private SimpleGameData gameData;   // Données du jeu (modèle)
+public class TestZen implements GameView{
+	private SimpleGameData gameData;   // Données du jeu (modèle)
     private ZenCanvas canvas;          // Le canevas Zen pour dessiner
 
     // Constructeur
