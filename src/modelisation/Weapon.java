@@ -1,5 +1,6 @@
 package modelisation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,12 +14,24 @@ public class Weapon implements Item {
 	private Coord offsetCoord=new Coord(0,0);
 	
 	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e) {
+		Objects.requireNonNull(f);
+		Objects.requireNonNull(e);
 		name=n;
 		cost=c;
 		mana=m;
 		estConsommable=b;
-		forme=f;
-		effects=e;
+		forme=new ArrayList<>(Objects.requireNonNull(f));
+		effects=new ArrayList<>(Objects.requireNonNull(e));
+	}
+	
+	public Weapon(Weapon w) {
+		Objects.requireNonNull(w);
+		name=w.name;
+		cost=w.cost;
+		mana=w.mana;
+		estConsommable=w.estConsommable;
+		forme=new ArrayList<>(Objects.requireNonNull(w.forme));
+		effects=new ArrayList<>(Objects.requireNonNull(w.effects));
 	}
 	
 	 public String nom() { return name; }
@@ -78,6 +91,13 @@ public class Weapon implements Item {
 		// TODO Auto-generated method stub
 		return offsetCoord;
 	}
+	 
+	 /*
+	 @Override
+	public void Item(Item i) {
+		// TODO Auto-generated method stub
+		
+	}*/
 	 
 	    
 }

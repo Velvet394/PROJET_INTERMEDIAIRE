@@ -15,5 +15,12 @@ public class Generation {
 		return list;
 	}
 	
-	//public List<Item> genererItems(){}
+	public List<Item> genererItems(){
+		var num=Dice.roll(1, 3);//nombres des tresor max [1,5] tous inclus
+		ArrayList<Item> list=new ArrayList<>();
+		for(int i=0;i<num;i++) {
+			list.add(new Weapon(ItemBase.templates.get(Dice.roll(0, ItemBase.NUMITM-1))));
+		}
+		return list;
+	}
 }
