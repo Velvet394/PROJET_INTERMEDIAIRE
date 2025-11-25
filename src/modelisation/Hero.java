@@ -163,6 +163,8 @@ class Hero {
     public int maxMana() {
     	return maxMana;
     }
+    
+    public void tresor(List<Item> list) {}
 
     public void ajouterDansSac(Item item) {
         // TODO: gestion rotation, placement

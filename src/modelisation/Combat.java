@@ -60,5 +60,8 @@ class Combat {
 
         return false; 
     }
+    
+    public void startCombat() {}
+    
 }
 

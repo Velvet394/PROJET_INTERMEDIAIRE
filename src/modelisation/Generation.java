@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Generation {
-	public List<Ennemi> genererEnnemis(){
+	public static List<Ennemi> genererEnnemis(){
 		var num=Dice.roll(1, 5);//nombres des ennemis max [1,5] tous inclus
 		ArrayList<Ennemi> list=new ArrayList<>();
 		for(int i=0;i<num;i++) {
@@ -15,7 +15,7 @@ public class Generation {
 		return list;
 	}
 	
-	public List<Item> genererItems(){
+	public static List<Item> genererItems(){
 		var num=Dice.roll(1, 3);//nombres des tresor max [1,5] tous inclus
 		ArrayList<Item> list=new ArrayList<>();
 		for(int i=0;i<num;i++) {
