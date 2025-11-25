@@ -3,8 +3,9 @@ package modelisation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ennemisBase {
+public class EnnemisBase {
 	public static final List<Ennemi> templates = new ArrayList<>();
+	public static final int NUMENN = 3;
 
     static {
         templates.add(new Ennemi("Slime", 30, 5,3,10,50,20,10,50,30)); //nom, hp, dmg, blockpoint, healpoint tendance att, skill, def, heal , buff

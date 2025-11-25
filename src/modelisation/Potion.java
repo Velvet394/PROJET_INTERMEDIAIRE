@@ -1,4 +1,4 @@
-package modelisation;
+/*package modelisation;
 import java.util.*;
 
 public class Potion extends Item {
@@ -26,4 +26,4 @@ public class Potion extends Item {
     public boolean estConsommable() {
         return true;
     }
-}
+}*/

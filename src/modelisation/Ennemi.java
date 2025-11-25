@@ -4,7 +4,7 @@ import java.io.*;
 import java.time.chrono.MinguoChronology;
 
 public class Ennemi {
-    private final String nom;
+    private final String name;
     
     //private final Hp hp;
     private int hp;
@@ -30,7 +30,7 @@ public class Ennemi {
     	if(pv<=0||b<0||h<0||d<0||att<0||sk<0||def<0||heal<0||/*cur<0||*/buf<0) {
     		throw new IllegalArgumentException("Argument(s) de ennemi est/sont inferieur que 0");
     	}
-        this.nom = nom;
+        this.name = nom;
         
         this.hp = pv;
         this.maxHp=pv;
@@ -47,6 +47,27 @@ public class Ennemi {
         tendanceHEAL=heal;
         tendanceBUFF=buf;
         //tendanceCURSE=cur;
+    }
+    
+    //constructeur copier
+    public Ennemi(Ennemi e) {
+    	Objects.requireNonNull(e);
+    	this.name = e.name;
+        
+        this.hp = e.hp;
+        this.maxHp=e.maxHp;
+        this.blockPoint=e.blockPoint;
+        this.healPoint=e.healPoint;
+        this.intentions = /*skills;*/new ArrayList<>();
+        this.block = 0;
+        this.dmg=e.dmg;
+        
+        
+        tendanceATTACK=e.tendanceATTACK;
+        tendanceSKILL=e.tendanceSKILL;
+        tendanceDEFEND=e.tendanceDEFEND;
+        tendanceHEAL=e.tendanceHEAL;
+        tendanceBUFF=e.tendanceBUFF;
     }
 
     public boolean estMort() { 
@@ -157,24 +178,24 @@ public class Ennemi {
     	Objects.requireNonNull(hero);
         if (!estMort()) {
             hero.damage(this.dmg);
-            IO.println(nom + " attaque et inflige " + dmg + " points de dégât.");
+            IO.println(name + " attaque et inflige " + dmg + " points de dégât.");
         }
     }
     
     private void defend() { 
         block += blockPoint;
-        IO.println(nom + " se défend et augmente sa protection de " + blockPoint + " points.");
+        IO.println(name + " se défend et augmente sa protection de " + blockPoint + " points.");
     }
     
     private void heal() {
         if (!estMort()) {
             if(hp+healPoint>=maxHp) {
             	hp = maxHp;
-            	IO.println(nom + " se guérit de " + healPoint + " points.");
+            	IO.println(name + " se guérit de " + healPoint + " points.");
             	return;
             }
             hp+=healPoint;
-            IO.println(nom + " se guérit de " + healPoint + " points.");
+            IO.println(name + " se guérit de " + healPoint + " points.");
             return;
         }
     }
@@ -183,13 +204,13 @@ public class Ennemi {
     	Objects.requireNonNull(hero);
         int curseStrength = 1;
         hero.addMalediction(curseStrength);
-        IO.println(nom + " applique une malédiction au héros.");
+        IO.println(name + " applique une malédiction au héros.");
     }
     
     private void buff() {
         int buffAmount = 3; 
         block += buffAmount; 
-        System.out.println(nom + " se buff et gagne " + buffAmount + " points de protection.");
+        IO.println(name + " se buff et gagne " + buffAmount + " points de protection.");
     }
     
     private void skill() {
@@ -212,7 +233,7 @@ public class Ennemi {
     
     @Override
     public int hashCode() {
-    	return Objects.hash(nom,hp,blockPoint,healPoint,maxHp,intentions,dmg,block,tendanceATTACK,tendanceBUFF,tendanceDEFEND,tendanceHEAL,tendanceSKILL);
+    	return Objects.hash(name,hp,blockPoint,healPoint,maxHp,intentions,dmg,block,tendanceATTACK,tendanceBUFF,tendanceDEFEND,tendanceHEAL,tendanceSKILL);
     }
     
     @Override
@@ -225,7 +246,7 @@ public class Ennemi {
     public boolean equals(Object obj) {
     	return obj instanceof Ennemi e &&
     			this.intentions.equals(e.intentions) &&
-    			this.nom.equals(e.nom) &&
+    			this.name.equals(e.name) &&
     			//this.hp.equals(e.hp) &&
     			this.hp==e.hp &&
     			this.maxHp==e.maxHp &&
