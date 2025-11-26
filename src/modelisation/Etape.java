@@ -21,6 +21,7 @@ public class Etape {
     	var list=new ArrayList<Room>();
     	sallesNeighborNonVisite.clear();
     	for(var i:salles.entrySet()) {
+    		var room=i.getValue();
     		
     	}
     }
