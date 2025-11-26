@@ -8,5 +8,6 @@ public enum RoomType {
     HEALER,
     EXIT,
     GATE,
-    EVENT
+    EVENT, 
+    HALLWAY
 }

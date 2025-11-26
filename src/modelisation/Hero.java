@@ -2,7 +2,7 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
-class Hero {
+public class Hero {
     private final Backpack sac = new Backpack();
     //private final Hp hp = new Hp(40);
     //private final Mana mana = new Mana(0);
@@ -21,6 +21,7 @@ class Hero {
     private int refusMalediction = 0;
     private int foisMalediction = 0;
     private boolean estProteger;
+    private int or = 0;
 
     public Hero() {
         position = new Position(0, new Coord(0,0));
@@ -165,6 +166,14 @@ class Hero {
     	return maxMana;
     }
     
+    public int or() {
+    	return or;
+    }
+    
+    public void addOr(int a) {
+    	or += a;
+    }
+    
     public void tresor(List<Item> list) {}
     
     public void afficheAnduse() {}
@@ -172,4 +181,11 @@ class Hero {
     public void ajouterDansSac(Item item) {
         // TODO: gestion rotation, placement
     }
+
+	public Position position() {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	
 }

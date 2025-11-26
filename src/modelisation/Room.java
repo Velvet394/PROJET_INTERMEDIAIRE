@@ -32,6 +32,11 @@ public class Room {
     	this.visite = true; 
     	enter.apply(null);
     }
+
+	public Object getEnnemis() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 /*
 public class Room {

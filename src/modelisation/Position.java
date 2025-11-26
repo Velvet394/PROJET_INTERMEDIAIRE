@@ -17,4 +17,28 @@ public class Position {
         this.etape = newEtape;
         this.coord = newCoord;
     }
+    
+    public void setCoord(Coord newPos) {
+    	coord = newPos;
+    }
+    
+    public void move(Direction dir) {
+    	switch(dir) {
+    		case UP:
+    			coord = new Coord(coord.x(), coord.y() + 1); 
+    			break;
+    		case DOWN:
+    			coord = new Coord(coord.x(), coord.y() - 1); 
+    			break;
+    		case LEFT:
+    			coord = new Coord(coord.x() - 1, coord.y()); 
+    			break;
+    		case RIGHT:
+    			coord = new Coord(coord.x() + 1, coord.y()); 
+    			break;
+    		default:
+    			break;
+    	}
+    }
+    
 }

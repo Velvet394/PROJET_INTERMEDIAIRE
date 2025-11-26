@@ -2,7 +2,7 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
-class Combat {
+public class Combat {
     private final Hero hero;
     private final List<Ennemi> ennemis;
 
@@ -11,7 +11,9 @@ class Combat {
         this.ennemis = e;
     }
     
-    public Ennemi getEnnemi(int index) {
+    
+
+	public Ennemi getEnnemi(int index) {
     	return ennemis.get(index);
     }
     
@@ -90,6 +92,9 @@ class Combat {
     	}
     	hero.tresor(Generation.genererItems());
     }
-    
+
+
+
+	
 }
 

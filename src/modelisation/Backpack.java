@@ -2,7 +2,7 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
-class Backpack {
+public class Backpack {
     private final Map<Coord, Item> contenu = new HashMap<>();
     private int width = 7;
     private int height = 5;
