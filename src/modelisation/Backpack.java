@@ -118,7 +118,11 @@ class Backpack {
     	throw new IllegalArgumentException("getOr gagne un valeur exception");
     }
     
-    public void RefreshMonnaie() {}
+    public void RefreshMonnaie() {
+    	for(var i:contenu.entrySet()) {
+    		
+    	}
+    }
     
     public void use(Or useor, Argent usear) {
     	Objects.requireNonNull(useor);
