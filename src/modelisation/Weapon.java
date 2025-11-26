@@ -75,6 +75,11 @@ public class Weapon implements Item {
 		 forme.addAll(list);
 	 }
 	 
+	 public void translate(Coord offset) {
+		 Objects.requireNonNull(offset);
+		 offsetCoord=offset;
+	 }
+	 
 	 
 	 
 	 @Override

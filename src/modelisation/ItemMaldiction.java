@@ -15,6 +15,11 @@ public class ItemMaldiction implements Item {
 		forme=l;
 	}
 	
+	public void translate(Coord offset) {
+		 Objects.requireNonNull(offset);
+		 offsetCoord=offset;
+	 }
+	
 	@Override
 	public List<Coord> forme() {
 		// TODO Auto-generated method stub
