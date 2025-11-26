@@ -93,4 +93,40 @@ class Backpack {
 	        }
 	    }
 	}
+    
+    public Argent getArgent() {
+    	 var res=contenu.entrySet().stream()
+    			.map(e->e.getValue())
+    			.filter(e->e instanceof Argent)
+    			.findFirst()
+    			.orElse(new Argent(0,new Coord(0,0)));
+    	if(res instanceof Argent a) {
+    		return a;
+    	}
+    	throw new IllegalArgumentException("getArgent gagne un valeur exception");
+    }
+    
+    public Or getOr() {
+    	var res=contenu.entrySet().stream()
+    			.map(e->e.getValue())
+    			.filter(e->e instanceof Or)
+    			.findFirst()
+    			.orElse(new Argent(0,new Coord(0,0)));
+    	if(res instanceof Or a) {
+    		return a;
+    	}
+    	throw new IllegalArgumentException("getOr gagne un valeur exception");
+    }
+    
+    public void RefreshMonnaie() {}
+    
+    public void use(Or useor, Argent usear) {
+    	Objects.requireNonNull(useor);
+    	Objects.requireNonNull(usear);
+    	var ar=getArgent();
+    	var or=getOr();
+    	if(ar.num()>=usear.num()) {
+    		
+    	}
+    }
 }
