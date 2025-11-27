@@ -55,7 +55,7 @@ public class DonjonApp {
 
     public static void initialiserDonjon() {
         Etape e1 = new Etape();
-        e1.ajouterSalle(new Coord(0, 0), new Room(RoomType.HALLWAY, new Enter_empty()));
+        e1.ajouterSalle(new Coord(0, 0), new Room(RoomType.HALLWAY, new Enter_Empty()));
         e1.ajouterSalle(new Coord(1, 0), new Room(RoomType.ENEMY, new Enter_Combat()));
         e1.ajouterSalle(new Coord(2, 0), new Room(RoomType.TREASURE, new Enter_Tresor()));
         e1.ajouterSalle(new Coord(3, 0), new Room(RoomType.MERCHANT, new Enter_Market()));

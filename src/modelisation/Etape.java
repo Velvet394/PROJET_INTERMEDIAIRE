@@ -4,49 +4,70 @@ import java.io.*;
 
 public class Etape {
     private final Map<Coord, Room> salles;
-    private final List<Room> sallesNeighborNonVisite;
+    private final Map<Coord,Room> sallesNeighborNonVisite;
     
     public Etape() {
-    	salles = new HashMap<>();
-    	sallesNeighborNonVisite=new ArrayList<>();
+    	salles = new HashMap<>(Generation.genererEpate());
+    	var res=salles.get(new Coord(0, 0));
+    	sallesNeighborNonVisite=new HashMap<>();
+    	sallesNeighborNonVisite.put(new Coord(0, 0),res);
     }
     
     public Etape(Map<Coord, Room> s) {
     	Objects.requireNonNull(s);
 		salles = new HashMap<>(s);
-		sallesNeighborNonVisite=new ArrayList<>();
+		var res=salles.get(new Coord(0, 0));
+		sallesNeighborNonVisite=new HashMap<>();
+    	sallesNeighborNonVisite.put(new Coord(0, 0),res);
 	}
     
     public void RefreshListNeighbor() {
-    	var list=new ArrayList<Room>();
+    	var list=new HashMap<Coord,Room>();
     	var res=new ArrayList<Room>();
-    	sallesNeighborNonVisite.clear();
-    	for(var i:salles.entrySet()) {
+    	//for(var i:salles.entrySet())
+    	for(var i:sallesNeighborNonVisite.entrySet()) {
     		var room=i.getValue();
     		var set = i.getKey();
+    		var l=new ArrayList<Coord>();
+    				l.add(new Coord(set.x()+1, set.y()));
+    				l.add(new Coord(set.x()-1, set.y()));
+    				l.add(new Coord(set.x(), set.y()+1));
+    				l.add(new Coord(set.x(), set.y()-1));
+
+    		for(var j:l) {
+    			var r=salles.getOrDefault(j, null);
+    			if(r!=null) {
+    				list.put(j, r);
+    			}
+    		}
+    		/*
     		Optional.ofNullable(salles.getOrDefault(new Coord(set.x()+1, set.y()), null)).ifPresent(list::add);
     		Optional.ofNullable(salles.getOrDefault(new Coord(set.x()-1, set.y()), null)).ifPresent(list::add);
     		Optional.ofNullable(salles.getOrDefault(new Coord(set.x(), set.y()+1), null)).ifPresent(list::add);
     		Optional.ofNullable(salles.getOrDefault(new Coord(set.x(), set.y()-1), null)).ifPresent(list::add);
+    		*/
     		/*var resl=salles.getOrDefault(new Coord(set.x()-1, set.y()), null);
     		var resr=salles.getOrDefault(new Coord(set.x()+1, set.y()), null);
     		var resu=salles.getOrDefault(new Coord(set.x(), set.y()+1), null);
     		var resd=salles.getOrDefault(new Coord(set.x(), set.y()-1), null);*/
     	}
-    	for(var i:list) {
-    		if(!i.estVisite()) {
-    			sallesNeighborNonVisite.add(i);
+    	sallesNeighborNonVisite.clear();
+    	for(var i:list.entrySet()) {
+    		if(!i.getValue().estVisite()) {
+    			sallesNeighborNonVisite.put(i.getKey(),i.getValue());
     		}
     	}
     }
     
-    public void visite(Coord set) {
+    public void visite(Coord set,Hero h) {
     	var res=salles.getOrDefault(set, null);
     	if(res==null) {
     		return;
     	}
-    	if(sallesNeighborNonVisite.contains(res)) {
-    		res.visiter();
+    	var r=sallesNeighborNonVisite.getOrDefault(set, null);
+    	if(/*sallesNeighborNonVisite.contains(res)*/ r!=null) {
+    		//res.visiter();
+    		r.visiter(h);
     	}
     	return;
     }
