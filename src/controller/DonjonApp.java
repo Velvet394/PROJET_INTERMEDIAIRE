@@ -118,7 +118,7 @@ public class DonjonApp {
                     g.fillOval(drawX + 30, drawY + 30, 40, 40); // Ennemi dans la salle
                 }
 
-                // Indiquer la salle sélectionnée avec un contour particulier
+               
                 if (x == selectedX && y == selectedY) {
                     g.setColor(Color.WHITE);
                     g.drawRect(drawX, drawY, ROOM_SIZE, ROOM_SIZE);  // Contour de la salle sélectionnée
@@ -126,7 +126,6 @@ public class DonjonApp {
             }
         }
 
-        // Afficher l'inventaire ou les informations du héros
         g.setColor(Color.WHITE);
         g.drawString("PV: " + hero.hp() + "/" + hero.maxHp(), 10, 10);
         g.drawString("Sac à dos: " + hero.getBackpack().contenu().size() + " objets", 10, 30);
@@ -143,14 +142,13 @@ public class DonjonApp {
         } else if (event.key() == Key.RIGHT) {
             selectedX = Math.min(DONJON_WIDTH - 1, selectedX + 1);  // Déplacer vers la droite
         } else if (event.key() == Key.SPACE) {
-            // Lorsqu'on appuie sur Entrée, vérifier si la salle contient un ennemi
             Etape etage = donjon.getEtape(hero.position().getEtape());
             Room room = etage.getSalle(new Coord(selectedX, selectedY));
 
             if (room != null && room.getType() == RoomType.ENEMY) {
                 System.out.println("Vous êtes projeté dans la salle de combat !");
-                // Lancer le combat avec l'ennemi
-                Object ennemy = room.getEnnemis();  // Supposons qu'il y a un ennemi
+              
+                Object ennemy = room.getEnnemis();  
                 Combat combat = new Combat(hero, (List<Ennemi>) ennemy);
                 combat.startCombat();  // Gérer le combat ici
             } else {
@@ -212,7 +210,7 @@ public class DonjonApp {
                     break;
                 case TREASURE:
                     System.out.println("Trésor trouvé !");
-                    // Ajouter des objets au héros ou augmenter des statistiques
+                    // Gérer le trésor ici
                     break;
                 case MERCHANT:
                     System.out.println("Marchand rencontré !");

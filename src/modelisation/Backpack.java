@@ -14,35 +14,35 @@ public class Backpack {
         }
     }
 
-    public boolean peutPlacer(Item item, Coord base) {
+    public boolean peutPlacer(Item item) {
         for (Coord c : item.forme()) {
-            Coord abs = new Coord(base.x() + c.x(), base.y() + c.y());
+            Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
             if (!contenu.containsKey(abs)) return false;     // case inexistante
             if (contenu.get(abs) != null) return false;       // déjà occupée
         }
         return true;
     }
 
-    public void placer(Item item, Coord base) {
-    	if (!peutPlacer(item,base)) throw new IllegalArgumentException();
+    public void placer(Item item) {
+    	if (!peutPlacer(item)) throw new IllegalArgumentException();
     	
         for (Coord c : item.forme()) {
-            Coord abs = new Coord(base.x() + c.x(), base.y() + c.y());
+            Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
             contenu.put(abs, item);
         }
     }
     
     //hero.getBackpack().contenu().entrySet().removeIf(entry -> entry.getValue()==this);
     
-    public void PlacerMalediction(Item item,Coord base) {
+    public void PlacerMalediction(Item item) {
     	Objects.requireNonNull(item);
-    	if(!peutPlacerMalediction(item,base)) {
+    	if(!peutPlacerMalediction(item)) {
     		throw new IllegalArgumentException("error");
     	}
     	ArrayList<Item> list=new ArrayList<>();
     	//if (item.estMalediction()) {
     		for (Coord c : item.forme()) {
-    			Coord abs = new Coord(base.x() + c.x(), base.y() + c.y());
+    			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
     			if (contenu.containsKey(abs)) {
     				var res=contenu.get(abs);
     				if (!list.contains(res)) {
@@ -57,11 +57,11 @@ public class Backpack {
     	//}
     }
 
-    public boolean peutPlacerMalediction(Item item,Coord base) {
+    public boolean peutPlacerMalediction(Item item) {
     	Objects.requireNonNull(item);
     	//if (item.estMalediction()) {
     		for (Coord c : item.forme()) {
-    			Coord abs = new Coord(base.x() + c.x(), base.y() + c.y());
+    			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
     			if (!contenu.containsKey(abs)) return false;
     		}
     		
@@ -93,4 +93,44 @@ public class Backpack {
 	        }
 	    }
 	}
+    
+    public Argent getArgent() {
+    	 var res=contenu.entrySet().stream()
+    			.map(e->e.getValue())
+    			.filter(e->e instanceof Argent)
+    			.findFirst()
+    			.orElse(new Argent(0,new Coord(0,0)));
+    	if(res instanceof Argent a) {
+    		return a;
+    	}
+    	throw new IllegalArgumentException("getArgent gagne un valeur exception");
+    }
+    
+    public Or getOr() {
+    	var res=contenu.entrySet().stream()
+    			.map(e->e.getValue())
+    			.filter(e->e instanceof Or)
+    			.findFirst()
+    			.orElse(new Argent(0,new Coord(0,0)));
+    	if(res instanceof Or a) {
+    		return a;
+    	}
+    	throw new IllegalArgumentException("getOr gagne un valeur exception");
+    }
+    
+    public void RefreshMonnaie() {
+    	for(var i:contenu.entrySet()) {
+    		
+    	}
+    }
+    
+    public void use(Or useor, Argent usear) {
+    	Objects.requireNonNull(useor);
+    	Objects.requireNonNull(usear);
+    	var ar=getArgent();
+    	var or=getOr();
+    	if(ar.num()>=usear.num()) {
+    		
+    	}
+    }
 }
