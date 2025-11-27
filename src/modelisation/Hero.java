@@ -20,12 +20,12 @@ public class Hero {
     private int niveau = 1;
     private int refusMalediction = 0;
     private int foisMalediction = 0;
-    private boolean estProteger;
+    //private boolean estProteger;
     private int or = 0;
 
     public Hero() {
         position = new Position(0, new Coord(0,0));
-        sac.initialiser15Cases();
+        //sac.initialiser15Cases();
     }
     
     public void damage(int dmg) {
@@ -59,7 +59,7 @@ public class Hero {
     public int max() { 
     	return maxHp; 
     }*/
-    
+    /*
     public void activateProtection() {
     	estProteger = true;
     }
@@ -71,7 +71,7 @@ public class Hero {
     public boolean estProteger() {
     	return estProteger;
     }
-    
+    */
     public void recharge() { 
     	mana = maxMana; 
     }
@@ -176,10 +176,17 @@ public class Hero {
     
     public void tresor(List<Item> list) {}
     
-    public void afficheAnduse() {}
+    public void afficheAnduse(Coord c,Ennemi e,Combat combat) {
+    	var i=sac.contenu().getOrDefault(c, null);
+    	if(i==null) {return;}
+    	if(i instanceof Weapon w) {
+    		w.utiliser(this, e, combat);
+    	}
+    }
 
     public void ajouterDansSac(Item item) {
         // TODO: gestion rotation, placement
+    	sac.placer(item);
     }
 
 	public Position position() {

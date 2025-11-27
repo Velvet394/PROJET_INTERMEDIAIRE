@@ -57,6 +57,8 @@ public class Weapon implements Item {
 		 }
 		 hero.use(mana);
 		 
+		 IO.println("USE Weapon");
+		 
 		 for(var i:effects) {
 			 i.apply(hero, ennemi,combat);
 		 }

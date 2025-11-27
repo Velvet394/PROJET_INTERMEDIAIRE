@@ -12,7 +12,9 @@ public class Jeu {
         this.donjon = new Donjon();
     }
     
-    public static void jeuTermine() {}
+    public static void jeuTermine() {
+    	throw new RuntimeException("##############Jeu termine##############");
+    }
 
     public void deplacerHero(Coord vers) {
     	

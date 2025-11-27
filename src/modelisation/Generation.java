@@ -1,7 +1,9 @@
 package modelisation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -22,5 +24,23 @@ public class Generation {
 			list.add(new Weapon(WeaponBase.templates.get(Dice.roll(0, WeaponBase.NUMITM-1))));
 		}
 		return list;
+	}
+	
+	public static Map<Coord, Room> genererEtape(){
+		var map=new HashMap<Coord,Room>();
+		for(int i=0;i<5;i++) {
+			for(int j=0;j<11;j++) {
+				map.put(new Coord(i,j), new Room(RoomBase.templates.get(Dice.roll(0, RoomBase.NUMROOM-1))));
+			}
+		}
+		return map;
+	}
+	
+	public static Donjon genererDonjon() {
+		var map=new Donjon();
+		for(int i=0;i<=5;i++) {
+			map.ajouterEtape(i, new Etape());
+		}
+		return map;
 	}
 }

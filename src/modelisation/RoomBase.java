@@ -12,5 +12,6 @@ public class RoomBase {
         templates.add(new Room(RoomType.TREASURE, new Enter_Tresor()));
         templates.add(new Room(RoomType.MERCHANT, new Enter_Market()));
         templates.add(new Room(RoomType.HEALER, new Enter_Healer()));
+        templates.add(new Room(RoomType.EMPTY, new Enter_Empty()));
     }
 }

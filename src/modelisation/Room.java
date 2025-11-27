@@ -14,6 +14,13 @@ public class Room {
         this.visite = false;
         this.enter=e;
     }
+    
+    public Room(Room r) {
+    	Objects.requireNonNull(r);
+    	type=r.type;
+    	visite=false;
+    	enter=r.enter;
+    }
 
     public RoomType getType() { 
     	return type; 

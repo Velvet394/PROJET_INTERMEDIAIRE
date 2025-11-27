@@ -3,10 +3,12 @@ import java.util.*;
 import java.io.*;
 
 public class Backpack {
-    private final Map<Coord, Item> contenu = new HashMap<>();
+    private final Map<Coord, Item> contenu;
     private int width = 7;
     private int height = 5;
-    public void initialiser15Cases() {
+    
+    public Backpack() {
+    	contenu = new HashMap<>();
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 3; y++) {
                 contenu.put(new Coord(x, y), null);
@@ -24,7 +26,7 @@ public class Backpack {
     }
 
     public void placer(Item item) {
-    	if (!peutPlacer(item)) throw new IllegalArgumentException();
+    	if (!peutPlacer(item)) return;
     	
         for (Coord c : item.forme()) {
             Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());

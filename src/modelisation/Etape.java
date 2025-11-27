@@ -7,7 +7,7 @@ public class Etape {
     private final Map<Coord,Room> sallesNeighborNonVisite;
     
     public Etape() {
-    	salles = new HashMap<>(Generation.genererEpate());
+    	salles = new HashMap<>(Generation.genererEtape());
     	var res=salles.get(new Coord(0, 0));
     	sallesNeighborNonVisite=new HashMap<>();
     	sallesNeighborNonVisite.put(new Coord(0, 0),res);
@@ -82,5 +82,9 @@ public class Etape {
     
     public Map<Coord, Room> getSalles() {
     	return salles;
+    }
+    
+    public Map<Coord, Room> sallesNeighborNonVisite() {
+    	return sallesNeighborNonVisite;
     }
 }

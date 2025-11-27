@@ -29,7 +29,7 @@ public class Combat {
     	boolean termine=false; // ATTENTION!!! quand on clique termine round, il est mettre en true
     	hero.rechargerCombat();
     	while(!termine) {
-    		hero.afficheAnduse();//fonction pour affiche en graphique et choisir item
+    		hero.afficheAnduse(new Coord(0,0),ennemis.get(0),this);//fonction pour affiche en graphique et choisir item
     		RefreshListEnnemis();
     	}
     }
@@ -76,6 +76,7 @@ public class Combat {
     
     public void startCombat() {
     	var state=CombatState.HERO_TURN;
+    	hero.startCombat();
     	while (state != CombatState.FINISHED) {
     	    switch (state) {
     	        case HERO_TURN -> {
