@@ -120,5 +120,8 @@ public class Weapon implements Item {
 		
 	}*/
 	 
+	 public String name() {
+		 return name;
+	 }
 	    
 }
