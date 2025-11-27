@@ -62,7 +62,12 @@ public class Weapon implements Item {
 		 }
 		 
 		 if(estConsommable) {
-			 hero.getBackpack().contenu().entrySet().removeIf(entry -> entry.getValue()==this);
+			 //hero.getBackpack().contenu().entrySet().removeIf(entry -> entry.getValue()==this);
+			 for(var i:hero.getBackpack().contenu().entrySet()) {
+				 if(i.getValue()==this) {
+					 i.setValue(null);
+				 }
+			 }
 		 }
 	 }
 	 

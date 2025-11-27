@@ -21,7 +21,7 @@ public class MenuPrincipalApp {
 
     public static void main(String[] args) {
         try {
-            backgroundImage = ImageIO.read(new File("/home/asna/Documents/POO/TestProject/MyNewProject/data/backpack-hero-1nqjl.jpg"));  // Mettez le bon chemin de l'image
+            backgroundImage = ImageIO.read(new File("./data/backpack-hero-1nqjl.jpg"));  // Mettez le bon chemin de l'image
         } catch (IOException e) {
             e.printStackTrace();
             return;
