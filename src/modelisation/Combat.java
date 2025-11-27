@@ -31,6 +31,7 @@ public class Combat {
     	//while(/*!termine*/hero.energie()>2) {
     		hero.afficheAnduse(new Coord(0,0),ennemis.get(0),this);//fonction pour affiche en graphique et choisir item
     		RefreshListEnnemis();
+    		IO.println(hero.energie());
     	//}
     }
 

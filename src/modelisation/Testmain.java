@@ -23,7 +23,7 @@ public class Testmain {
 				donjon.moveSalle(hero, new Coord(i,j));
 			}
 		}
-		
+		IO.println("salles finit");
 		
 	}
 }

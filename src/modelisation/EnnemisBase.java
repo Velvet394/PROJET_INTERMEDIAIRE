@@ -8,9 +8,9 @@ public class EnnemisBase {
 	public static final int NUMENN = 3;
 
     static {
-        templates.add(new Ennemi("Slime", 30, 5,3,10,50,20,10,50,30)); //nom, hp, dmg, blockpoint, healpoint tendance att, skill, def, heal , buff
-        templates.add(new Ennemi("BigRat", 50, 10, 5,3,40,30,50,20,15));
-        templates.add(new Ennemi("Rat", 10, 3, 2, 2, 70,10,20,10,10));
+        templates.add(new Ennemi("Slime", 30, 5,3,10,40,15,10,15,15)); //nom, hp, dmg, blockpoint, healpoint tendance att, skill, def, heal , buff
+        templates.add(new Ennemi("BigRat", 50, 10, 5,3,40,10,15,10,15));
+        templates.add(new Ennemi("Rat", 10, 3, 2, 2, 60,5,15,10,10));
     }
 
 }

@@ -95,7 +95,7 @@ public class Ennemi {
     		return EnnemyActionType.ATTACK;
     	}
     	return EnnemyActionType.CURSE;*/
-    	int roll = Dice.roll(1, 550); // 1~100
+    	int roll = Dice.roll(1, 101); // 1~100
 
         if (hp <= maxHp / 2) {
             int thresholdHeal = tendanceHEAL;
@@ -217,6 +217,7 @@ public class Ennemi {
     }
     
     public void damage(int dmg) {
+    	IO.println("Ennemi est damage");
     	var res=block-dmg;
     	if(res>0) {
     		this.block=res;

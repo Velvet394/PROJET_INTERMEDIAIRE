@@ -8,10 +8,10 @@ public class Hero {
     //private final Mana mana = new Mana(0);
     //private final Exp exp = new Exp(0, 20);
     private Position position;
-    private int hp=20;
-    private int maxHp=20;
-    private int mana=20;
-    private int maxMana=20;
+    private int hp=500;
+    private int maxHp=500;
+    private int mana=200;
+    private int maxMana=200;
     private int exp=0;
     private int expMax=10;
     private int block=0;
