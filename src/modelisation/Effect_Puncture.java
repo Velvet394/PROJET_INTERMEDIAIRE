@@ -30,6 +30,7 @@ public class Effect_Puncture implements Effect {
 				continue;
 			}
 			list.get(index).damage(dmg);
+			cp++;
 		}
 		
 	}

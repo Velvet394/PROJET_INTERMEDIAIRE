@@ -166,6 +166,10 @@ public class Hero {
     	return maxMana;
     }
     
+    public int energie() {
+    	return energie;
+    }
+    
     public int or() {
     	return or;
     }

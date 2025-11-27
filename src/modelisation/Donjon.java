@@ -10,6 +10,7 @@ public class Donjon {
     public void moveEtape() {
     	if(etape==maxEtape) {
     		Jeu.jeuTermine();
+    		return;
     	}
     	etape++;
     }

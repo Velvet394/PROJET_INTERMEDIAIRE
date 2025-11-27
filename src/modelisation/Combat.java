@@ -28,7 +28,7 @@ public class Combat {
     public void tourHero() {
     	boolean termine=false; // ATTENTION!!! quand on clique termine round, il est mettre en true
     	hero.rechargerCombat();
-    	while(!termine) {
+    	while(/*!termine*/hero.energie()>0) {
     		hero.afficheAnduse(new Coord(0,0),ennemis.get(0),this);//fonction pour affiche en graphique et choisir item
     		RefreshListEnnemis();
     	}
@@ -81,12 +81,12 @@ public class Combat {
     	    switch (state) {
     	        case HERO_TURN -> {
     	            tourHero();
-    	            if (estCombatTermine()==2) state = CombatState.FINISHED;
+    	            if (estCombatTermine()!=1) state = CombatState.FINISHED;
     	            else state = CombatState.ENEMY_TURN;
     	        }
     	        case ENEMY_TURN -> {
     	            tourEnnemis();
-    	            if (estCombatTermine()==2) state = CombatState.FINISHED;
+    	            if (estCombatTermine()!=1) state = CombatState.FINISHED;
     	            else state = CombatState.HERO_TURN;
     	        }
     	    }
