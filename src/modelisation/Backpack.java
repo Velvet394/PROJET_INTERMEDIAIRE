@@ -43,7 +43,7 @@ public class Backpack {
     	//if (item.estMalediction()) {
     		for (Coord c : item.forme()) {
     			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
-    			if (contenu.containsKey(abs)) {
+    			if (contenu.get(abs) != null) {
     				var res=contenu.get(abs);
     				if (!list.contains(res)) {
     					list.add(contenu.get(abs));
@@ -51,7 +51,12 @@ public class Backpack {
     			}
     		}
     		for(var i:list) {
-    			contenu().entrySet().removeIf(entry -> entry.getValue()==i);
+    			//contenu().entrySet().removeIf(entry -> entry.getValue()==i);
+    			for(var e:contenu.entrySet()) {
+   				 if(e.getValue()==i) {
+   					 e.setValue(item);
+   				 }
+   			 }
     		}
     		
     	//}
