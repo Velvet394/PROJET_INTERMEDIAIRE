@@ -98,7 +98,7 @@ public class Hero {
     	if(energie<cost) {
     		return;
     	}
-    	mana = Math.max(0, energie - cost);
+    	energie = Math.max(0, energie - cost);
     }
     
     public void defend(int b) { 

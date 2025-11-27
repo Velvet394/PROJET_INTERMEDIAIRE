@@ -35,6 +35,7 @@ public class Room {
     }
 
     public void visiter(Hero h) { 
+    	IO.println("Visite");
     	if(estVisite()) {return;}
     	this.visite = true; 
     	enter.apply(h);

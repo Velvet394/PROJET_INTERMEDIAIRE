@@ -28,10 +28,10 @@ public class Combat {
     public void tourHero() {
     	boolean termine=false; // ATTENTION!!! quand on clique termine round, il est mettre en true
     	hero.rechargerCombat();
-    	while(/*!termine*/hero.energie()>0) {
+    	//while(/*!termine*/hero.energie()>2) {
     		hero.afficheAnduse(new Coord(0,0),ennemis.get(0),this);//fonction pour affiche en graphique et choisir item
     		RefreshListEnnemis();
-    	}
+    	//}
     }
 
     public void tourEnnemis() {
