@@ -27,10 +27,10 @@ public class Room {
     	return visite; 
     }
 
-    public void visiter() { 
+    public void visiter(Hero h) { 
     	if(estVisite()) {return;}
     	this.visite = true; 
-    	enter.apply(null);
+    	enter.apply(h);
     }
 
 	public Object getEnnemis() {
