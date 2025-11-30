@@ -8,8 +8,8 @@ public class Hero {
     //private final Mana mana = new Mana(0);
     //private final Exp exp = new Exp(0, 20);
     private Position position;
-    private int hp=500;
-    private int maxHp=500;
+    private int hp=40;
+    private int maxHp=40;
     private int mana=200;
     private int maxMana=200;
     private int exp=0;
@@ -197,6 +197,8 @@ public class Hero {
 		// TODO Auto-generated method stub
 		return position;
 	}
+
+	
 
 	
 }

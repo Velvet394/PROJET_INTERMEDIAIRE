@@ -131,6 +131,11 @@ public class Backpack {
     	}
     }
     
+    public Item getItemAt(Coord coord) {
+        return contenu.get(coord);
+    }
+
+    
     public void use(Or useor, Argent usear) {
     	Objects.requireNonNull(useor);
     	Objects.requireNonNull(usear);

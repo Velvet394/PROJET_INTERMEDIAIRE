@@ -43,5 +43,11 @@ public class ItemMaldiction implements Item {
 	public int hashCode() {
 	    return Objects.hash(forme, offsetCoord);
 	}
+
+	@Override
+	public String nom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

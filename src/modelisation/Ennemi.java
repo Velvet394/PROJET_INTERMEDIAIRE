@@ -261,5 +261,10 @@ public class Ennemi {
     			this.tendanceHEAL==e.tendanceHEAL &&
     			this.tendanceSKILL==e.tendanceSKILL;
     }
+
+	public String name() {
+		// TODO Auto-generated method stub
+		return name;
+	}
     
 }

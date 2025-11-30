@@ -45,5 +45,11 @@ public record Argent(int num,Coord set) implements Item {
 		i.add(set);
 		return i;
 	}
+
+	@Override
+	public String nom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

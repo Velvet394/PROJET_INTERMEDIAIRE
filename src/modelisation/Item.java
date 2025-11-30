@@ -6,6 +6,7 @@ public interface Item {
 	List<Coord> forme();
 	Coord offsetCoord();
 	//void Item(Item i);
+	String nom();
 }
 
 

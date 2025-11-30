@@ -1,6 +1,7 @@
 package modelisation;
 
 import java.util.Objects;
+import java.util.*;
 
 public class Room {
     private RoomType type;
@@ -40,11 +41,18 @@ public class Room {
     	this.visite = true; 
     	enter.apply(h);
     }
+    
+    public boolean visite() {
+    	return visite;
+    }
 
-	public Object getEnnemis() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<Ennemi> getEnnemis() {
+        if (enter instanceof Enter_Combat) {
+            // L'Enter_Combat génère les ennemis lors de l'entrée dans la salle
+            return ((Enter_Combat) enter).genererEnnemis();
+        }
+        return new ArrayList<>();  // Retourner une liste vide si la salle n'est pas un combat
+    }
 }
 /*
 public class Room {
