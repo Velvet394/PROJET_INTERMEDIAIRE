@@ -13,6 +13,7 @@ public class Enter_Market implements Enter {
 	@Override
 	public void apply(Hero h) {
 		// TODO Auto-generated method stub
+		//cest partie graphique.
 		
 	}
 }
