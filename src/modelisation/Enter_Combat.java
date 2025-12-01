@@ -15,8 +15,8 @@ public class Enter_Combat implements Enter {
 		var combat=new Combat(h, ennemis);
 		combat.startCombat();
 	}
-	/*
+	
 	public List<Ennemi> genererEnnemis() {
         return EnnemisBase.templates;  // Ici vous pouvez ajuster la logique de génération des ennemis si besoin
-    }*/
+    }
 }
