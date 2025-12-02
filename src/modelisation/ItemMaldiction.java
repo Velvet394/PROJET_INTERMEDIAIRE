@@ -15,6 +15,12 @@ public class ItemMaldiction implements Item {
 		forme=l;
 	}
 	
+	@Override
+	public void rotation() {
+		// TODO Auto-generated method stub
+		IO.println("Peut pas rotation");
+	}
+	
 	public void translate(Coord offset) {
 		 Objects.requireNonNull(offset);
 		 offsetCoord=offset;

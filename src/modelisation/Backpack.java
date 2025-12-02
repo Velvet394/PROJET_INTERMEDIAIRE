@@ -142,7 +142,16 @@ public class Backpack {
     	var ar=getArgent();
     	var or=getOr();
     	if(ar.num()>=usear.num()) {
-    		
+    		// baned
     	}
+    	
     }
+    
+    public void use(Argent use) {
+		Objects.requireNonNull(use);
+		var ar=getArgent();
+		if(ar.num()>=use.num()){
+			
+		}
+	}
 }

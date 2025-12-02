@@ -7,6 +7,8 @@ public interface Item {
 	Coord offsetCoord();
 	//void Item(Item i);
 	String nom();
+	void rotation();
+	void translate(Coord offset);
 }
 
 
