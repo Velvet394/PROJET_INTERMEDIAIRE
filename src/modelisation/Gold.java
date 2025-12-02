@@ -1,5 +1,7 @@
 package modelisation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Gold implements Item {
@@ -11,6 +13,17 @@ public class Gold implements Item {
 			throw new IllegalArgumentException("num de Argent error");
 		}
 		set=new Coord(0, 0);
+	}
+	
+	@Override
+	public void rotation() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void translate(Coord offset) {
+		set=offset;	
 	}
 	
 	public void confision(Gold g) {
@@ -34,6 +47,23 @@ public class Gold implements Item {
 		return;
 	}
 	
+	@Override
+	public String nom() {
+		// TODO Auto-generated method stub
+		return "Gold";
+	}
 	
+	@Override
+	public Coord offsetCoord() {
+		// TODO Auto-generated method stub
+		return set;
+	}
+	
+	@Override
+	public List<Coord> forme(){
+		var i=new ArrayList<Coord>();
+		i.add(set);
+		return i;
+	}
 	
 }
