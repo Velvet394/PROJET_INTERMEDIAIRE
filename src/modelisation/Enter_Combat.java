@@ -1,10 +1,13 @@
 package modelisation;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Enter_Combat implements Enter {
+	private Combat combat=null;
 	@Override
 	public void apply(Hero h) {
+		combat=null;
 		List<Ennemi> ennemis = Generation.genererEnnemis();  // Assurez-vous que cette méthode renvoie une liste valide
 
         if (ennemis == null || ennemis.isEmpty()) {
@@ -12,8 +15,13 @@ public class Enter_Combat implements Enter {
             IO.println("Aucun ennemi n'a été généré pour le combat !");
             return;  // Retourne si pas d'ennemis
         }
-		var combat=new Combat(h, ennemis);
+		combat=new Combat(h, ennemis);
+		Objects.requireNonNull(combat);
 		combat.startCombat();
+	}
+	
+	public Combat getcombat() {
+		return combat;
 	}
 	
 	public List<Ennemi> genererEnnemis() {
