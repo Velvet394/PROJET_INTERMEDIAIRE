@@ -125,6 +125,18 @@ public class Backpack {
     	throw new IllegalArgumentException("getOr gagne un valeur exception");
     }
     
+    public Gold getGold() {
+   	 var res=contenu.entrySet().stream()
+   			.map(e->e.getValue())
+   			.filter(e->e instanceof Gold)
+   			.findFirst()
+   			.orElse(new Gold(0));
+   	if(res instanceof Gold a) {
+   		return a;
+   	}
+   	throw new IllegalArgumentException("getGold gagne un valeur exception");
+   }
+    
     public void RefreshMonnaie() {
     	for(var i:contenu.entrySet()) {
     		
@@ -147,11 +159,11 @@ public class Backpack {
     	
     }
     
-    public void use(Argent use) {
+    public void use(Gold use) {
 		Objects.requireNonNull(use);
-		var ar=getArgent();
-		if(ar.num()>=use.num()){
-			
-		}
+		var g=getGold();
+		if(!g.peutUse(use)) {return;}
+		g.use(use);
+		RefreshMonnaie();
 	}
 }
