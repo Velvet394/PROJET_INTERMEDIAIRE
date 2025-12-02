@@ -66,7 +66,7 @@ public class DonjonApp {
     // Initialisation du donjon
     public static void initialiserDonjon() {
         Etape e1 = new Etape();
-        e1.ajouterSalle(new Coord(0, 0), new Room(RoomType.HALLWAY, new Enter_Empty()));
+        e1.ajouterSalle(new Coord(0, 0), new Room(RoomType.ENEMY, new Enter_Combat()));
         e1.ajouterSalle(new Coord(1, 0), new Room(RoomType.ENEMY, new Enter_Combat()));
         e1.ajouterSalle(new Coord(2, 0), new Room(RoomType.TREASURE, new Enter_Tresor()));
         e1.ajouterSalle(new Coord(3, 0), new Room(RoomType.MERCHANT, new Enter_Market()));
@@ -84,6 +84,16 @@ public class DonjonApp {
         selectedX = hero.position().getCoord().x();
         selectedY = hero.position().getCoord().y();
     }
+    
+    public static void commencerNouvellePartie() {
+        System.out.println("Lancement d'une nouvelle partie...");
+        // Créez et initialisez un héros et des ennemis pour le combat
+        Hero hero = new Hero();  // Création d'un héros
+        List<Ennemi> ennemis = Generation.genererEnnemis();  // Générez des ennemis
+        CombatApp.initialiserCombat(hero, ennemis);  // Initialisation du combat
+        CombatApp.main(new String[]{});  // Lancez le combat dans une nouvelle application
+    }
+
 
     // Affichage du donjon
     public static void afficherDonjon(Graphics2D g) {
@@ -183,6 +193,7 @@ public class DonjonApp {
         }
     }
 
+
     // Interaction avec la salle via un clic de souris
     public static void interagirAvecSalle(PointerEvent event) {
         int mouseX = event.location().x();
@@ -205,29 +216,76 @@ public class DonjonApp {
 
     // Traitement de l'entrée dans une salle
     public static void traiterSalle(Room room) {
-        if (room != null && room.getType() == RoomType.ENEMY) {
-            IO.println("Combat contre un ennemi !");
-            //enCombat = true;
-            //List<Ennemi> en = room.getEnnemis();
-            //Combat combat = new Combat(hero, en);
-            //combat.startCombat();
-            //if (room.estVisite()) {
-            	//IO.println("Cette salle est déja visiter.");
-            //}
-            
-            //room.visiter(hero);
-            
-            room.visiter(hero);
-
-            // Appliquer la logique de la salle via Enter (en l'occurrence Enter_Combat)
-            Enter_Combat enterCombat = (Enter_Combat) room.getEnter();
-            enterCombat.apply(hero);  // Cette méthode va générer les ennemis et démarrer le combat.
-            
-            enCombat = true;
+        if (room != null) {
+            switch (room.getType()) {
+                case ENEMY:
+                    IO.println("Combat contre un ennemi !");
+                    // Commencer un combat
+                    room.visiter(hero);  // Marquer la salle comme visitée
+                    
+                    // Logique pour démarrer le combat
+                    Enter_Combat enterCombat = (Enter_Combat) room.getEnter();
+                    enterCombat.apply(hero);  // Cette méthode gère l'apparition des ennemis et l'initiation du combat
+                    
+                    enCombat = true;  // Changer l'état en mode combat
+                    break;
+                
+                case EMPTY:
+                    IO.println("Cette salle est vide.");
+                    room.visiter(hero);
+                    break;
+                    
+                case MERCHANT:
+                    IO.println("Voici le marchand.");
+                    room.visiter(hero);
+                    break;
+                    
+                case TREASURE:
+                    IO.println("Voici le trésor.");
+                    room.visiter(hero);
+                    break;
+                    
+                case HEALER:
+                    IO.println("Voici le guérisseur.");
+                    room.visiter(hero);
+                    break;
+                
+                case HALLWAY:
+                    IO.println("Il n'y a rien à faire ici.");
+                    room.visiter(hero);
+                    break;
+                
+                case GATE:
+                    IO.println("Ceci est une porte de sortie.");
+                    room.visiter(hero);
+                    break;
+                
+                case EVENT:
+                    IO.println("Un événement surprise.");
+                    room.visiter(hero);
+                    break;
+                
+                default:
+                    throw new IllegalArgumentException("Type de salle inconnu.");
+            }
         }
-        
-        IO.println("La salle est vide ou autre.");
     }
+    
+    public static void avancerVersEtageSuivant() {
+        Etape etageActuel = donjon.getEtape(hero.position().getEtape());
+        Room salleActuelle = etageActuel.getSalle(hero.position().getCoord());
+        if (salleActuelle.getType() == RoomType.GATE) {
+            int etageSuivant = hero.position().getEtape() + 1;
+            if (etageSuivant < donjon.etapes().size()) {
+            	Coord new_pos = new Coord(hero.position().getCoord().x() + 1, hero.position().getCoord().y() + 1);
+                hero.position().moveTo(etageSuivant, new_pos);
+                System.out.println("Vous avez avancé à l'étage suivant.");
+            } else {
+                System.out.println("Félicitations ! Vous avez terminé le jeu.");
+            }
+        }
+    }
+
     
     public static void traiterSalle2(Room room) {
     	if (room != null) {
@@ -320,8 +378,18 @@ public class DonjonApp {
 
         if (room == null) return;
 
+//        if (room.getType() == RoomType.ENEMY) {
+//        	Enter_Combat c = (Enter_Combat) room.getEnter(); 
+//        	List<Ennemi> ennemis = c.genererEnnemis();
+//        	if (ennemis != null && !ennemis.isEmpty()) {
+//                CombatApp.initialiserCombat(hero, ennemis); // Initialiser le combat avec le héros et les ennemis
+//                CombatApp.main(new String[]{}); // Lancer l'application de combat
+//                enCombat = true; // Mettre l'état du jeu en mode combat
+//            }
+//        }
         // Visiter la salle -> Enter.apply() s'occupe de tout
         room.visiter(hero);
+        
     }
 
 
@@ -332,7 +400,7 @@ public class DonjonApp {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-            // Affichage de l'état du combat (par exemple, les PV du héros et des ennemis)
+            // Affichage de l'état du combat
             g.setColor(Color.WHITE);
             g.drawString("Combat en cours!", 10, 20);
 
@@ -349,4 +417,5 @@ public class DonjonApp {
             g.drawString("Attaquer", WINDOW_WIDTH - 180, WINDOW_HEIGHT - 80);
         });
     }
+
 }
