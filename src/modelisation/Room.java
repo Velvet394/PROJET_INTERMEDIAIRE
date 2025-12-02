@@ -30,6 +30,10 @@ public class Room {
     public void setType(RoomType t) { 
     	this.type = t; 
     }
+    
+    public Enter getEnter() {
+    	return enter;
+    }
 
     public boolean estVisite() { 
     	return visite; 
@@ -46,6 +50,7 @@ public class Room {
     	return visite;
     }
 
+    // INUTILE
     public List<Ennemi> getEnnemis() {
         if (enter instanceof Enter_Combat) {
             // L'Enter_Combat génère les ennemis lors de l'entrée dans la salle
@@ -54,29 +59,3 @@ public class Room {
         return new ArrayList<>();  // Retourner une liste vide si la salle n'est pas un combat
     }
 }
-/*
-public class Room {
-    private RoomType type;
-    private boolean visite;
-
-    public Room(RoomType type) {
-        this.type = type;
-        this.visite = false;
-    }
-
-    public RoomType getType() { 
-    	return type; 
-    }
-
-    public void setType(RoomType t) { 
-    	this.type = t; 
-    }
-
-    public boolean estVisite() { 
-    	return visite; 
-    }
-
-    public void visiter() { 
-    	this.visite = true; 
-    }
-}*/

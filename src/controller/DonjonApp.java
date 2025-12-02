@@ -76,6 +76,8 @@ public class DonjonApp {
         hero.position().setCoord(new Coord(0, 0));  // Initialiser la position du héros à (0, 0)
         updateSelectionFromHeroPosition();  // Mise à jour de la sélection dès le départ
     }
+    
+    
 
     // Mise à jour de la salle sélectionnée en fonction de la position du héros
     private static void updateSelectionFromHeroPosition() {
@@ -204,40 +206,124 @@ public class DonjonApp {
     // Traitement de l'entrée dans une salle
     public static void traiterSalle(Room room) {
         if (room != null && room.getType() == RoomType.ENEMY) {
-            System.out.println("Combat contre un ennemi !");
+            IO.println("Combat contre un ennemi !");
+            //enCombat = true;
+            //List<Ennemi> en = room.getEnnemis();
+            //Combat combat = new Combat(hero, en);
+            //combat.startCombat();
+            //if (room.estVisite()) {
+            	//IO.println("Cette salle est déja visiter.");
+            //}
+            
+            //room.visiter(hero);
+            
+            room.visiter(hero);
+
+            // Appliquer la logique de la salle via Enter (en l'occurrence Enter_Combat)
+            Enter_Combat enterCombat = (Enter_Combat) room.getEnter();
+            enterCombat.apply(hero);  // Cette méthode va générer les ennemis et démarrer le combat.
+            
             enCombat = true;
-            Combat combat = new Combat(hero, (List<Ennemi>) room.getEnnemis());
-            combat.startCombat();
-        } else {
-            System.out.println("Salle vide ou autre.");
         }
+        
+        IO.println("La salle est vide ou autre.");
+    }
+    
+    public static void traiterSalle2(Room room) {
+    	if (room != null) {
+    		switch(room.getType()) {
+    			case RoomType.ENEMY -> {
+    				room.visiter(hero);
+    			}
+    			
+    			case RoomType.EMPTY ->  {
+    				IO.println("Cette salle est vide.");
+    				room.visiter(hero);
+    			}
+    			
+    			case RoomType.MERCHANT -> {
+    				IO.println("Voici le marchant.");
+    				room.visiter(hero);
+    			}
+    			
+    			
+    			case RoomType.TREASURE -> {
+    				IO.println("Voici le trésor.");
+    				room.visiter(hero);
+    			}
+    			
+    			case RoomType.HEALER -> {
+    				IO.println("Voici le guérisseur.");
+    				room.visiter(hero);
+    			}
+    		
+    			case RoomType.HALLWAY -> {
+    				IO.println("Il n'y a rien a faire ici.");
+    				room.visiter(hero);
+    			}
+
+    			case RoomType.GATE -> {
+    				IO.println("Ceci est une porte de sortie.");
+    				room.visiter(hero);
+    			}
+    		   
+    			case RoomType.EVENT -> {
+    				IO.println("Ceci eest un évenement surprise.");
+    				room.visiter(hero);
+    			}
+    		    
+    			
+    			default -> new IllegalArgumentException();
+    		};
+    	}
     }
 
     // Entrer dans la salle sélectionnée
+//    public static void entrerDansSalle() {
+//        Etape etage = donjon.getEtape(hero.position().getEtape());
+//        Room room = etage.getSalle(new Coord(selectedX, selectedY));
+//
+//        if (room != null && !room.estVisite()) {
+//            System.out.println("Entrée dans la salle (" + selectedX + ", " + selectedY + ")");
+//            room.visiter(hero);
+//
+//            
+//            if (room.getType() == RoomType.ENEMY) {
+//                List<Ennemi> ennemis = room.getEnnemis();
+//                if (ennemis != null && !ennemis.isEmpty()) {
+//                    //enCombat = true;
+//                    //Combat combat = new Combat(hero, ennemis);
+//                    //combat.startCombat();
+//                	CombatApp.initialiserCombat(hero, ennemis);
+//                    CombatApp.main(new String[]{});
+//                } else {
+//                    System.out.println("Aucun ennemi à combattre.");
+//                }
+//            }
+//            
+//            if (room.getType() == RoomType.GATE) {
+//            	
+//            }
+//            
+//            
+//            if (room.getType() == RoomType.MERCHANT) {
+//            	
+//            }
+//            //(Trésor, Marchand, Guérisseur)
+//        }
+//    }
+    
+    
     public static void entrerDansSalle() {
         Etape etage = donjon.getEtape(hero.position().getEtape());
         Room room = etage.getSalle(new Coord(selectedX, selectedY));
 
-        if (room != null && !room.estVisite()) {
-            System.out.println("Entrée dans la salle (" + selectedX + ", " + selectedY + ")");
-            room.visiter(hero);
+        if (room == null) return;
 
-            // Vérifier le type de la salle
-            if (room.getType() == RoomType.ENEMY) {
-                List<Ennemi> ennemis = room.getEnnemis();
-                if (ennemis != null && !ennemis.isEmpty()) {
-                    //enCombat = true;
-                    //Combat combat = new Combat(hero, ennemis);
-                    //combat.startCombat();
-                	CombatApp.initialiserCombat(hero, ennemis);
-                    CombatApp.main(new String[]{});
-                } else {
-                    System.out.println("Aucun ennemi à combattre.");
-                }
-            }
-            // Autres types de salles peuvent être traités ici (Trésor, Marchand, Guérisseur)
-        }
+        // Visiter la salle -> Enter.apply() s'occupe de tout
+        room.visiter(hero);
     }
+
 
     // Affichage du combat
     public static void afficherCombat(ApplicationContext context) {

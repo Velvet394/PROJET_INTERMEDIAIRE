@@ -9,6 +9,7 @@ import com.github.forax.zen.KeyboardEvent.Key;
 import com.github.forax.zen.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,7 +17,7 @@ import java.io.IOException;
 public class MenuPrincipalApp {
     private static int WINDOW_WIDTH;
     private static int WINDOW_HEIGHT;
-    private static Image backgroundImage;
+    private static BufferedImage backgroundImage;
 
     private static final String[] MENU_OPTIONS = {"Nouvelle Partie", "Charger Partie", "Options", "Quitter"};
     private static int hoveredOption = 0; 

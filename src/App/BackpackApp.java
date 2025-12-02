@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +26,7 @@ public class BackpackApp {
     private static final int CELL_SIZE = 60;  // Taille d'une cellule (case)
     private static int gridX, gridY; // Coordonnées de départ de la grille
 
-    private static Image heroImage;  // L'image du héros
+    private static BufferedImage heroImage;  // L'image du héros
 
     // Méthode principale pour lancer l'application
     public static void main(String[] args) {
