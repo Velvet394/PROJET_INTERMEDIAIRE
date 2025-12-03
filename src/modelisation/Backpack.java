@@ -139,7 +139,11 @@ public class Backpack {
     
     public void RefreshMonnaie() {
     	for(var i:contenu.entrySet()) {
-    		
+    		if(i.getValue() instanceof Gold g) {
+    			if(g.num()<=0) {
+    				contenu.put(i.getKey(), null);
+    			}
+    		}
     	}
     }
     

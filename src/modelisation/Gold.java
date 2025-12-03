@@ -66,4 +66,8 @@ public class Gold implements Item {
 		return i;
 	}
 	
+	public int num() {
+		return num;
+	}
+	
 }
