@@ -43,8 +43,8 @@ public class DonjonApp {
                     gererSelection(k);
                 }
 
-                PointerEvent pointerEvent = (PointerEvent) context.pollEvent();
-                if (pointerEvent != null && pointerEvent.action() == PointerEvent.Action.POINTER_DOWN) {
+                Event pointerEvent = (PointerEvent) context.pollEvent();
+                if (pointerEvent != null && pointerEvent instanceof PointerEvent poinrerEvent && pointerEvent.action() == PointerEvent.Action.POINTER_DOWN) {
                     interagirAvecSalle(pointerEvent);
                 }
 
