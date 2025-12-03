@@ -1,12 +1,7 @@
 package controller;
 
-import com.github.forax.zen.Application;
-import com.github.forax.zen.ApplicationContext;
-import com.github.forax.zen.PointerEvent;
-
 import App.CombatApp;
 
-import com.github.forax.zen.KeyboardEvent;
 import com.github.forax.zen.KeyboardEvent.Key;
 import com.github.forax.zen.*;
 
@@ -42,10 +37,10 @@ public class DonjonApp {
 
             // Boucle principale du jeu
             while (true) {
-                KeyboardEvent keyboardEvent = (KeyboardEvent) context.pollEvent();
-                if (keyboardEvent != null) {
-                    gererDeplacement(keyboardEvent);
-                    gererSelection(keyboardEvent);
+                Event keyboardEvent = context.pollEvent();
+                if (keyboardEvent != null && keyboardEvent instanceof KeyboardEvent k) {
+                    gererDeplacement(k);
+                    gererSelection(k);
                 }
 
                 PointerEvent pointerEvent = (PointerEvent) context.pollEvent();

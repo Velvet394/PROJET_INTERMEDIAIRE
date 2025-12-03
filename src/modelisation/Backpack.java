@@ -15,6 +15,13 @@ public class Backpack {
             }
         }
     }
+    
+    public void allouerCase(Coord c) {
+    	if(c.x()>7||c.x()<0) {return;}
+    	if(c.y()>5||c.y()<0) {return;}
+    	if(contenu.containsKey(c)) {return;}
+    	contenu.put(c,null);
+    }
 
     public boolean peutPlacer(Item item) {
         for (Coord c : item.forme()) {

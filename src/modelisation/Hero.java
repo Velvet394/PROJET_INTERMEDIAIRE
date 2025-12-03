@@ -22,6 +22,18 @@ public class Hero {
     private int foisMalediction = 0;
     //private boolean estProteger;
     private int or = 0;
+    
+    public void testLevelUp() {
+    	if(exp>=expMax) {
+    		niveau++;
+    		var r=Dice.roll(1, 3);
+    		for(int i=0;i<r;i++) {
+    			sac.allouerCase(null);
+    		}
+    		exp=0;
+    		expMax=(niveau^niveau)*10;
+    	}
+    }
 
     public Hero() {
         position = new Position(0, new Coord(0,0));
