@@ -15,6 +15,13 @@ public class Backpack {
             }
         }
     }
+    
+    public void allouerCase(Coord c) {
+    	if(c.x()>7||c.x()<0) {return;}
+    	if(c.y()>5||c.y()<0) {return;}
+    	if(contenu.containsKey(c)) {return;}
+    	contenu.put(c,null);
+    }
 
     public boolean peutPlacer(Item item) {
         for (Coord c : item.forme()) {
@@ -125,9 +132,25 @@ public class Backpack {
     	throw new IllegalArgumentException("getOr gagne un valeur exception");
     }
     
+    public Gold getGold() {
+   	 var res=contenu.entrySet().stream()
+   			.map(e->e.getValue())
+   			.filter(e->e instanceof Gold)
+   			.findFirst()
+   			.orElse(new Gold(0));
+   	if(res instanceof Gold a) {
+   		return a;
+   	}
+   	throw new IllegalArgumentException("getGold gagne un valeur exception");
+   }
+    
     public void RefreshMonnaie() {
     	for(var i:contenu.entrySet()) {
-    		
+    		if(i.getValue() instanceof Gold g) {
+    			if(g.num()<=0) {
+    				contenu.put(i.getKey(), null);
+    			}
+    		}
     	}
     }
     
@@ -142,7 +165,16 @@ public class Backpack {
     	var ar=getArgent();
     	var or=getOr();
     	if(ar.num()>=usear.num()) {
-    		
+    		// baned
     	}
+    	
     }
+    
+    public void use(Gold use) {
+		Objects.requireNonNull(use);
+		var g=getGold();
+		if(!g.peutUse(use)) {return;}
+		g.use(use);
+		RefreshMonnaie();
+	}
 }
