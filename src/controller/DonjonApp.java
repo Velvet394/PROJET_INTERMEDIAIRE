@@ -44,9 +44,10 @@ public class DonjonApp {
                 }
 
                 Event pointerEvent = (PointerEvent) context.pollEvent();
-                if (pointerEvent != null && pointerEvent instanceof PointerEvent poinrerEvent && pointerEvent.action() == PointerEvent.Action.POINTER_DOWN) {
-                    interagirAvecSalle(pointerEvent);
-                }
+                if (pointerEvent != null && pointerEvent instanceof PointerEvent p) {
+                	if(p.action() == PointerEvent.Action.POINTER_DOWN) {
+                		interagirAvecSalle(p);
+                }}
 
                 // Affichage en fonction de l'état du jeu
                 if (enCombat) {
