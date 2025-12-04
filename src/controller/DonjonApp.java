@@ -37,14 +37,13 @@ public class DonjonApp {
 
             // Boucle principale du jeu
             while (true) {
-                Event keyboardEvent = context.pollEvent();
-                if (keyboardEvent != null && keyboardEvent instanceof KeyboardEvent k) {
+                Event Event = context.pollEvent();
+                if (Event != null && Event instanceof KeyboardEvent k) {
                     gererDeplacement(k);
                     gererSelection(k);
                 }
 
-                Event pointerEvent = (PointerEvent) context.pollEvent();
-                if (pointerEvent != null && pointerEvent instanceof PointerEvent p) {
+                if (Event != null && Event instanceof PointerEvent p) {
                 	if(p.action() == PointerEvent.Action.POINTER_DOWN) {
                 		interagirAvecSalle(p);
                 }}

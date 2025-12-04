@@ -3,11 +3,11 @@ import java.util.*;
 import java.io.*;
 
 public class Hero {
-    private final Backpack sac = new Backpack();
+    private final Backpack sac;
     //private final Hp hp = new Hp(40);
     //private final Mana mana = new Mana(0);
     //private final Exp exp = new Exp(0, 20);
-    private Position position;
+    //private Position position;
     private int hp=40;
     private int maxHp=40;
     private int mana=200;
@@ -36,7 +36,8 @@ public class Hero {
     }
 
     public Hero() {
-        position = new Position(0, new Coord(0,0));
+    	sac=new Backpack();
+        //position = new Position(0, new Coord(0,0));
         //sac.initialiser15Cases();
     }
     
@@ -204,12 +205,12 @@ public class Hero {
         // TODO: gestion rotation, placement
     	sac.placer(item);
     }
-
+/*
 	public Position position() {
 		// TODO Auto-generated method stub
 		return position;
 	}
-
+*/
 	
 
 	

@@ -24,8 +24,11 @@ public class CombatApp {
     public static void initialiserCombat(Hero hero, List<Ennemi> ennemis) {
         CombatApp.hero = hero;
         CombatApp.ennemis = ennemis;
-        combat = new Combat(hero, ennemis);
+        combat = new Combat(hero, ennemis); //???? pourquoi new combat??
+        
     }
+    
+    public Combat(Hero h,List<>)
 
     // Méthode principale pour lancer l'application du combat
     public static void main(String[] args) {
