@@ -1,6 +1,10 @@
 package controller;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.util.Objects;
+
+import com.github.forax.zen.*;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.Event;
@@ -17,6 +21,7 @@ public class Game {
     private static final int ROOM_SIZE = 100;
     private static final int DONJON_WIDTH = 5;
     private static final int DONJON_HEIGHT = 5;
+    public Button exit;
 
     private static int selectedX = 0;
     private static int selectedY = 0;
@@ -28,15 +33,19 @@ public class Game {
 	
 	public void RefreshPosition() {}
 	
-	public void afficheDonjon() {}
 	
-	public void gererClique() {}
+	
+	public void visiter() {}
+	public void exit() {}
+	public void afficheSac() {}
 	
 	public void start() {
 		Application.run(Color.BLACK, context -> {
             var screenInfo = context.getScreenInfo();
             WINDOW_WIDTH = screenInfo.width();
             WINDOW_HEIGHT = screenInfo.height();
+            
+            exit=new Button(WINDOW_WIDTH-30,WINDOW_HEIGHT-30,30,30,"Exit");
 
             // Boucle principale du jeu
             while (true) {
@@ -49,7 +58,7 @@ public class Game {
             	}
             	
             	case PointerEvent _ -> {
-            		gererClique(e);
+            		gererClique((PointerEvent)e);
             	}
             	
             	default -> {}
@@ -69,11 +78,30 @@ public class Game {
                 		interagirAvecSalle(p);
                 }}*/
                 
-                context.renderFrame(Game::afficherDonjon);
+            	context.renderFrame(g -> {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+                    afficheDonjon(g);
+                });
                 
             }
         });
     }
+	
+	public void gererClique(PointerEvent p) {
+		Objects.requireNonNull(p);
+		int x=p.location().x();
+		int y=p.location().y();
+		if(exit.isInside(x, y)) {
+			exit();
+		}
+		
+		
+		
 	}
 	
+	public void afficheDonjon(Graphics2D g) {}
+	
 }
+
+	
