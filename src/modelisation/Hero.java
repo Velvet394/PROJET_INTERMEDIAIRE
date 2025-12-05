@@ -31,7 +31,7 @@ public class Hero {
     			sac.allouerCase(null);
     		}
     		exp=0;
-    		expMax=(niveau^niveau)*10;
+    		expMax=(niveau+niveau)*10;
     	}
     }
 

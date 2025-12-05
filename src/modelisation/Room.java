@@ -45,14 +45,14 @@ public class Room {
     public boolean visite() {
     	return visite;
     }
-
+/*
     public List<Ennemi> getEnnemis() {
         if (enter instanceof Enter_Combat) {
             // L'Enter_Combat génère les ennemis lors de l'entrée dans la salle
             return ((Enter_Combat) enter).genererEnnemis();
         }
         return new ArrayList<>();  // Retourner une liste vide si la salle n'est pas un combat
-    }
+    }*/
 }
 /*
 public class Room {

@@ -12,6 +12,7 @@ public class Donjon {
     		Jeu.jeuTermine();
     		return;
     	}
+    	if(!etapes.containsKey(etape+1)) {Jeu.jeuTermine();}
     	etape++;
     }
     

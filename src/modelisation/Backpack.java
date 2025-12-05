@@ -99,7 +99,7 @@ public class Backpack {
     public Map<Coord, Item> contenu() { 
     	return contenu; 
     }
-
+/*
     public void retirerItem(Item item) {
 		for (Coord c : item.forme()) {
 	        if (contenu.get(c) == item) {
@@ -107,7 +107,7 @@ public class Backpack {
 	        }
 	    }
 	}
-    
+    */
     public Argent getArgent() {
     	 var res=contenu.entrySet().stream()
     			.map(e->e.getValue())

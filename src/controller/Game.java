@@ -26,6 +26,10 @@ public class Game {
 		donjon=Generation.genererDonjon();
 	}
 	
+	public void RefreshPosition() {}
+	
+	public void afficheDonjon() {}
+	
 	public void start() {
 		Application.run(Color.BLACK, context -> {
             var screenInfo = context.getScreenInfo();
@@ -38,15 +42,16 @@ public class Game {
             	
             	switch(e) {
             	case KeyboardEvent _ -> {
-            		gererDeplacement(e);
-                    gererSelection(e);
+            		//gererDeplacement(e);
+                    //gererSelection(e);
             	}
             	
             	case PointerEvent _ -> {
-            		interagirAvecSalle(e);
+            		gererClique(e);
             	}
             	
             	default -> {}
+            	
             	
             	
             	}

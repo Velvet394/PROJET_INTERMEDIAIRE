@@ -13,6 +13,7 @@ public class Gold implements Item {
 			throw new IllegalArgumentException("num de Argent error");
 		}
 		set=new Coord(0, 0);
+		num=n;
 	}
 	
 	@Override
