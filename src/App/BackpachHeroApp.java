@@ -459,17 +459,15 @@ public class BackpachHeroApp {
     RoomType type = room.getType();
     var enter = room.getEnter();
 
-    // On veut pouvoir mesurer le heal du guérisseur
     int hpBefore = hero.hp();
     boolean isHealerRoom = enter instanceof Enter_Healer;
 
-    // Appel au modèle : Enter_* (combat, marchand, healer, trésor, etc.)
     room.visiter(hero);
     currentCoord = dest;
 
     etape.RefreshListNeighbor();
 
-    // ---- Cas COMBAT ----
+    // COMBAT
     if (enter instanceof Enter_Combat ec) {
       currentCombat = ec.getcombat();
       if (currentCombat != null) {
@@ -480,14 +478,14 @@ public class BackpachHeroApp {
       return;
     }
 
-    // ---- Cas MARCHAND ----
+    // MARCHAND
     if (enter instanceof Enter_Market em) {
       currentMarket = em;
       currentScreen = Screen.MERCHANT;
       return;
     }
 
-    // ---- Cas GUERISSEUR ----
+    // GUERISSEUR
     if (isHealerRoom) {
       currentHealer = (Enter_Healer) enter;
       lastHealAmount = Math.max(0, hero.hp() - hpBefore);
@@ -495,14 +493,14 @@ public class BackpachHeroApp {
       return;
     }
 
-    // ---- Cas TRESOR ----
+    // TRESOR
     if (enter instanceof Enter_Tresor) {
-      // Enter_Tresor.apply a déjà ajouté les items au héros
+      // Enter_Tresor.apply a déjà ajouté les items au héros (dans son sac ou ailleurs)
       currentScreen = Screen.TREASURE;
       return;
     }
 
-    // ---- Cas SORTIE ----
+    // SORTIE
     if (type == RoomType.EXIT) {
       if (currentEtape < Donjon.maxEtape) {
         donjon.moveEtape();
@@ -525,7 +523,6 @@ public class BackpachHeroApp {
       return;
     }
 
-    // ---- Couloirs / vide ----
     currentScreen = Screen.DUNGEON;
 
     System.out.println("Salle visitée : " + dest
@@ -711,32 +708,82 @@ public class BackpachHeroApp {
     }
   }
 
-  // =================== ECRAN MARCHAND ===================
+  // =================== ECRAN MARCHAND (avec backpack + héros + marchand) ===================
 
   private static void renderMerchant(Graphics2D g) {
     g.setColor(new Color(20, 20, 40));
     g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+    // Infos en haut
     g.setColor(Color.WHITE);
-    g.setFont(new Font("Arial", Font.BOLD, 28));
-    g.drawString("Marchand", 60, 80);
+    g.setFont(new Font("Arial", Font.BOLD, 24));
+    g.drawString("Marchand", 20, 40);
 
     g.setFont(new Font("Arial", Font.PLAIN, 18));
-    g.drawString("Or du héros : " + hero.or(), 60, 110);
-    g.drawString("Cliquez sur un objet pour l'ajouter à votre sac (si vous avez assez d'or).", 60, 140);
-    g.drawString("Appuyez sur ESC ou cliquez sur \"Retour\" pour revenir au donjon.", 60, 165);
+    g.drawString("Or du héros : " + hero.or(), 20, 70);
+    g.drawString("Cliquez sur un objet pour l'acheter (si vous avez assez d'or).", 20, 95);
+
+    // Sac à dos en haut au centre (comme en combat)
+    drawBackpack(g);
+
+    // Héros en bas gauche (même rendu que combat)
+    int floorMargin = 110;
+    int heroBoxSize = 90;
+    int heroBoxX = 80;
+    int heroBoxY = WINDOW_HEIGHT - floorMargin - heroBoxSize;
+
+    g.setColor(new Color(30, 30, 60));
+    g.fillRect(heroBoxX, heroBoxY, heroBoxSize, heroBoxSize);
+    g.setColor(Color.WHITE);
+    g.drawRect(heroBoxX, heroBoxY, heroBoxSize, heroBoxSize);
+
+    if (heroSprite != null) {
+      int imgW = heroSprite.getWidth();
+      int imgH = heroSprite.getHeight();
+      double scale = Math.min(
+          (double) heroBoxSize / imgW,
+          (double) heroBoxSize / imgH
+      );
+      int drawW = (int) (imgW * scale);
+      int drawH = (int) (imgH * scale);
+
+      int drawX = heroBoxX + (heroBoxSize - drawW) / 2;
+      int drawY = heroBoxY + (heroBoxSize - drawH) / 2;
+
+      g.drawImage(heroSprite, drawX, drawY, drawW, drawH, null);
+    } else {
+      g.setColor(Color.BLUE);
+      g.fillRect(heroBoxX, heroBoxY, heroBoxSize, heroBoxSize);
+      g.setColor(Color.WHITE);
+      g.drawString("H", heroBoxX + heroBoxSize / 2 - 4, heroBoxY + heroBoxSize / 2);
+    }
+
+    g.setColor(Color.WHITE);
+    g.drawString("HP: " + hero.hp() + "/" + hero.maxHp(), heroBoxX, heroBoxY + heroBoxSize + 20);
+
+    // Marchand en bas droite (même style que ennemi, mais avec 'Shop')
+    int merchantBoxSize = 90;
+    int merchantBoxX = WINDOW_WIDTH - 80 - merchantBoxSize;
+    int merchantBoxY = heroBoxY;
+
+    g.setColor(new Color(90, 60, 20));
+    g.fillRect(merchantBoxX, merchantBoxY, merchantBoxSize, merchantBoxSize);
+    g.setColor(Color.WHITE);
+    g.drawRect(merchantBoxX, merchantBoxY, merchantBoxSize, merchantBoxSize);
+    g.drawString("Shop", merchantBoxX + 15, merchantBoxY + merchantBoxSize / 2);
+
+    // Liste des objets à vendre, sous le backpack
+    int startX = 60;
+    int startY = 360;  // en dessous du sac
+    int itemHeight = 60;
+    int itemWidth = WINDOW_WIDTH - 2 * startX;
+    int gap = 10;
+
+    g.setFont(new Font("Arial", Font.PLAIN, 16));
 
     if (currentMarket == null || currentMarket.items.isEmpty()) {
-      g.drawString("Le marchand n'a plus rien à vendre.", 60, 210);
+      g.drawString("Le marchand n'a plus rien à vendre.", startX, startY);
     } else {
-      int startX = 60;
-      int startY = 210;
-      int itemHeight = 60;
-      int itemWidth = WINDOW_WIDTH - 2 * startX;
-      int gap = 10;
-
-      g.setFont(new Font("Arial", Font.PLAIN, 16));
-
       for (int i = 0; i < currentMarket.items.size(); i++) {
         Item item = currentMarket.items.get(i);
         int y = startY + i * (itemHeight + gap);
@@ -770,7 +817,7 @@ public class BackpachHeroApp {
       }
     }
 
-    // Bouton "Retour"
+    // Bouton "Retour" en bas à droite
     int btnWidth = 150;
     int btnHeight = 40;
     int btnX = WINDOW_WIDTH - btnWidth - 40;
@@ -810,9 +857,9 @@ public class BackpachHeroApp {
       return;
     }
 
-    // Détection clic sur un item
+    // Détection clic sur un item (coordonnées cohérentes avec renderMerchant)
     int startX = 60;
-    int startY = 210;
+    int startY = 360;
     int itemHeight = 60;
     int itemWidth = WINDOW_WIDTH - 2 * startX;
     int gap = 10;
@@ -889,12 +936,11 @@ public class BackpachHeroApp {
     if (x >= btnX && x <= btnX + btnWidth && y >= btnY && y <= btnY + btnHeight) {
       currentScreen = Screen.DUNGEON;
     } else {
-      // clic ailleurs -> retour aussi, si tu veux
       currentScreen = Screen.DUNGEON;
     }
   }
 
-  // =================== ECRAN TRESOR ===================
+  // =================== ECRAN TRESOR (avec backpack affiché) ===================
 
   private static void renderTreasure(Graphics2D g) {
     g.setColor(new Color(40, 30, 10));
@@ -902,12 +948,18 @@ public class BackpachHeroApp {
 
     g.setColor(Color.YELLOW);
     g.setFont(new Font("Arial", Font.BOLD, 28));
-    g.drawString("Trésor", 60, 80);
+    g.drawString("Trésor", 60, 60);
+
+    // Afficher le backpack pour voir où vont les objets
+    drawBackpack(g);
 
     g.setColor(Color.WHITE);
     g.setFont(new Font("Arial", Font.PLAIN, 18));
-    g.drawString("Vous ouvrez un coffre ! De nouveaux objets peuvent être dans votre sac.", 60, 130);
-    g.drawString("Appuyez sur ESPACE / ESC ou cliquez sur \"OK\" pour revenir au donjon.", 60, 160);
+    // Texte en dessous du sac (sac ≈ hauteur 260 à partir de y=80 => bas ≈ 340)
+    int textY = 360;
+    g.drawString("Vous ouvrez un coffre ! Les nouveaux objets sont ajoutés dans votre sac.", 60, textY);
+    g.drawString("Regardez le backpack au-dessus pour voir où ils se placent.", 60, textY + 30);
+    g.drawString("Appuyez sur ESPACE / ESC ou cliquez sur \"OK\" pour revenir au donjon.", 60, textY + 60);
 
     // Bouton "OK"
     int btnWidth = 150;
