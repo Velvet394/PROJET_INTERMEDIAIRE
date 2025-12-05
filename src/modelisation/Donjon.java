@@ -17,6 +17,14 @@ public class Donjon {
     	etape++;
     }
     
+    public Etape getetape() {
+    	if(etape>=maxEtape) {
+    		throw new IllegalArgumentException("etape error");
+    	}
+    	
+    	return etapes.get(etape);
+    }
+    
     public void moveSalle(Hero h,Coord c) {
     	var e=etapes.getOrDefault(etape, null);
     	if(e==null) {
