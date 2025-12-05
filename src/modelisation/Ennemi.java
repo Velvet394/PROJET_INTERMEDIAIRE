@@ -3,6 +3,11 @@ import java.util.*;
 import java.io.*;
 import java.time.chrono.MinguoChronology;
 
+import java.awt.Image;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+
 public class Ennemi {
     private final String name;
     
@@ -23,8 +28,10 @@ public class Ennemi {
     private final int tendanceHEAL;
     //private final int tendanceCURSE;
     private final int tendanceBUFF;
+    
+    private Image image;
 
-    public Ennemi(String nom, int pv, int d ,/*List<EnnemyActionType> skills,*/int b,int h, int att,int sk,int def, int heal,/*int cur,*/int buf) {
+    public Ennemi(String nom, int pv, int d ,/*List<EnnemyActionType> skills,*/int b,int h, int att,int sk,int def, int heal,/*int cur,*/int buf, String imagePath) {
     	Objects.requireNonNull(nom);
     	//Objects.requireNonNull(skills);
     	if(pv<=0||b<0||h<0||d<0||att<0||sk<0||def<0||heal<0||/*cur<0||*/buf<0) {
@@ -47,6 +54,13 @@ public class Ennemi {
         tendanceHEAL=heal;
         tendanceBUFF=buf;
         //tendanceCURSE=cur;
+        
+        try {
+            image = ImageIO.read(new File(imagePath));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            image = null; // 出错就先设为 null
+        }
     }
     
     //constructeur copier
@@ -68,6 +82,8 @@ public class Ennemi {
         tendanceDEFEND=e.tendanceDEFEND;
         tendanceHEAL=e.tendanceHEAL;
         tendanceBUFF=e.tendanceBUFF;
+        
+        image=e.image;
     }
 
     public boolean estMort() { 
@@ -266,5 +282,9 @@ public class Ennemi {
 		// TODO Auto-generated method stub
 		return name;
 	}
+	
+	public Image image() {
+        return image;
+    }
     
 }

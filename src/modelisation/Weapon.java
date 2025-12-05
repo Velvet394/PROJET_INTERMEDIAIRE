@@ -46,6 +46,7 @@ public class Weapon implements Item {
 		estConsommable=w.estConsommable;
 		forme=new ArrayList<>(Objects.requireNonNull(w.forme));
 		effects=new ArrayList<>(Objects.requireNonNull(w.effects));
+		image=w.image;
 	}
 	
 	 public String nom() { return name; }
