@@ -42,6 +42,13 @@ public class Game {
 		donjon=Generation.genererDonjon();
 	}
 	
+	public Game(Hero h, Donjon d) {
+		Objects.requireNonNull(h);
+		Objects.requireNonNull(d);
+		hero=h;
+		donjon=d;
+	}
+	
 	public void RefreshPosition() {}
 	
 	
@@ -119,7 +126,12 @@ public class Game {
 	        int py = backpackOriginY + gy * CELL_SIZE;
 	        
 	        if(i.image()!=null) {
-	        	g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
+	        	//g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
+	        	
+	        	Image img = i.image();
+	            int w = img.getWidth(null);
+	            int h = img.getHeight(null);
+	            g.drawImage(img, px, py, px + w, py + h, 0, 0, w, h, null);
 	        }
 	        else {
                 // 没有图片时备用显示方式：画名字
