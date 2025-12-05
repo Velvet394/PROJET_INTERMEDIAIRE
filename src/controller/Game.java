@@ -54,7 +54,7 @@ public class Game {
 	
 	
 	//public void visiter() {}
-	public void exit() {}
+	public void exit() {System.exit(0);}
 	
 	public void afficheSac(Graphics2D g) {
 		
@@ -173,6 +173,7 @@ public class Game {
             
             //exit=new Button(WINDOW_WIDTH-30,WINDOW_HEIGHT-30,30,30,"Exit");
             initExit();
+            initSac();
 
             // Boucle principale du jeu
             while (true) {
