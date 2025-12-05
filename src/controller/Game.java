@@ -30,6 +30,8 @@ public class Game {
 	
 	public void afficheDonjon() {}
 	
+	public void gererClique() {}
+	
 	public void start() {
 		Application.run(Color.BLACK, context -> {
             var screenInfo = context.getScreenInfo();
