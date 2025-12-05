@@ -116,8 +116,13 @@ public class Game {
 		Objects.requireNonNull(p);
 		int x=p.location().x();
 		int y=p.location().y();
+		
 		if(exit.isInside(x, y)) {
 			exit();
+		}
+		
+		if(exit.isInside(x, y)) {
+			afficheSac();
 		}
 		/*
 		if(x>=100 && x<=WINDOW_WIDTH-100 && y>=100 && y<=WINDOW_HEIGHT-100) {
