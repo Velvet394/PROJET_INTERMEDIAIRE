@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Map;
 import java.util.Objects;
 
 import com.github.forax.zen.*;
@@ -21,6 +22,9 @@ public class Game {
     private static final int ROOM_SIZE = 100;
     private static final int DONJON_WIDTH = 5;
     private static final int DONJON_HEIGHT = 11;
+    private static final int GRID_WIDTH = 7;
+    private static final int GRID_HEIGHT = 5;
+    private static final int CELL_SIZE = 60;
     public Button exit;
     public Button sac;
 
@@ -38,7 +42,54 @@ public class Game {
 	
 	//public void visiter() {}
 	public void exit() {}
-	public void afficheSac() {}
+	public void afficheSac(Graphics2D g) {
+		
+		int backpackPixelWidth  = GRID_WIDTH  * CELL_SIZE;
+		int backpackPixelHeight = GRID_HEIGHT * CELL_SIZE;
+		int backpackOriginX = (WINDOW_WIDTH  - backpackPixelWidth)  / 2;
+		int backpackOriginY = (WINDOW_HEIGHT - backpackPixelHeight) / 2;
+		
+		for (int gy = 0; gy < GRID_HEIGHT; gy++) {
+		    for (int gx = 0; gx < GRID_WIDTH; gx++) {
+		        int px = backpackOriginX + gx * CELL_SIZE;
+		        int py = backpackOriginY + gy * CELL_SIZE;
+		        // 画格子 + 物品
+		        g.setColor(Color.DARK_GRAY);
+	            g.fillRect(px, py, CELL_SIZE, CELL_SIZE);
+	            g.setColor(Color.GRAY);
+	            g.drawRect(px, py, CELL_SIZE, CELL_SIZE);
+		    }
+		}
+		
+		Map<Coord, Item> contenu = hero.getBackpack().contenu();
+	    for (var entry : contenu.entrySet()) {
+	        Coord c = entry.getKey();
+	        Item item = entry.getValue();
+	        if (item == null) continue;
+
+	        int gx = c.x();
+	        int gy = c.y();
+	        int px = backpackOriginX + gx * CELL_SIZE;
+	        int py = backpackOriginY + gy * CELL_SIZE;
+
+	        // 如果是武器，就画图片；否则画文字
+	        if (item instanceof Weapon weapon) {
+	            Image img = weapon.image();
+	            if (img != null) {
+	                // 按格子大小缩放绘制
+	                g.drawImage(img, px, py, CELL_SIZE, CELL_SIZE, null);
+	            } else {
+	                // 没有图片时备用显示方式：画名字
+	                g.setColor(Color.WHITE);
+	                g.drawString(weapon.nom(), px + 5, py + 20);
+	            }
+	        } else {
+	            g.setColor(Color.WHITE);
+	            g.drawString(item.nom(), px + 5, py + 20);
+	        }
+	    }
+		
+	}
 	
 	public void start() {
 		Application.run(Color.BLACK, context -> {
