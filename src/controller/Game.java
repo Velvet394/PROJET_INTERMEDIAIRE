@@ -2,8 +2,11 @@ package controller;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import com.github.forax.zen.*;
 
@@ -25,6 +28,9 @@ public class Game {
     private static final int GRID_WIDTH = 7;
     private static final int GRID_HEIGHT = 5;
     private static final int CELL_SIZE = 60;
+    
+    private ViewState viewState = ViewState.DUNGEON;
+    
     public Button exit;
     public Button sac;
 
@@ -42,7 +48,18 @@ public class Game {
 	
 	//public void visiter() {}
 	public void exit() {}
+	
 	public void afficheSac(Graphics2D g) {
+		
+		g.setColor(Color.RED);
+	    g.fillRect(exit.x(), exit.y(), exit.width(), exit.height());
+	    g.setColor(Color.WHITE);
+	    g.drawString("Quit", exit.x() + 20, exit.y() + 25);
+	    
+	    g.setColor(Color.RED);
+	    g.fillRect(sac.x(), sac.y(), sac.width(), sac.height());
+	    g.setColor(Color.WHITE);
+	    g.drawString("Sac", sac.x() + 20, sac.y() + 25);
 		
 		int backpackPixelWidth  = GRID_WIDTH  * CELL_SIZE;
 		int backpackPixelHeight = GRID_HEIGHT * CELL_SIZE;
@@ -51,30 +68,76 @@ public class Game {
 		
 		for (int gy = 0; gy < GRID_HEIGHT; gy++) {
 		    for (int gx = 0; gx < GRID_WIDTH; gx++) {
+		    	
+		    	Coord coord = new Coord(gx, gy);
+		    	
 		        int px = backpackOriginX + gx * CELL_SIZE;
 		        int py = backpackOriginY + gy * CELL_SIZE;
 		        // 画格子 + 物品
+		        /*
 		        g.setColor(Color.DARK_GRAY);
 	            g.fillRect(px, py, CELL_SIZE, CELL_SIZE);
 	            g.setColor(Color.GRAY);
-	            g.drawRect(px, py, CELL_SIZE, CELL_SIZE);
+	            g.drawRect(px, py, CELL_SIZE, CELL_SIZE);*/
+		        
+		        if (hero.getBackpack().contenu().containsKey(coord)) {
+		            // 这个位置是“解锁”的格子（可以放东西）
+
+		            g.setColor(Color.DARK_GRAY);   // 背景
+		            g.fillRect(px, py, CELL_SIZE, CELL_SIZE);
+
+		            g.setColor(Color.GRAY);        // 边框
+		            g.drawRect(px, py, CELL_SIZE, CELL_SIZE);
+
+		        } else {
+		            // 这个位置没有 key，说明还没解锁
+		            g.setColor(Color.BLACK);       // 更暗一点
+		            g.fillRect(px, py, CELL_SIZE, CELL_SIZE);
+
+		            g.setColor(Color.DARK_GRAY);
+		            g.drawRect(px, py, CELL_SIZE, CELL_SIZE);
+		        }
 		    }
 		}
 		
 		Map<Coord, Item> contenu = hero.getBackpack().contenu();
+		Set<Weapon> set=new HashSet<>();
 	    for (var entry : contenu.entrySet()) {
-	        Coord c = entry.getKey();
+	        //Coord c = entry.getKey();
 	        Item item = entry.getValue();
 	        if (item == null) continue;
-
-	        int gx = c.x();
-	        int gy = c.y();
+	        
+	        if (item instanceof Weapon weapon) {
+	        	set.add(weapon);
+	        }
+	     }
+	    
+	    for(var i: set) {
+	    	int gx = i.offsetCoord().x();
+	        int gy = i.offsetCoord().y();
 	        int px = backpackOriginX + gx * CELL_SIZE;
 	        int py = backpackOriginY + gy * CELL_SIZE;
+	        
+	        if(i.image()!=null) {
+	        	g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
+	        }
+	        else {
+                // 没有图片时备用显示方式：画名字
+                g.setColor(Color.WHITE);
+                g.drawString(i.nom(), px + 5, py + 20);
+            }
+	    	
+	    }
+
+	        //int gx = c.x();
+	        //int gy = c.y();
+	        //int px = backpackOriginX + gx * CELL_SIZE;
+	        //int py = backpackOriginY + gy * CELL_SIZE;
 
 	        // 如果是武器，就画图片；否则画文字
+	        /*
 	        if (item instanceof Weapon weapon) {
-	            Image img = weapon.image();
+	        	
 	            if (img != null) {
 	                // 按格子大小缩放绘制
 	                g.drawImage(img, px, py, CELL_SIZE, CELL_SIZE, null);
@@ -86,10 +149,9 @@ public class Game {
 	        } else {
 	            g.setColor(Color.WHITE);
 	            g.drawString(item.nom(), px + 5, py + 20);
-	        }
+	        }*/
 	    }
 		
-	}
 	
 	public void start() {
 		Application.run(Color.BLACK, context -> {
@@ -103,7 +165,7 @@ public class Game {
             // Boucle principale du jeu
             while (true) {
             	Event e = context.pollEvent();
-            	
+            	if(e!=null) {
             	switch(e) {
             	case KeyboardEvent _ -> {
             		//gererDeplacement(e);
@@ -111,13 +173,14 @@ public class Game {
             	}
             	
             	case PointerEvent _ -> {
-            		gererClique((PointerEvent)e);
+            		gererClique((PointerEvent)e,context);
             	}
             	
             	default -> {}
             	
             	
             	
+            	}
             	}
             	
                 /*Event Event = context.pollEvent();
@@ -131,10 +194,22 @@ public class Game {
                 		interagirAvecSalle(p);
                 }}*/
                 
+            	/*
             	context.renderFrame(g -> {
                     g.setColor(Color.BLACK);
                     g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
                     renderDonjon(g);
+                });*/
+            	
+            	context.renderFrame(g -> {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+                    // 这里根据当前状态决定画什么
+                    switch (viewState) {
+                        case DUNGEON -> renderDonjon(g);
+                        case BACKPACK -> afficheSac(g);
+                    }
                 });
                 
             }
@@ -163,17 +238,45 @@ public class Game {
 	    sac = new Button(exitX, exitY, buttonWidth, buttonHeight, "Sac");
 	}
 	
-	public void gererClique(PointerEvent p) {
+	public void gererClique(PointerEvent p,ApplicationContext context) {
 		Objects.requireNonNull(p);
+		
+		if (p.action() != PointerEvent.Action.POINTER_DOWN) return;
+		
 		int x=p.location().x();
 		int y=p.location().y();
 		
 		if(exit.isInside(x, y)) {
 			exit();
+			return;
 		}
 		
-		if(exit.isInside(x, y)) {
-			afficheSac();
+		if(sac.isInside(x, y)) {
+			/*
+			context.renderFrame(g -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+                afficheSac(g);
+            });*/
+			/*
+			if(viewState==ViewState.BACKPACK) {
+				viewState=ViewState.DUNGEON;
+			}
+			else if(viewState==ViewState.DUNGEON) {
+				viewState=ViewState.BACKPACK;
+			}*/
+			/*
+			 * 
+			viewState = (viewState == ViewState.DUNGEON)
+	                ? ViewState.BACKPACK
+	                : ViewState.DUNGEON;
+	                */
+			
+			switch (viewState) {
+	        case DUNGEON -> viewState = ViewState.BACKPACK;
+	        case BACKPACK -> viewState = ViewState.DUNGEON;
+	    }
+	        return;
 		}
 		/*
 		if(x>=100 && x<=WINDOW_WIDTH-100 && y>=100 && y<=WINDOW_HEIGHT-100) {
