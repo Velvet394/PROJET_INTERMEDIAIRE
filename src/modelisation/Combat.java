@@ -25,15 +25,36 @@ public class Combat {
     	return hero;
     }
 
+//    public void tourHero() {
+//    	boolean termine=false; // ATTENTION!!! quand on clique termine round, il est mettre en true
+//    	hero.rechargerCombat();
+//    	while(/*!termine*/hero.energie()>2) {
+//    		hero.afficheAnduse(new Coord(0,0),ennemis.get(0),this);//fonction pour affiche en graphique et choisir item
+//    		RefreshListEnnemis();
+//    		IO.println(hero.energie());
+//    	}
+//    }
+    
     public void tourHero() {
-    	boolean termine=false; // ATTENTION!!! quand on clique termine round, il est mettre en true
-    	hero.rechargerCombat();
-    	while(/*!termine*/hero.energie()>2) {
-    		hero.afficheAnduse(new Coord(0,0),ennemis.get(0),this);//fonction pour affiche en graphique et choisir item
-    		RefreshListEnnemis();
-    		IO.println(hero.energie());
-    	}
+        hero.rechargerCombat();     
+        boolean aJoueAuMoinsUneFois = false;
+
+        while (hero.energie() > 0) {
+            if (ennemis.isEmpty()) {
+                break;
+            }
+
+            hero.afficheAnduse(new Coord(0, 0), ennemis.get(0), this);
+            RefreshListEnnemis();
+            aJoueAuMoinsUneFois = true;
+
+            
+            if (!aJoueAuMoinsUneFois || hero.energie() == 3) {
+                break;
+            }
+        }
     }
+
 
     public void tourEnnemis() {
     	for (var e:ennemis) {
@@ -66,7 +87,7 @@ public class Combat {
         
         if (hero.isDead()) {
             IO.println("Le héros est mort ! Le combat est terminé.");
-            Jeu.jeuTermine();
+            //Jeu.jeuTermine();
             return 3;
         }
         if(ennemis.isEmpty()) {

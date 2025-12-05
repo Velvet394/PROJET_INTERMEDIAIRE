@@ -16,8 +16,8 @@ public class Enter_Combat implements Enter {
             return;  // Retourne si pas d'ennemis
         }
 		combat=new Combat(h, ennemis);
-		Objects.requireNonNull(combat);
-		combat.startCombat();
+		//Objects.requireNonNull(combat);
+		//combat.startCombat(); //a revoir si necessaire pour partie graphique
 	}
 	
 	public Combat getcombat() {

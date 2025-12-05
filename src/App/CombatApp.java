@@ -2,10 +2,11 @@ package App;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.ApplicationContext;
+import com.github.forax.zen.Event;
 import com.github.forax.zen.PointerEvent;
 import com.github.forax.zen.KeyboardEvent;
 import com.github.forax.zen.KeyboardEvent.Key;
-import com.github.forax.zen.*;
+
 import modelisation.*;
 
 import java.awt.Color;
@@ -17,14 +18,16 @@ public class CombatApp {
     private static List<Ennemi> ennemis;
     private static Combat combat;
     private static boolean enCombat = true;
+
     private static int WINDOW_WIDTH;
     private static int WINDOW_HEIGHT;
 
     // Initialisation du combat avec le héros et les ennemis
-    public static void initialiserCombat(Hero hero, List<Ennemi> ennemis) {
-        CombatApp.hero = hero;
-        CombatApp.ennemis = ennemis;
+    public static void initialiserCombat(Hero h, List<Ennemi> es) {
+        hero = h;
+        ennemis = es;
         combat = new Combat(hero, ennemis);
+        enCombat = true;
     }
 
     // Méthode principale pour lancer l'application du combat
@@ -36,145 +39,181 @@ public class CombatApp {
 
             // Boucle principale du combat
             while (enCombat) {
-                var event = context.pollEvent();
-                if (event != null) {
-                    if (event instanceof PointerEvent pointerEvent) {
-                        gererSouris(pointerEvent); // Gestion des clics pour sélectionner les ennemis et utiliser des objets
-                    } else if (event instanceof KeyboardEvent keyboardEvent) {
-                        gererClavier(keyboardEvent); // Gestion des actions via clavier
-                    }
+                Event event = context.pollOrWaitEvent(16);
+
+                if (event instanceof PointerEvent p) {
+                    gererSouris(p);
+                } else if (event instanceof KeyboardEvent k) {
+                    gererClavier(k);
                 }
 
-                // On affiche l'écran du combat après chaque mise à jour de l'état
+                updateCombatState();
+
                 context.renderFrame(g -> afficherCombat(g));
-                updateCombatState(); // Mettre à jour l'état du combat (tour du héros / tour des ennemis)
             }
         });
     }
 
-    // Affichage du combat : Héros, ennemis, et sac
+    // Affichage du combat : Héros, ennemis, sac, boutons
     public static void afficherCombat(Graphics2D g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        // Affichage des informations du héros
+        // Héros
         g.setColor(Color.CYAN);
         g.drawString("Héros - PV: " + hero.hp() + "/" + hero.maxHp(), 10, 20);
 
-        // Affichage des ennemis
-        for (int i = 0; i < ennemis.size(); i++) {
-            Ennemi ennemi = ennemis.get(i);
-            g.setColor(Color.RED);
-            g.drawString("Ennemi " + (i + 1) + " - PV: " + ennemi.hp() + "/" + ennemi.hp(), 10, 60 + i * 20);
+        // Ennemis
+        if (ennemis != null) {
+            for (int i = 0; i < ennemis.size(); i++) {
+                Ennemi ennemi = ennemis.get(i);
+                g.setColor(Color.RED);
+                g.drawString(
+                        "Ennemi " + (i + 1) + " - PV: " + ennemi.hp() + "/" + ennemi.hp(),
+                        10,
+                        60 + i * 20
+                );
+            }
         }
 
-        // Affichage du sac du héros
+        // Sac
         g.setColor(Color.WHITE);
         g.drawString("Sac : " + hero.getBackpack().contenu().size() + " objets", 10, 120);
-
-        // Affichage des objets dans le sac
         for (int i = 0; i < hero.getBackpack().contenu().size(); i++) {
-            g.drawString("Objet " + (i + 1) + ": " + hero.getBackpack().contenu().get(i).nom(), 10, 140 + i * 20);
+            Item item = hero.getBackpack().contenu().get(i);
+            g.drawString("Objet " + (i + 1) + ": " + item.nom(), 10, 140 + i * 20);
         }
 
-        // Affichage des options d'interaction (Attaquer / Utiliser un objet)
         int buttonWidth = 180;
         int buttonHeight = 40;
         int buttonMargin = 20;
 
-        // Clic sur "Attaquer"
-        g.setColor(Color.GREEN);
-        g.fillRect(WINDOW_WIDTH - buttonWidth - buttonMargin, WINDOW_HEIGHT - buttonHeight - 2 * buttonMargin, buttonWidth, buttonHeight);
-        g.setColor(Color.BLACK);
-        g.drawString("Attaquer", WINDOW_WIDTH - buttonWidth / 2 - buttonMargin, WINDOW_HEIGHT - buttonHeight / 2 - 2 * buttonMargin);
+        int attackX = WINDOW_WIDTH - buttonWidth - buttonMargin;
+        int attackY = WINDOW_HEIGHT - buttonHeight - 2 * buttonMargin;
+        int itemX = WINDOW_WIDTH - buttonWidth - buttonMargin;
+        int itemY = WINDOW_HEIGHT - buttonHeight - buttonMargin;
 
-        // Clic sur "Utiliser objet"
-        g.setColor(Color.YELLOW);
-        g.fillRect(WINDOW_WIDTH - buttonWidth - buttonMargin, WINDOW_HEIGHT - buttonHeight - buttonMargin, buttonWidth, buttonHeight);
+        // Bouton "Attaquer"
+        g.setColor(Color.GREEN);
+        g.fillRect(attackX, attackY, buttonWidth, buttonHeight);
         g.setColor(Color.BLACK);
-        g.drawString("Utiliser objet", WINDOW_WIDTH - buttonWidth / 2 - buttonMargin, WINDOW_HEIGHT - buttonHeight / 2 - buttonMargin);
+        g.drawString("Attaquer", attackX + 20, attackY + 25);
+
+        // Bouton "Utiliser objet"
+        g.setColor(Color.YELLOW);
+        g.fillRect(itemX, itemY, buttonWidth, buttonHeight);
+        g.setColor(Color.BLACK);
+        g.drawString("Utiliser objet", itemX + 10, itemY + 25);
     }
 
-    // Mise à jour de l'état du combat : gestion du tour du héros et des ennemis
+    // Mise à jour de l'état du combat
     public static void updateCombatState() {
-        if (combat.estCombatTermine() != 1) {
-            enCombat = false; // Fin du combat si le héros est mort ou tous les ennemis sont tués
-            if (combat.estCombatTermine() == 2) {
-                System.out.println("Le combat est terminé, le héros a gagné !");
-                // Lancer une action après la victoire, comme récolter un trésor
-                hero.tresor(Generation.genererItems());
-            } else if (combat.estCombatTermine() == 3) {
-                System.out.println("Le combat est terminé, le héros a perdu !");
-                // Fin du jeu, ou gestion de la défaite du héros
-            }
+        if (combat == null) {
+            enCombat = false;
+            return;
+        }
+
+        int status = combat.estCombatTermine(); // 1 = en cours, 2 = win, 3 = lose
+
+        if (status == 1) {
+            // combat en cours
+            return;
+        }
+
+        // combat terminé
+        enCombat = false;
+
+        if (status == 2) {
+            System.out.println("Le combat est terminé, le héros a gagné !");
+            hero.tresor(Generation.genererItems());
+        } else if (status == 3) {
+            System.out.println("Le combat est terminé, le héros a perdu !");
         }
     }
 
-    // Gestion des événements clavier (actions du joueur)
+    // Gestion clavier : ESPACE = tour complet, ESCAPE = quitter combat
     public static void gererClavier(KeyboardEvent event) {
+        if (event.action() != KeyboardEvent.Action.KEY_PRESSED) {
+            return;
+        }
+
         if (event.key() == Key.SPACE) {
-            // Si l'utilisateur appuie sur ESPACE, effectuer une action
             if (combat != null) {
-                combat.tourHero(); // Le héros effectue son tour
+                // Tour du héros puis tour des ennemis si le combat continue
+                combat.tourHero();
                 if (combat.estCombatTermine() == 1) {
-                    combat.tourEnnemis(); // Les ennemis agissent après le tour du héros
+                    combat.tourEnnemis();
                 }
             }
+        } else if (event.key() == Key.ESCAPE) {
+            enCombat = false;
         }
     }
 
-    // Gestion des événements de la souris (sélection d'un ennemi ou d'un objet)
+    // Gestion souris : boutons + clic sur objet
     public static void gererSouris(PointerEvent event) {
+        if (event.action() != PointerEvent.Action.POINTER_DOWN) {
+            return;
+        }
+
         int mouseX = event.location().x();
         int mouseY = event.location().y();
 
-        // Détection des clics pour attaquer ou utiliser un objet
         int buttonWidth = 180;
         int buttonHeight = 40;
         int buttonMargin = 20;
 
-        // Clic sur "Attaquer"
-        if (mouseX >= (WINDOW_WIDTH - buttonWidth - buttonMargin) && mouseX <= (WINDOW_WIDTH - buttonMargin) &&
-            mouseY >= (WINDOW_HEIGHT - buttonHeight - 2 * buttonMargin) && mouseY <= (WINDOW_HEIGHT - buttonMargin)) {
+        int attackX = WINDOW_WIDTH - buttonWidth - buttonMargin;
+        int attackY = WINDOW_HEIGHT - buttonHeight - 2 * buttonMargin;
+        int itemX = WINDOW_WIDTH - buttonWidth - buttonMargin;
+        int itemY = WINDOW_HEIGHT - buttonHeight - buttonMargin;
+
+        // clic sur "Attaquer"
+        if (mouseX >= attackX && mouseX <= attackX + buttonWidth &&
+            mouseY >= attackY && mouseY <= attackY + buttonHeight) {
+
             if (ennemis != null && !ennemis.isEmpty()) {
-                // Sélection de l'ennemi (ici, on attaque le premier ennemi de la liste)
-                Ennemi ennemi = ennemis.get(0); // Attaque du premier ennemi
-                // Le héros inflige des dégâts à l'ennemi
-                ennemi.damage(12); // Le héros inflige des dégâts à l'ennemi avec sa propre méthode
+                Ennemi ennemi = ennemis.get(0);
+                ennemi.damage(12);
                 if (ennemi.estMort()) {
-                    ennemis.remove(ennemi); // Ennemi vaincu, on le retire de la liste
+                    ennemis.remove(ennemi);
                 }
             }
-        } 
-        // Clic sur "Utiliser objet"
-        else if (mouseX >= (WINDOW_WIDTH - buttonWidth - buttonMargin) && mouseX <= (WINDOW_WIDTH - buttonMargin) &&
-                 mouseY >= (WINDOW_HEIGHT - buttonHeight - buttonMargin) && mouseY <= (WINDOW_HEIGHT - buttonMargin)) {
-            if (!hero.getBackpack().contenu().isEmpty()) {
-                // Utilisation d'un objet (par exemple, une arme)
-                Item item = hero.getBackpack().contenu().get(0); // On prend le premier objet
+        }
+        // clic sur "Utiliser objet"
+        else if (mouseX >= itemX && mouseX <= itemX + buttonWidth &&
+                 mouseY >= itemY && mouseY <= itemY + buttonHeight) {
+
+            if (!hero.getBackpack().contenu().isEmpty() &&
+                ennemis != null && !ennemis.isEmpty()) {
+
+                Item item = hero.getBackpack().contenu().get(0);
                 if (item instanceof Weapon weapon) {
-                    // Utilisation de l'arme
                     weapon.utiliser(hero, ennemis.get(0), combat);
                 }
             }
-        } 
-        // Clic sur un objet dans le sac
+        }
+        // clic sur un objet dans la liste du sac (texte)
         else {
             for (int i = 0; i < hero.getBackpack().contenu().size(); i++) {
-                if (mouseX >= 10 && mouseX <= 200 && mouseY >= 140 + i * 20 && mouseY <= 160 + i * 20) {
-                    // Utiliser l'objet sélectionné
-                    UtiliserObjet(hero.getBackpack().contenu().get(i));  
+                int x1 = 10;
+                int y1 = 140 + i * 20 - 15;
+                int x2 = 200;
+                int y2 = 140 + i * 20 + 5;
+
+                if (mouseX >= x1 && mouseX <= x2 &&
+                    mouseY >= y1 && mouseY <= y2) {
+                    utiliserObjet(hero.getBackpack().contenu().get(i));
                 }
             }
         }
     }
 
-    // Exemple simple d'utilisation d'un objet
-    public static void UtiliserObjet(Object objet) {
-        System.out.println("Objet utilisé: " + objet);
-        // Ici, tu peux ajouter de la logique pour l'utilisation d'objets (par exemple, soigner le héros)
+    // Exemple simple
+    public static void utiliserObjet(Item objet) {
+        System.out.println("Objet utilisé: " + objet.nom());
         if (objet instanceof Weapon) {
-            hero.heal(50); // Exemple d'objet "Potion" qui soigne de 50 PV
+            hero.heal(50); // exemple : une arme qui soigne (à adapter)
         }
     }
 }

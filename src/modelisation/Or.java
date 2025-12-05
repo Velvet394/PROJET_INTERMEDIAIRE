@@ -51,4 +51,16 @@ public record Or(int num, Coord set) implements Item {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void rotation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void translate(Coord offset) {
+		// TODO Auto-generated method stub
+		
+	}
 }

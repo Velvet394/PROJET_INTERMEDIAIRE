@@ -210,7 +210,9 @@ public class Hero {
 		return position;
 	}
 
-	
+	public void moveTo(int etape, Coord coord) {
+	    position.moveTo(etape, coord);
+	}
 
 	
 }

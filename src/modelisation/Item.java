@@ -9,6 +9,7 @@ public interface Item {
 	String nom();
 	void rotation();
 	void translate(Coord offset);
+	
 }
 
 

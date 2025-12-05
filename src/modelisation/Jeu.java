@@ -9,7 +9,7 @@ public class Jeu {
 
     public Jeu() {
         this.hero = new Hero();
-        this.donjon = new Donjon();
+        this.donjon = Generation.genererDonjon();
     }
     
     public static void jeuTermine() {
