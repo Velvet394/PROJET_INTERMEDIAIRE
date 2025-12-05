@@ -24,4 +24,9 @@ public class Button {
         return mx >= x && mx <= x + width &&
                my >= y && my <= y + height;
     }
+    
+    public int x() {return x;}
+    public int y() {return y;}
+    public int width() {return width;}
+    public int height() {return height;}
 }
