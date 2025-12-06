@@ -9,12 +9,21 @@ public class Gold implements Item {
 	private Coord set;
 	
 	public Gold(int n) {
+<<<<<<< HEAD
         if (n < 0) {
             throw new IllegalArgumentException("num de Gold error");
         }
         this.num = n;
         this.set = new Coord(0, 0);
     }
+=======
+		if(n<0) {
+			throw new IllegalArgumentException("num de Argent error");
+		}
+		set=new Coord(0, 0);
+		num=n;
+	}
+>>>>>>> branch 'master' of https://github.com/Velvet394/PROJET_INTERMEDIAIRE.git
 	
 	@Override
 	public void rotation() {

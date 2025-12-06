@@ -23,8 +23,8 @@ public class Enter_Combat implements Enter {
 	public Combat getcombat() {
 		return combat;
 	}
-	
+/*	
 	public List<Ennemi> genererEnnemis() {
         return EnnemisBase.templates;  // Ici vous pouvez ajuster la logique de génération des ennemis si besoin
-    }
+    }*/
 }

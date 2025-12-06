@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import java.awt.Image;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+
 public class Weapon implements Item {
 	private final String name;
 	private final int cost;
@@ -13,7 +18,9 @@ public class Weapon implements Item {
 	private final List<Effect> effects;
 	private Coord offsetCoord=new Coord(0,0);
 	
-	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e) {
+	private Image image;
+	
+	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e,String imagePath) {
 		Objects.requireNonNull(f);
 		Objects.requireNonNull(e);
 		name=n;
@@ -22,6 +29,13 @@ public class Weapon implements Item {
 		estConsommable=b;
 		forme=new ArrayList<>(Objects.requireNonNull(f));
 		effects=new ArrayList<>(Objects.requireNonNull(e));
+		
+		 try {
+	            image = ImageIO.read(new File(imagePath));
+	        } catch (IOException ex) {
+	            ex.printStackTrace();
+	            image = null; 
+	        }
 	}
 	
 	public Weapon(Weapon w) {
@@ -32,6 +46,7 @@ public class Weapon implements Item {
 		estConsommable=w.estConsommable;
 		forme=new ArrayList<>(Objects.requireNonNull(w.forme));
 		effects=new ArrayList<>(Objects.requireNonNull(w.effects));
+		image=w.image;
 	}
 	
 	 public String nom() { return name; }
@@ -123,5 +138,9 @@ public class Weapon implements Item {
 	 public String name() {
 		 return name;
 	 }
+	 
+	 public Image image() {
+	        return image;
+	    }
 	    
 }

@@ -23,12 +23,22 @@ public class CombatApp {
     private static int WINDOW_HEIGHT;
 
     // Initialisation du combat avec le héros et les ennemis
+<<<<<<< HEAD
     public static void initialiserCombat(Hero h, List<Ennemi> es) {
         hero = h;
         ennemis = es;
         combat = new Combat(hero, ennemis);
         enCombat = true;
+=======
+    public static void initialiserCombat(Hero hero, List<Ennemi> ennemis) {
+        CombatApp.hero = hero;
+        CombatApp.ennemis = ennemis;
+        combat = new Combat(hero, ennemis); //???? pourquoi new combat??
+        
+>>>>>>> branch 'master' of https://github.com/Velvet394/PROJET_INTERMEDIAIRE.git
     }
+    
+    public Combat(Hero h,List<>)
 
     // Méthode principale pour lancer l'application du combat
     public static void main(String[] args) {

@@ -39,6 +39,7 @@ public class DonjonApp {
 
             // boucle principale du donjon
             while (true) {
+<<<<<<< HEAD
                 // un évènement max par frame (~60 FPS)
                 Event event = context.pollOrWaitEvent(16);
 
@@ -47,9 +48,29 @@ public class DonjonApp {
                 } else if (event instanceof PointerEvent p) {
                     // Si tu veux activer la souris :
                     // interagirAvecSalle(p);
+=======
+                Event Event = context.pollEvent();
+                if (Event != null && Event instanceof KeyboardEvent k) {
+                    gererDeplacement(k);
+                    gererSelection(k);
+>>>>>>> branch 'master' of https://github.com/Velvet394/PROJET_INTERMEDIAIRE.git
                 }
 
+<<<<<<< HEAD
                 context.renderFrame(g -> afficherDonjon(g));
+=======
+                if (Event != null && Event instanceof PointerEvent p) {
+                	if(p.action() == PointerEvent.Action.POINTER_DOWN) {
+                		interagirAvecSalle(p);
+                }}
+
+                // Affichage en fonction de l'état du jeu
+                if (enCombat) {
+                    afficherCombat(context); // Si en mode combat, afficher l'écran de combat
+                } else {
+                    context.renderFrame(DonjonApp::afficherDonjon); // Sinon, afficher le donjon
+                }
+>>>>>>> branch 'master' of https://github.com/Velvet394/PROJET_INTERMEDIAIRE.git
             }
         });
     }

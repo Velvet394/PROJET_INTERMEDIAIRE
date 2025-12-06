@@ -38,7 +38,7 @@ public class Generation {
 	
 	public static Donjon genererDonjon() {
 		var map=new Donjon();
-		for(int i=0;i<=5;i++) {
+		for(int i=0;i<=Donjon.maxEtape;i++) {
 			map.ajouterEtape(i, new Etape());
 		}
 		return map;

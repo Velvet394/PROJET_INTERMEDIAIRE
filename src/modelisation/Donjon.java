@@ -5,6 +5,7 @@ import java.io.*;
 public class Donjon {
     private final Map<Integer, Etape> etapes = new HashMap<>();
     private int etape=0;
+    private Coord position=new Coord(0,0);
     public static final int maxEtape=5;
     
     public void moveEtape() {
@@ -12,7 +13,16 @@ public class Donjon {
     		Jeu.jeuTermine();
     		return;
     	}
+    	if(!etapes.containsKey(etape+1)) {Jeu.jeuTermine();}
     	etape++;
+    }
+    
+    public Etape getetape() {
+    	if(etape>=maxEtape) {
+    		throw new IllegalArgumentException("etape error");
+    	}
+    	
+    	return etapes.get(etape);
     }
     
     public void moveSalle(Hero h,Coord c) {
@@ -23,6 +33,7 @@ public class Donjon {
     	var res=e.sallesNeighborNonVisite().getOrDefault(c, null);
     	if(res==null) {return;}
     	res.visiter(h);
+    	position=c;
     	e.RefreshListNeighbor();
     }
 
