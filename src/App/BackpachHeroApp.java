@@ -236,7 +236,7 @@ public class BackpachHeroApp {
         "Epee", 1, 0, false,
         List.of(new Coord(0, 0)),
         List.of(new Effect_Atteck(6))
-    );
+    , null);
     melee.translate(new Coord(2, 1));
     sac.placer(melee);
 
@@ -244,7 +244,7 @@ public class BackpachHeroApp {
         "Arc", 1, 0, false,
         List.of(new Coord(0, 0), new Coord(1, 0)),
         List.of(new Effect_Atteck(4))
-    );
+    , null);
     ranged.translate(new Coord(0, 0));
     sac.placer(ranged);
 
@@ -252,7 +252,7 @@ public class BackpachHeroApp {
         "Armure", 1, 0, false,
         List.of(new Coord(0, 0), new Coord(0, 1)),
         List.of(new Effect_Def(6))
-    );
+    , null);
     armor.translate(new Coord(3, 0));
     sac.placer(armor);
 
@@ -260,7 +260,7 @@ public class BackpachHeroApp {
         "Bouclier", 1, 0, false,
         List.of(new Coord(0, 0)),
         List.of(new Effect_Def(7))
-    );
+    , null);
     shield.translate(new Coord(0, 2));
     sac.placer(shield);
 
@@ -268,7 +268,7 @@ public class BackpachHeroApp {
         "Baton", 1, 5, false,
         List.of(new Coord(0, 0)),
         List.of(new Effect_Atteck(10))
-    );
+    , null);
     magic.translate(new Coord(4, 0));
     sac.placer(magic);
 
@@ -276,7 +276,7 @@ public class BackpachHeroApp {
         "Mana", 0, 0, true,
         List.of(new Coord(0, 0)),
         List.of(new Effect_Charge(5))
-    );
+    , null);
     manaStone.translate(new Coord(4, 1));
     sac.placer(manaStone);
 
