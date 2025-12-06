@@ -214,6 +214,9 @@ public class BackpachHeroApp {
     lastHealAmount = 0;
     currentScreen = Screen.DUNGEON;
 
+    // synchroniser la position du héros dans le modèle
+    hero.moveTo(currentEtape, currentCoord);
+
     initStartingBackpack();
 
     Etape etape = donjon.getEtape(currentEtape);
@@ -462,8 +465,11 @@ public class BackpachHeroApp {
     int hpBefore = hero.hp();
     boolean isHealerRoom = enter instanceof Enter_Healer;
 
+    // appliquer les effets d'entrée (combat, marchand, healer, trésor, etc.)
     room.visiter(hero);
     currentCoord = dest;
+    // synchroniser aussi la position dans le modèle
+    hero.moveTo(currentEtape, currentCoord);
 
     etape.RefreshListNeighbor();
 
@@ -495,17 +501,29 @@ public class BackpachHeroApp {
 
     // TRESOR
     if (enter instanceof Enter_Tresor) {
-      // Enter_Tresor.apply a déjà ajouté les items au héros (dans son sac ou ailleurs)
       currentScreen = Screen.TREASURE;
       return;
     }
 
-    // SORTIE
+    // SORTIE -> PASSAGE A L'ÉTAGE SUIVANT
     if (type == RoomType.EXIT) {
+      // si on n'est pas encore au dernier étage
       if (currentEtape < Donjon.maxEtape) {
+        // déplacer le donjon sur l'étage suivant (logique interne)
         donjon.moveEtape();
+
+        // index logique d'étage + coordonnées logiques
         currentEtape++;
         currentCoord = new Coord(0, 0);
+
+        // synchroniser aussi la position du héros dans le modèle
+        hero.moveTo(currentEtape, currentCoord);
+
+        // on nettoie les états de salle spécifiques
+        currentCombat = null;
+        currentMarket = null;
+        currentHealer = null;
+        lastHealAmount = 0;
 
         Etape nouvelleEtape = donjon.getEtape(currentEtape);
         if (nouvelleEtape != null) {
@@ -516,13 +534,16 @@ public class BackpachHeroApp {
           nouvelleEtape.RefreshListNeighbor();
         }
         System.out.println("Passage à l'étape " + currentEtape);
+        currentScreen = Screen.DUNGEON;
       } else {
+        // dernier étage terminé
         System.out.println("Donjon terminé !");
         currentScreen = Screen.MENU;
       }
       return;
     }
 
+    // Salle normale / couloir
     currentScreen = Screen.DUNGEON;
 
     System.out.println("Salle visitée : " + dest
@@ -955,7 +976,6 @@ public class BackpachHeroApp {
 
     g.setColor(Color.WHITE);
     g.setFont(new Font("Arial", Font.PLAIN, 18));
-    // Texte en dessous du sac (sac ≈ hauteur 260 à partir de y=80 => bas ≈ 340)
     int textY = 360;
     g.drawString("Vous ouvrez un coffre ! Les nouveaux objets sont ajoutés dans votre sac.", 60, textY);
     g.drawString("Regardez le backpack au-dessus pour voir où ils se placent.", 60, textY + 30);
