@@ -1,6 +1,7 @@
 package modelisation;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -141,6 +142,10 @@ public class Weapon implements Item {
 	 
 	 public Image image() {
 	        return image;
-	    }
-	    
+	 }
+	 
+	 @Override
+	 public int manaCapacity() {
+	     return mana;
+	 }
 }

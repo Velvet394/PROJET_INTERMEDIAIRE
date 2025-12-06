@@ -19,9 +19,9 @@ public class BackpachHeroApp {
 
   // --- Écrans possibles ---
   private enum Screen {
-    MENU,
-    DUNGEON,
-    COMBAT,
+    MENU, // Menu
+    DUNGEON, // Donjon
+    COMBAT, // Combat
     MERCHANT,   // Marchand
     HEALER,     // Guérisseur
     TREASURE    // Trésor
@@ -218,6 +218,7 @@ public class BackpachHeroApp {
     hero.moveTo(currentEtape, currentCoord);
 
     initStartingBackpack();
+    hero.updateStatsFromBackpack();
 
     Etape etape = donjon.getEtape(currentEtape);
     if (etape != null) {

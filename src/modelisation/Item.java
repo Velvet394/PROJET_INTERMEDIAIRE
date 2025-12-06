@@ -10,6 +10,9 @@ public interface Item {
 	void rotation();
 	void translate(Coord offset);
 	
+	default int manaCapacity() {
+        return 0;
+    }
 }
 
 

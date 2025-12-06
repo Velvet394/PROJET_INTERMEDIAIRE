@@ -10,8 +10,8 @@ public class Hero {
     private Position position;
     private int hp=40;
     private int maxHp=40;
-    private int mana=200;
-    private int maxMana=200;
+    private int mana=0;
+    private int maxMana=0;
     private int exp=0;
     private int expMax=10;
     private int block=0;
@@ -124,7 +124,7 @@ public class Hero {
     	if(m<0) {
     		throw new IllegalArgumentException("charge argument error");
     	}
-    	hp = Math.min(maxMana, mana + m); 
+    	mana = Math.min(maxMana, mana + m); 
     	
     }
     
@@ -141,8 +141,10 @@ public class Hero {
     }*/
 
     public void startCombat() {
-        recharge();
+    	updateMaxManaFromBackpack();
+    	recharge();
         energie = 3;
+        //block = 0;
     }
     
     public void rechargerCombat() {
@@ -214,5 +216,20 @@ public class Hero {
 	    position.moveTo(etape, coord);
 	}
 
-	
+	private void updateMaxManaFromBackpack() {
+	    int total = 0;
+	    for (Item item : sac.contenu().values()) {
+	        if (item != null) {
+	            total += item.manaCapacity();
+	        }
+	    }
+	    maxMana = total;
+	    mana = Math.min(mana, maxMana);
+	}
+
+
+	public void updateStatsFromBackpack() {
+	    updateMaxManaFromBackpack();
+	}
+
 }
