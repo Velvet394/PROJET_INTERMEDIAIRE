@@ -3,7 +3,7 @@ import java.util.*;
 import java.io.*;
 
 public class Hero {
-    private final Backpack sac = new Backpack();
+    private final Backpack sac;
     //private final Hp hp = new Hp(40);
     //private final Mana mana = new Mana(0);
     //private final Exp exp = new Exp(0, 20);
@@ -37,7 +37,7 @@ public class Hero {
 
     public Hero() {
         position = new Position(0, new Coord(0,0));
-        //sac.initialiser15Cases();
+        sac  = new Backpack();
     }
     
     public void damage(int dmg) {
