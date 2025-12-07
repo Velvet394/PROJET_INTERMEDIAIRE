@@ -169,6 +169,10 @@ public class Game_Market implements Ecran{
             }
 	    	
 	    }
+	    
+	    g.setColor(Color.WHITE);
+	    g.setFont(new Font("Arial", Font.PLAIN, 18));
+	    g.drawString(""+hero.or(), backpackOriginX+CELL_SIZE, backpackOriginY+2*CELL_SIZE+50);
 
 	    // Héros en bas gauche (même rendu que combat)
 	    

@@ -170,6 +170,11 @@ public class Game_Donjon implements Ecran {
             }
 	    	
 	    }
+	    
+	    g.setColor(Color.WHITE);
+	    g.setFont(new Font("Arial", Font.PLAIN, 18));
+	    g.drawString(""+hero.or(), backpackOriginX+CELL_SIZE, backpackOriginY+2*CELL_SIZE+50);
+	    
 
 	        //int gx = c.x();
 	        //int gy = c.y();
@@ -192,6 +197,7 @@ public class Game_Donjon implements Ecran {
 	            g.setColor(Color.WHITE);
 	            g.drawString(item.nom(), px + 5, py + 20);
 	        }*/
+	  
 	    }
 		
 	

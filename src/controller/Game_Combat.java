@@ -305,6 +305,10 @@ public class Game_Combat implements Ecran {
 		    g.drawString("Termine", tourTermine.x() + 20, tourTermine.y() + 25);
 	    	
 	    }
+	    
+	    g.setColor(Color.WHITE);
+	    g.setFont(new Font("Arial", Font.PLAIN, 18));
+	    g.drawString(""+combat.getHero().or(), backpackOriginX+CELL_SIZE, backpackOriginY+2*CELL_SIZE+50);
 
         // Héros en bas gauche
         /*int floorMargin = 110;
