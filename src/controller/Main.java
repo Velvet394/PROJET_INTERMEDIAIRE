@@ -13,7 +13,10 @@ import modelisation.WeaponBase;
 import modelisation.*;
 
 public class Main {
+	
 	public static void main(String[] args) {
+		
+		//-----game----
 		Weapon durandal = new Weapon(WeaponBase.templates.get(0)); // épée verticale
 	     Weapon shield   = new Weapon(WeaponBase.templates.get(1)); // bouclier 2x2
 	     Weapon manaStone= new Weapon(WeaponBase.templates.get(2)); // pierre de mana
