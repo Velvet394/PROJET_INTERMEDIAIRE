@@ -51,5 +51,5 @@ public class Generation {
 			map.ajouterEtape(i, new Etape());
 		}
 		return map;
-	}
+	}//s
 }
