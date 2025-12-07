@@ -7,6 +7,9 @@ import modelisation.Hero;
 import modelisation.Weapon;
 import modelisation.WeaponBase;
 
+/**
+ * This is the main part of the game 
+ * */
 public class Main {
 	public static void main(String[] args) {
 		Weapon durandal = new Weapon(WeaponBase.templates.get(0)); // épée verticale
