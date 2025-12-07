@@ -3,6 +3,11 @@ package modelisation;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Enter behavior for enemy rooms.
+ * Generates a new combat when the hero enters the room.
+ */
+
 public class Enter_Combat implements Enter {
 	private Combat combat=null;
 	

@@ -2,6 +2,10 @@ package modelisation;
 
 import java.util.Objects;
 
+/**
+ * A chained attack effect.
+ * Damages the targeted enemy and a number of following enemies in the list.
+ */
 public class Effect_Puncture implements Effect {
 	private final int dmg;
 	private final int puncturePoint;

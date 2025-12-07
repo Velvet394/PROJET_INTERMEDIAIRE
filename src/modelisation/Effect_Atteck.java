@@ -1,5 +1,8 @@
 package modelisation;
 
+/**
+ * An attack effect.
+ */
 public class Effect_Atteck implements Effect {
 private final int dmg;
 	

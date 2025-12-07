@@ -1,5 +1,7 @@
 package modelisation;
-
+/**
+ * A healing effect that restores health points to the hero.
+ */
 public class Effect_Heal implements Effect {
 	private final int heal;
 	

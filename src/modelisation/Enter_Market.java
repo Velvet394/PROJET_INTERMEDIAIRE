@@ -2,7 +2,10 @@ package modelisation;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Enter behavior for merchant rooms.
+ * Creates a list of items that can be bought by the hero.
+ */
 public class Enter_Market implements Enter {
 	public final List<Item> items;
 	

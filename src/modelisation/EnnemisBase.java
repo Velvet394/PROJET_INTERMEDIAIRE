@@ -3,6 +3,9 @@ package modelisation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Static registry of enemy templates used in the game.
+ */
 public class EnnemisBase {
 	public static final List<Ennemi> templates = new ArrayList<>();
 	public static final int NUMENN = 3;

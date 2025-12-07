@@ -2,11 +2,20 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Represents the hero's backpack.
+ * It stores items arranged on a grid and handles placement rules.
+ */
+
 public class Backpack {
+	/** Content of the BackPack*/
     private final Map<Coord, Item> contenu;
     private int width = 7;
     private int height = 5;
     
+    /**
+     * Creates the initial 5×3 backpack with empty cells.
+     */
     public Backpack() {
     	contenu = new HashMap<>();
         for (int x = 0; x < 5; x++) {
@@ -15,14 +24,19 @@ public class Backpack {
             }
         }
     }
-    
+    /**
+     * Adds an empty cell to the backpack if the coordinate is valid.
+     */
     public void allouerCase(Coord c) {
     	if(c.x()>7||c.x()<0) {return;}
     	if(c.y()>5||c.y()<0) {return;}
     	if(contenu.containsKey(c)) {return;}
     	contenu.put(c,null);
     }
-
+    
+    /**
+     * Checks if an item 
+     */
     public boolean peutPlacer(Item item) {
         for (Coord c : item.forme()) {
             Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
@@ -32,6 +46,9 @@ public class Backpack {
         return true;
     }
 
+    /**
+     * Places an item if the placement is valid.
+     */
     public void placer(Item item) {
     	if (!peutPlacer(item)) return;
     	
@@ -42,7 +59,9 @@ public class Backpack {
     }
     
     //hero.getBackpack().contenu().entrySet().removeIf(entry -> entry.getValue()==this);
-    
+    /**
+     * Places a curse item, removing displaced items.
+     */
     public void PlacerMalediction(Item item) {
     	Objects.requireNonNull(item);
     	if(!peutPlacerMalediction(item)) {
@@ -70,6 +89,10 @@ public class Backpack {
     		
     	//}
     }
+    
+    /**
+     * Checks if a curse can be placed.
+     */
 
     public boolean peutPlacerMalediction(Item item) {
     	Objects.requireNonNull(item);
@@ -143,7 +166,9 @@ public class Backpack {
    	}
    	throw new IllegalArgumentException("getGold gagne un valeur exception");
    }
-    
+    /**
+     * Removes depleted Gold items.
+     */
     public void RefreshMonnaie() {
     	for(var i:contenu.entrySet()) {
     		if(i.getValue() instanceof Gold g) {

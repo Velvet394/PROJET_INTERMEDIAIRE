@@ -1,5 +1,9 @@
 package modelisation;
 
+/**
+ * A mana-recovery effect.
+ * Refills mana to the hero.
+ */
 public class Effect_Charge implements Effect{
 	private final int chargePoint;
 	
@@ -12,6 +16,9 @@ public class Effect_Charge implements Effect{
 		chargePoint=c;
 	}
 	
+	 /**
+     * Restores mana to the hero.
+     */
 	@Override
 	public void apply(Hero h, Ennemi e, Combat c) {
 		// TODO Auto-generated method stub

@@ -1,5 +1,8 @@
 package modelisation;
-
+/**
+ * Enter behavior for healer rooms.
+ * The hero can recover HP in those rooms.
+ */
 public class Enter_Healer implements Enter {
 
 	@Override

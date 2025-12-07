@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Represents a stack of gold coins as an item.
+ */
 public record Or(int num, Coord set) implements Item {
 	public Or {
 		if(num<0) {

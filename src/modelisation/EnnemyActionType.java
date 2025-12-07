@@ -1,10 +1,14 @@
 package modelisation;
 
+/**
+ * Defines the ennemy's actions 
+ * */
+
 public enum EnnemyActionType {
-	ATTACK, /* attack de l'ennemi */
-	SKILL, /* compétence speciale */
-	DEFEND, // defence
-	HEAL, // géri
-	CURSE, // malédiction
-	BUFF // s'améliore 
+	ATTACK, /* attack  */
+	SKILL, /* special skills */
+	DEFEND,/* defend */
+	HEAL, // heals
+	CURSE, // curse
+	BUFF // protection 
 }

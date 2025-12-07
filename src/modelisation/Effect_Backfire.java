@@ -1,5 +1,8 @@
 package modelisation;
 
+/**
+ * A risky effect that damages the enemy and also hurts the hero.
+ */
 public class Effect_Backfire implements Effect {
 	private final int dmg;
 	
@@ -10,6 +13,9 @@ public class Effect_Backfire implements Effect {
 		dmg=d;
 	}
 	
+	/**
+     * Deals damage to the enemy and half damage to the hero.
+     */
 	@Override
 	public void apply(Hero h, Ennemi e, Combat c) {
 		// TODO Auto-generated method stub

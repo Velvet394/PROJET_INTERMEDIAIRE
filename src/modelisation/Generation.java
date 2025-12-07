@@ -7,7 +7,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Static registry of Ennemies, Weapons, Items, Floors and Dungeons
+ * */
 public class Generation {
+	
+	/**
+	   * Generates a random list of enemies for a combat.
+	   */
 	public static List<Ennemi> genererEnnemis(){
 		var num=Dice.roll(1, 5);//nombres des ennemis max [1,5] tous inclus
 		ArrayList<Ennemi> list=new ArrayList<>();
@@ -17,6 +24,9 @@ public class Generation {
 		return list;
 	}
 	
+	/**
+	   * Generates a random list of items (usually used for treasure rewards).
+	*/
 	public static List<Item> genererItems(){
 		var num=Dice.roll(1, 3);//nombres des tresor max [1,5] tous inclus
 		ArrayList<Item> list=new ArrayList<>();
@@ -26,6 +36,9 @@ public class Generation {
 		return list;
 	}
 	
+	/**
+	   * Generates a random list of weapons (for example, merchant inventory).
+	*/
 	public static List<Weapon> genererArticles(){
 		var num=Dice.roll(1, 4);//nombres des tresor max [1,5] tous inclus
 		ArrayList<Weapon> list=new ArrayList<>();
@@ -35,6 +48,9 @@ public class Generation {
 		return list;
 	}
 	
+	/**
+	   * Generates a random map of rooms for an {@link Etape} (one floor).
+    */
 	public static Map<Coord, Room> genererEtape(){
 		var map=new HashMap<Coord,Room>();
 		for(int i=0;i<5;i++) {
@@ -45,6 +61,9 @@ public class Generation {
 		return map;
 	}
 	
+   /**
+	* Generates a complete dungeon with several floors.
+	*/
 	public static Donjon genererDonjon() {
 		var map=new Donjon();
 		for(int i=0;i<=Donjon.maxEtape;i++) {

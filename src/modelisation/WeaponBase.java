@@ -3,6 +3,9 @@ package modelisation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Static registry of Weapon
+ * */
 public class WeaponBase {
 	public static final List<Weapon> templates = new ArrayList<>();
 	public static final int NUMITM = 3;

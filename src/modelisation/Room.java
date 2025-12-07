@@ -3,6 +3,10 @@ package modelisation;
 import java.util.Objects;
 import java.util.*;
 
+/**
+ * Represents a room in a dungeon floor.
+ * A room has a type, a visited state and an enter behavior.
+ */
 public class Room {
     private RoomType type;
     private boolean visite;
@@ -39,6 +43,10 @@ public class Room {
     	return visite; 
     }
 
+    /**
+     * Marks the room as visited and applies its enter behavior to the hero.
+     * If the room was already visited, returns  null.
+     */
     public RoomType visiter(Hero h) { 
     	IO.println("Visite");
     	if(estVisite()) {return null;}

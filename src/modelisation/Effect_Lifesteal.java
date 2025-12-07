@@ -1,5 +1,8 @@
 package modelisation;
 
+/**
+ * An attack effect that also heals the hero by the dealt amount.
+ */
 public class Effect_Lifesteal implements Effect {
 	private final int dmg;
 	

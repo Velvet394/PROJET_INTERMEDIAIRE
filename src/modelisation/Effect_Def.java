@@ -1,5 +1,8 @@
 package modelisation;
 
+/**
+ * A defensive effect that increases the hero's block for the current turn.
+ */
 public class Effect_Def implements Effect {
 	private final int blockPoint;
 	

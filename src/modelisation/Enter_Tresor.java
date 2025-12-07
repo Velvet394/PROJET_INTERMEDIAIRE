@@ -1,5 +1,8 @@
 package modelisation;
 
+/**
+ * Enter behavior for treasure rooms.
+ */
 public class Enter_Tresor implements Enter {
 	
 	@Override

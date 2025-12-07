@@ -3,6 +3,9 @@ package modelisation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Registry of room templates used for random floor generation.
+ */
 public class RoomBase {
 	public static final List<Room> templates = new ArrayList<>();
 	public static final int NUMROOM = 7;

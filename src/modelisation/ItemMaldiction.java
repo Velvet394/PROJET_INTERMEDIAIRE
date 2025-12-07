@@ -3,6 +3,9 @@ package modelisation;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a curse item placed in the backpack.
+ */
 public class ItemMaldiction implements Item {
 	private final String name="Maldiction";
 	private final List<Coord> forme;

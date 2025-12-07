@@ -2,8 +2,19 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Represents a single floor (etape) of the dungeon.
+ * It stores all rooms on the floor and keeps track of
+ * neighbor rooms that are not visited yet.
+ */
 public class Etape {
+	/** All rooms of the floor indexed by their coordinates. */
     private final Map<Coord, Room> salles;
+    
+    /**
+     * Rooms that are neighbours of at least one visited room
+     * and are not visited yet.
+     */
     private final Map<Coord,Room> sallesNeighborNonVisite;
     
     public Etape() {
@@ -21,6 +32,11 @@ public class Etape {
     	sallesNeighborNonVisite.put(new Coord(0, 0),res);
 	}
     
+    /**
+     * Rebuilds the map of non-visited neighbour rooms.
+     * A room is considered a neighbour if it is adjacent to
+     * at least one visited room and has not been visited yet.
+     */
     public void RefreshListNeighbor() {
     	var list=new HashMap<Coord,Room>();
     	var res=new ArrayList<Room>();
@@ -100,6 +116,10 @@ public class Etape {
 //    	}
 //    }
     
+    /**
+     * Visits a room at a given coordinate with the provided hero,
+     * only if that room is currently in the neighbour list.
+     */
     public RoomType visite(Coord set,Hero h) {
     	var res=salles.getOrDefault(set, null);
     	if(res==null) {

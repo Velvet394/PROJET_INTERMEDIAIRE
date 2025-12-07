@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents an amount of silver money stored as an item.
+ */
 public record Argent(int num,Coord set) implements Item {
 	
 	public Argent {

@@ -2,27 +2,46 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Represents the main hero controlled by the player.
+ * The hero has health points, energy, mana and a backpack of items.
+ */
+
 public class Hero {
+	 /** Backpack containing all items of the hero. */
     private final Backpack sac;
-    //private final Hp hp = new Hp(40);
-    //private final Mana mana = new Mana(0);
-    //private final Exp exp = new Exp(0, 20);
+    /** Current position of the Hero in the Dungeon */
     private Position position;
+    /** Current health points */
     private int hp=40;
+    /** Maximum Current health points */
     private int maxHp=40;
+    /** Current mana points */
     private int mana=20;
+    /** Maximum Current mana points */
     private int maxMana=20;
+    /** Current experience points */
     private int exp=0;
+    /** Maximum experience points */
     private int expMax=10;
+    /** Current block value (temporary protection) */
     private int block=0;
 
+    /** Energy available this turn (resets to 3 each turn) */
     private int energie = 3;
+    /** Hero level */
     private int niveau = 1;
+    
+    /** Number of times the hero refused a curse. */
     private int refusMalediction = 0;
+    /** Number of curses suffered. */
     private int foisMalediction = 0;
     //private boolean estProteger;
     private int or = 20;
     
+    /**
+     * Tests if the hero should level up and, if so, increases backpack capacity.
+     */
     public void testLevelUp() {
     	if(exp>=expMax) {
     		niveau++;
@@ -34,11 +53,19 @@ public class Hero {
     		expMax=(niveau^niveau)*10;
     	}
     }
+    
+    /**
+     * This is the constructor
+     */
 
     public Hero() {
         position = new Position(0, new Coord(0,0));
         sac  = new Backpack();
     }
+    
+    /**
+     * Applies damage to the hero
+     */
     
     public void damage(int dmg) {
     	var res=block-dmg;
@@ -51,14 +78,20 @@ public class Hero {
     	return;
     }
 
+    /**
+     * Heals the hero 
+     */
     public void heal(int val) { 
     	hp = Math.min(maxHp, hp + val); 
     }
+    
+    /** Verifies if the hero is dead */
 
     public boolean isDead() { 
     	return hp <= 0;
     }
 
+    /** Verifies if the hero is alive */
     public boolean isAlive() { 
     	return hp > 0; 
     }
@@ -84,10 +117,13 @@ public class Hero {
     	return estProteger;
     }
     */
+    
+    /** Refills the Mana points */
     public void recharge() { 
     	mana = maxMana; 
     }
     
+    /** Verifies if the hro's mana is usable */
     public boolean ifuse(int cost) {
     	if(mana<cost) {
     		return false;
@@ -95,9 +131,16 @@ public class Hero {
     	return true;
     }
 
+    /**
+     *  Consumes mana points,
+     */
     public void use(int val) { 
     	mana = Math.max(0, mana - val); 
     }
+    
+    /**
+     * Checks if the hero has enough 
+     */
     
     public boolean ifcost(int cost) {
     	if(energie<cost) {
@@ -106,13 +149,18 @@ public class Hero {
     	return true;
     }
     
+    /**
+     * Consumes energy points
+     */
     public void cost(int cost) {
     	if(energie<cost) {
     		return;
     	}
     	energie = Math.max(0, energie - cost);
     }
-    
+    /**
+     * Adds protection points 
+     */
     public void defend(int b) { 
     	if(b<0){
     		throw new IllegalArgumentException("Hero defend error");
@@ -120,6 +168,9 @@ public class Hero {
         block += b;
     }
     
+    /**
+     * Increases current mana, without exceeding maxMana.
+     */
     public void charge(int m) {
     	if(m<0) {
     		throw new IllegalArgumentException("charge argument error");
@@ -140,6 +191,10 @@ public class Hero {
     	exp.add(v); 
     }*/
 
+    /**
+     * Initializes a new combat: updates max mana from the backpack,
+     * fully recharges mana and resets energy to 3.
+     */
     public void startCombat() {
     	updateMaxManaFromBackpack();
     	recharge();
@@ -147,10 +202,14 @@ public class Hero {
         //block = 0;
     }
     
+    /**
+     * Recharges energy to 3 at the beginning of the hero turn.
+     */
     public void rechargerCombat() {
         energie = 3;
     }
     
+    /** Adds Malediction to the Hero */
     public void addMalediction(int n) {
     	foisMalediction += n;
     	
@@ -199,6 +258,10 @@ public class Hero {
     
     public void tresor(List<Item> list) {}
     
+    /**
+     * Uses the item located at a given coordinate in the backpack
+     * against an enemy during a combat.
+     */
     public void afficheAnduse(Coord c,Ennemi e,Combat combat) {
     	var i=sac.contenu().getOrDefault(c, null);
     	if(i==null) {return;}
@@ -206,7 +269,10 @@ public class Hero {
     		w.utiliser(this, e, combat);
     	}
     }
-
+    
+    /**
+     * Adds an item to the backpack (if there is enough space).
+     */
     public void ajouterDansSac(Item item) {
         // TODO: gestion rotation, placement
     	sac.placer(item);
@@ -221,6 +287,9 @@ public class Hero {
 	    position.moveTo(etape, coord);
 	}
 
+	/**
+     * Camculates maxMana from the items present in the backpack
+     */
 	private void updateMaxManaFromBackpack() {
 	    int total = 0;
 	    for (Item item : sac.contenu().values()) {
@@ -232,7 +301,9 @@ public class Hero {
 	    mana = Math.min(mana, maxMana);
 	}
 
-
+	 /**
+     * Updates all hero points that depend on the backpack content.
+     */
 	public void updateStatsFromBackpack() {
 	    updateMaxManaFromBackpack();
 	}

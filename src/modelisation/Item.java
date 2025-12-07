@@ -1,15 +1,25 @@
 package modelisation;
 
 import java.util.List;
-
+/**
+ * Base interface for all items that can be stored in the backpack.
+ */
 public interface Item {
 	List<Coord> forme();
+	/**
+	   * Returns the current offset (top-left absolute coordinate) in the backpack.
+	   *
+	 */
 	Coord offsetCoord();
 	//void Item(Item i);
 	String nom();
 	void rotation();
 	void translate(Coord offset);
-	
+	/**
+	   * Returns the mana capacity provided by this item when
+	   * it is present in the backpack.
+	   * Default implementation returns 0.
+	*/
 	default int manaCapacity() {
         return 0;
     }

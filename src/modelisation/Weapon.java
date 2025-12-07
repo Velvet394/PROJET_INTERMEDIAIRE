@@ -2,6 +2,7 @@ package modelisation;
 
 import java.util.ArrayList;
 
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +11,10 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Represents a weapon or usable item placed inside the backpack.
+ * A weapon has a shape, a cost, optional mana consumption and applies effects.
+ */
 public class Weapon implements Item {
 	private final String name;
 	private final int cost;
@@ -58,7 +63,9 @@ public class Weapon implements Item {
 	 public List<Effect> effects(){
 		 return effects;
 	 }
-	 
+	 /**
+	     * Use of the weapon in a combat
+	 */
 	 public void utiliser(Hero hero, Ennemi ennemi, Combat combat) {
 		 Objects.requireNonNull(hero);
 		 Objects.requireNonNull(ennemi);
@@ -90,6 +97,9 @@ public class Weapon implements Item {
 		 }
 	 }
 	 
+	 /**
+	  * Rotation of the hero backpack
+	  * */
 	 public void rotation() {
 		 var list=new ArrayList<Coord>();
 		 for(var i:forme) {
@@ -99,6 +109,9 @@ public class Weapon implements Item {
 		 forme.addAll(list);
 	 }
 	 
+	 /**
+	  * Translates the current position to the new position
+	  * */
 	 public void translate(Coord offset) {
 		 Objects.requireNonNull(offset);
 		 offsetCoord=offset;

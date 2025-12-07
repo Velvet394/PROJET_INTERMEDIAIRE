@@ -8,14 +8,19 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Represents the ennemies that the hero will have to kill
+ * */
 public class Ennemi {
     private final String name;
     
     //private final Hp hp;
+    /** current health points */
     private int hp;
     private final int maxHp;
-    
+    /** the damage that the ennemy  will put onto the hero*/
     private final int dmg;
+    /** Block (protection) points*/
     private int block;
     private final int blockPoint;
     private final int healPoint;
@@ -151,7 +156,7 @@ public class Ennemi {
     public int hp() { 
     	return hp; 
     }
-    
+    /** Picks out a random action */
     public void Action() {
     	intentions.clear();
     	var num=Dice.roll(1, 3);
@@ -159,7 +164,7 @@ public class Ennemi {
     		intentions.add(choisirIntent());
     	}
     }
-    
+    /** Executes the ennemy's action */
     public void executerAction(Hero hero) {
     	Objects.requireNonNull(hero);
         for(var i:intentions) {
@@ -216,6 +221,7 @@ public class Ennemi {
         }
     }
     
+    /** Curse the hero */
     private void curse(Hero hero) {
     	Objects.requireNonNull(hero);
         int curseStrength = 1;
@@ -223,6 +229,7 @@ public class Ennemi {
         IO.println(name + " applique une malédiction au héros.");
     }
     
+    /** Protection */
     private void buff() {
         int buffAmount = 3; 
         block += buffAmount; 
@@ -232,6 +239,7 @@ public class Ennemi {
     private void skill() {
     }
     
+    /** Damages */
     public void damage(int dmg) {
     	IO.println("Ennemi est damage");
     	var res=block-dmg;

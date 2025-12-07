@@ -2,6 +2,11 @@ package modelisation;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Represents a combat between a hero and multiple enemies.
+ * A combat alternates turns until one side is defeated.
+ */
+
 public class Combat {
     private final Hero hero;
     private final List<Ennemi> ennemis;
@@ -35,6 +40,10 @@ public class Combat {
 //    	}
 //    }
     
+    /**
+     * Executes the hero's turn using his available energy.
+     */
+    
     public void tourHero() {
         hero.rechargerCombat();     
         boolean aJoueAuMoinsUneFois = false;
@@ -55,7 +64,9 @@ public class Combat {
         }
     }
 
-
+    /**
+     * Executes the ennemy's turn 
+     */
     public void tourEnnemis() {
     	for (var e:ennemis) {
     		if (!e.estMort()) {
@@ -68,6 +79,9 @@ public class Combat {
     	}
     }
     
+    /**
+     * Refresh the list of ennemies if an ennemy is dead 
+     */
     public void RefreshListEnnemis() { // l'appliquer chaque action de hero et ennemi
     	/*var list=new ArrayList<Integer>();
     	int index=0;
@@ -83,6 +97,9 @@ public class Combat {
     	ennemis.removeIf(Ennemi::estMort);
     }
     
+    /**
+     * Determines the combat state.
+     */
     public int estCombatTermine() {
         
         if (hero.isDead()) {
@@ -95,6 +112,10 @@ public class Combat {
         }
         return 1; 
     }
+    
+    /**
+     * Starts the combat
+     */
     
     public void startCombat() {
     	var state=CombatState.HERO_TURN;

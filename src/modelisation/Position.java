@@ -1,5 +1,9 @@
 package modelisation;
 
+/**
+ * Represents the position of the hero in the dungeon:
+ * which floor (etape) and which coordinate in the map.
+ */
 public class Position {
     private int etape;
     private Coord coord;
@@ -13,6 +17,10 @@ public class Position {
 
     public Coord getCoord() { return coord; }
 
+    /**
+     * Moves the position to a new floor and coordinate.
+     *
+     */
     public void moveTo(int newEtape, Coord newCoord) {
         this.etape = newEtape;
         this.coord = newCoord;
@@ -22,6 +30,9 @@ public class Position {
     	coord = newPos;
     }
     
+    /**
+     * Moves the coordinate by one cell in the given direction.
+     */
     public void move(Direction dir) {
     	switch(dir) {
     		case UP:
