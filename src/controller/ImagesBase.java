@@ -16,6 +16,7 @@ public class ImagesBase {
 	public static Image exit;
 	public static Image market;
 	public static Image heal;
+	public static Image tresor;
 	
 	static {
 		try {
@@ -79,6 +80,13 @@ public class ImagesBase {
         } catch (IOException ex) {
             ex.printStackTrace();
             heal = null; 
+        }
+		
+		try {
+			tresor = ImageIO.read(new File("./image/general/tresor.png"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            tresor = null; 
         }
 		
 		

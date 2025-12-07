@@ -367,7 +367,7 @@ public class Game_Donjon implements Ecran {
 	    case HEALER -> {hero.heal(Dice.roll(3, 10));}
 	    case GATE -> {donjon.moveEtape();}
 	    case MERCHANT -> {game.goToMarket();}
-	    case TREASURE -> {}
+	    case TREASURE -> {game.goToTresor();}
 	    case EXIT -> {System.exit(0);}
 	    default -> {}
 	    }
@@ -474,6 +474,15 @@ public class Game_Donjon implements Ecran {
 		                } else {
 		                    g.setColor(Color.RED);
 		                    g.drawString("H", px + 10, py + 20); 
+		                }
+		            }
+	            	
+		            else if(donjon.getetape().sallesNeighborNonVisite().get(new Coord(gx, gy)).getType()==RoomType.TREASURE) {
+		            	if (ImagesBase.tresor != null) {
+		                    g.drawImage(ImagesBase.tresor, px, py, ROOM_SIZE, ROOM_SIZE, null);
+		                } else {
+		                    g.setColor(Color.RED);
+		                    g.drawString("T", px + 10, py + 20); 
 		                }
 		            }
 		            

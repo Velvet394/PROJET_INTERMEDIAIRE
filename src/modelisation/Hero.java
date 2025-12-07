@@ -21,7 +21,7 @@ public class Hero {
     private int refusMalediction = 0;
     private int foisMalediction = 0;
     //private boolean estProteger;
-    private int or = 0;
+    private int or = 20;
     
     public void testLevelUp() {
     	if(exp>=expMax) {
@@ -190,6 +190,11 @@ public class Hero {
     
     public void addOr(int a) {
     	or += a;
+    }
+    
+    public void useOr(int a) {
+    	if(a>or) {return;}
+    	or-=a;
     }
     
     public void tresor(List<Item> list) {}

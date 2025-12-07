@@ -26,6 +26,15 @@ public class Generation {
 		return list;
 	}
 	
+	public static List<Weapon> genererArticles(){
+		var num=Dice.roll(1, 4);//nombres des tresor max [1,5] tous inclus
+		ArrayList<Weapon> list=new ArrayList<>();
+		for(int i=0;i<num;i++) {
+			list.add(new Weapon(WeaponBase.templates.get(Dice.roll(0, WeaponBase.NUMITM-1))));
+		}
+		return list;
+	}
+	
 	public static Map<Coord, Room> genererEtape(){
 		var map=new HashMap<Coord,Room>();
 		for(int i=0;i<5;i++) {

@@ -19,6 +19,7 @@ public class Game {
     private Ecran marketEcran;
     private Ecran healEcran;
     private final Ecran menuEcran;
+    private Ecran tresorEcran;
 
 
     private Ecran currentEcran;
@@ -40,10 +41,14 @@ public class Game {
     	var c=new Combat(hero, Generation.genererEnnemis());
     	combatEcran=new Game_Combat(c,this) ; 
     	currentEcran = combatEcran; }
-    public void goToMarket()  { /*currentEcran = marketEcran;*/ }
+    public void goToMarket()  { 
+    	marketEcran=new Game_Market(this, Generation.genererArticles(), hero);
+    	currentEcran = marketEcran; }
     public void goToHeal()  { /*currentEcran = healEcran;*/ }
     public void goToMenu()  { currentEcran = menuEcran; }
-    
+    public void goToTresor() {{ 
+    	tresorEcran=new Game_Tresor(this, Generation.genererArticles(), hero);
+    	currentEcran = tresorEcran; }}
 
     public void start() {
         Application.run(Color.BLACK, context -> {
@@ -72,4 +77,8 @@ public class Game {
 
     public static int windowWidth()  { return WINDOW_WIDTH; }
     public static int windowHeight() { return WINDOW_HEIGHT; }
+    
+    public Hero hero() {
+    	return hero;
+    }
 }
