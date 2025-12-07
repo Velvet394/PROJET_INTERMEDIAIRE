@@ -66,11 +66,12 @@ public class Weapon implements Item {
 		 if(!hero.ifcost(cost)) {
 			 return;
 		 }
-		 hero.cost(cost);
 		 
 		 if(!hero.ifuse(mana)) {
 			 return;
 		 }
+		 
+		 hero.cost(cost);
 		 hero.use(mana);
 		 
 		 IO.println("USE Weapon");

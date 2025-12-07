@@ -10,8 +10,8 @@ public class Hero {
     private Position position;
     private int hp=40;
     private int maxHp=40;
-    private int mana=0;
-    private int maxMana=0;
+    private int mana=20;
+    private int maxMana=20;
     private int exp=0;
     private int expMax=10;
     private int block=0;

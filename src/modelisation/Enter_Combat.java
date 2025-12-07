@@ -5,8 +5,14 @@ import java.util.Objects;
 
 public class Enter_Combat implements Enter {
 	private Combat combat=null;
+	
 	@Override
-	public void apply(Hero h) {
+	public RoomType apply(Hero h) {
+		// TODO Auto-generated method stub
+		return RoomType.ENEMY;
+	}
+	
+	public void apply1(Hero h) {
 		combat=null;
 		List<Ennemi> ennemis = Generation.genererEnnemis();  // Assurez-vous que cette méthode renvoie une liste valide
 

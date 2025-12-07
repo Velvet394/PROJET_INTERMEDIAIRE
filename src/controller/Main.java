@@ -7,9 +7,9 @@ import modelisation.Hero;
 import modelisation.Weapon;
 import modelisation.WeaponBase;
 
-public class Test {
-	 public static void main(String[] args) {
-		 Weapon durandal = new Weapon(WeaponBase.templates.get(0)); // épée verticale
+public class Main {
+	public static void main(String[] args) {
+		Weapon durandal = new Weapon(WeaponBase.templates.get(0)); // épée verticale
 	     Weapon shield   = new Weapon(WeaponBase.templates.get(1)); // bouclier 2x2
 	     Weapon manaStone= new Weapon(WeaponBase.templates.get(2)); // pierre de mana
 	     
@@ -24,9 +24,7 @@ public class Test {
 	     
 	     Donjon donjon = Generation.genererDonjon();
 	     
-	     Game_Donjon g=new Game_Donjon(hero,donjon);
-	     
-	     g.start();
+	     var game=new Game(hero,donjon);
+	     game.start();
 	}
-     
 }

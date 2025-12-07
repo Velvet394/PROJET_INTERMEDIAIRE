@@ -39,11 +39,13 @@ public class Room {
     	return visite; 
     }
 
-    public void visiter(Hero h) { 
+    public RoomType visiter(Hero h) { 
     	IO.println("Visite");
-    	if(estVisite()) {return;}
+    	if(estVisite()) {return null;}
     	this.visite = true; 
-    	enter.apply(h);
+    	var type=enter.apply(h);
+    	
+    	return type;
     }
     
     public boolean visite() {

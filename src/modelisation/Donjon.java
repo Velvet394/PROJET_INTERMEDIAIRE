@@ -25,16 +25,17 @@ public class Donjon {
     	return etapes.get(etape);
     }
     
-    public void moveSalle(Hero h,Coord c) {
+    public RoomType moveSalle(Hero h,Coord c) {
     	var e=etapes.getOrDefault(etape, null);
     	if(e==null) {
     		throw new IllegalArgumentException("error etape dans Donjon");
     	}
     	var res=e.sallesNeighborNonVisite().getOrDefault(c, null);
-    	if(res==null) {return;}
-    	res.visiter(h);
+    	if(res==null) {return null;}
+    	var type=res.visiter(h);
     	position=c;
     	e.RefreshListNeighbor();
+    	return type;
     }
 
     public void ajouterEtape(int num, Etape e) {
@@ -48,5 +49,9 @@ public class Donjon {
     
     public Map<Integer, Etape> etapes() {
     	return etapes;
+    }
+    
+    public int etape() {
+    	return etape;
     }
 }
