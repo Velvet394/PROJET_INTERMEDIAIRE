@@ -1,4 +1,4 @@
-package view;
+/*package view;
 import controller.*;
 
 import com.github.forax.zen.*;
@@ -31,3 +31,4 @@ public class MenuView  {
     }
 
 }
+*/
