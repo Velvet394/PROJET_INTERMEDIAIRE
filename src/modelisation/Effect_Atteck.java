@@ -21,3 +21,4 @@ private final int dmg;
 		e.damage(dmg);
 	}
 }
+//
