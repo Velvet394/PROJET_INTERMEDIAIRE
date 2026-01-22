@@ -1,5 +1,6 @@
 package modelisation;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.io.*;
 
 /**
@@ -27,11 +28,12 @@ public class Backpack {
     /**
      * Adds an empty cell to the backpack if the coordinate is valid.
      */
-    public void allouerCase(Coord c) {
-    	if(c.x()>7||c.x()<0) {return;}
-    	if(c.y()>5||c.y()<0) {return;}
-    	if(contenu.containsKey(c)) {return;}
+    public int allouerCase(Coord c) {
+    	if(c.x()>7||c.x()<0) {return 0;}
+    	if(c.y()>5||c.y()<0) {return 0;}
+    	if(contenu.containsKey(c)) {return 0;}
     	contenu.put(c,null);
+    	return 1;
     }
     
     /**
@@ -202,4 +204,62 @@ public class Backpack {
 		g.use(use);
 		RefreshMonnaie();
 	}
+    
+    
+    public void interaction_refresh(Hero h) {
+    	Objects.requireNonNull(h);
+    	h.interrefresh();
+    	var set=new HashSet<Item>();
+   
+    	set=contenu.entrySet().stream()
+    	.filter(e->e.getValue()!=null)
+    	.map(e->e.getValue())
+    	.collect(Collectors.toCollection(java.util.LinkedHashSet::new));
+    	
+    	for(var i:set) {
+    		var deja=new HashSet<Item>();
+    		Coord offset=i.offsetCoord();
+    		for(var j:i.forme()) {
+    			Item get=contenu.get(new Coord(j.x()+offset.x()+1, j.y()+offset.y()));
+    			if(get!=null) {
+    				if(!i.equals(get)) {
+    					deja.add(contenu.get(new Coord(j.x()+offset.x()+1, j.y()+offset.y())));
+    				}
+    			}
+    			get=contenu.get(new Coord(j.x()+offset.x()-1, j.y()+offset.y()));
+    			if(get!=null) {
+    				if(!i.equals(get)) {
+    					deja.add(contenu.get(new Coord(j.x()+offset.x()-1, j.y()+offset.y())));
+    				}
+    			}
+    			get=contenu.get(new Coord(j.x()+offset.x(), j.y()+offset.y()+1));
+    			if(get!=null) {
+    				if(!i.equals(get)) {
+    					deja.add(contenu.get(new Coord(j.x()+offset.x(), j.y()+offset.y()+1)));
+    				}
+    			}
+    			get=contenu.get(new Coord(j.x()+offset.x(), j.y()+offset.y()-1));
+    			if(get!=null) {
+    				if(!i.equals(get)) {
+    				deja.add(contenu.get(new Coord(j.x()+offset.x(), j.y()+offset.y()-1)));
+    				}
+    			}
+    		}
+    		
+    		i.interaction(h, deja.size());
+    		
+    	}
+    	
+    	h.updateStats();
+    	
+    }
+    
+    public void retirer(Item item) {
+    	  Objects.requireNonNull(item);
+    	  for (var e : contenu.entrySet()) {
+    	    if (e.getValue() == item) {
+    	      e.setValue(null);
+    	    }
+    	  }
+    	}
 }

@@ -1,6 +1,8 @@
 package modelisation;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 /**
  * Base interface for all items that can be stored in the backpack.
  */
@@ -23,6 +25,8 @@ public interface Item {
 	default int manaCapacity() {
         return 0;
     }
+	
+	void interaction(Hero h,Integer i);
 }
 
 

@@ -5,7 +5,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Objects;
-
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -24,9 +25,13 @@ public class Weapon implements Item {
 	private final List<Effect> effects;
 	private Coord offsetCoord=new Coord(0,0);
 	
+	private int rotationQuarterTurns = 0;
+	
 	private Image image;
 	
-	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e,String imagePath) {
+	BiConsumer<Hero,Integer> interaction;
+	
+	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e,String imagePath,BiConsumer<Hero,Integer> inter) {
 		Objects.requireNonNull(f);
 		Objects.requireNonNull(e);
 		name=n;
@@ -35,6 +40,7 @@ public class Weapon implements Item {
 		estConsommable=b;
 		forme=new ArrayList<>(Objects.requireNonNull(f));
 		effects=new ArrayList<>(Objects.requireNonNull(e));
+		interaction=inter;
 		
 		 try {
 	            image = ImageIO.read(new File(imagePath));
@@ -52,7 +58,9 @@ public class Weapon implements Item {
 		estConsommable=w.estConsommable;
 		forme=new ArrayList<>(Objects.requireNonNull(w.forme));
 		effects=new ArrayList<>(Objects.requireNonNull(w.effects));
+		interaction=w.interaction;
 		image=w.image;
+		rotationQuarterTurns=w.rotationQuarterTurns;
 	}
 	
 	 public String nom() { return name; }
@@ -100,6 +108,7 @@ public class Weapon implements Item {
 	 /**
 	  * Rotation of the hero backpack
 	  * */
+	 /*
 	 public void rotation() {
 		 var list=new ArrayList<Coord>();
 		 for(var i:forme) {
@@ -107,7 +116,32 @@ public class Weapon implements Item {
 		 }
 		 forme.clear();
 		 forme.addAll(list);
-	 }
+	 }*/
+	 public void rotation() {
+		  var list = new ArrayList<Coord>();
+		  for (var c : forme) {
+		    list.add(new Coord(c.y(), -c.x()));
+		  }
+		  forme.clear();
+		  forme.addAll(list);
+
+		  // normalize: shift so minX/minY become 0
+		  int minX = 0, minY = 0;
+		  for (var c : forme) {
+		    minX = Math.min(minX, c.x());
+		    minY = Math.min(minY, c.y());
+		  }
+		  if (minX < 0 || minY < 0) {
+		    var normalized = new ArrayList<Coord>(forme.size());
+		    for (var c : forme) {
+		      normalized.add(new Coord(c.x() - minX, c.y() - minY));
+		    }
+		    forme.clear();
+		    forme.addAll(normalized);
+		  }
+
+		  rotationQuarterTurns = (rotationQuarterTurns + 1) & 3;
+		}
 	 
 	 /**
 	  * Translates the current position to the new position
@@ -162,4 +196,16 @@ public class Weapon implements Item {
 	 public int manaCapacity() {
 	     return mana;
 	 }
+	 
+	 
+	 public void interaction(Hero h,Integer i) {
+		 interaction.accept(h,i);
+		 return;
+	 }
+	 
+	 
+	 public void setRotationQuarterTurns(int t) {
+		  rotationQuarterTurns = t & 3;
+		}
+	 public int rotationQuarterTurns() { return rotationQuarterTurns; }
 }

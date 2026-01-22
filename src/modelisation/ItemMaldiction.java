@@ -58,5 +58,9 @@ public class ItemMaldiction implements Item {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void interaction(Hero h,Integer i) {
+		return;
+	}
 }
 

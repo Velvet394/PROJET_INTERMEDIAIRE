@@ -51,14 +51,57 @@ public class Generation {
 	/**
 	   * Generates a random map of rooms for an {@link Etape} (one floor).
     */
-	public static Map<Coord, Room> genererEtape(){
-		var map=new HashMap<Coord,Room>();
-		for(int i=0;i<5;i++) {
-			for(int j=0;j<11;j++) {
-				map.put(new Coord(i,j), new Room(RoomBase.templates.get(Dice.roll(0, RoomBase.NUMROOM-1))));
-			}
-		}
-		return map;
+//	public static Map<Coord, Room> genererEtape(){
+//		var map=new HashMap<Coord,Room>();
+//		for(int i=0;i<5;i++) {
+//			for(int j=0;j<11;j++) {
+//				map.put(new Coord(i,j), new Room(RoomBase.templates.get(Dice.roll(0, RoomBase.NUMROOM-1))));
+//			}
+//		}
+//		return map;
+//	}
+	public static Map<Coord, Room> genererEtape() {
+	    final int W = 5;
+	    final int H = 11;
+
+	    var map = new HashMap<Coord, Room>();
+
+	    // RoomBase 里你的模板顺序是：
+	    // 0 ENEMY, 1 TREASURE, 2 MERCHANT, 3 HEALER, 4 EMPTY, 5 GATE, 6 EXIT
+	    final int IDX_GATE = 5;
+	    final int IDX_EXIT = 6;
+	    final int NORMAL_COUNT = RoomBase.NUMROOM - 2; // 只随机 0..4，不包含 GATE/EXIT
+
+	    // ---- 随机选出 1 个 EXIT + 2 个 GATE 的坐标（确保互不相同）----
+	    Coord exit = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));
+
+	    Coord gate1;
+	    do {
+	        gate1 = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));
+	    } while (gate1.equals(exit));
+
+	    Coord gate2;
+	    do {
+	        gate2 = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));
+	    } while (gate2.equals(exit) || gate2.equals(gate1));
+
+	    // ---- 填充整层 ----
+	    for (int i = 0; i < W; i++) {
+	        for (int j = 0; j < H; j++) {
+	            Coord c = new Coord(i, j);
+
+	            if (c.equals(exit)) {
+	                map.put(c, new Room(RoomBase.templates.get(IDX_EXIT)));
+	            } else if (c.equals(gate1) || c.equals(gate2)) {
+	                map.put(c, new Room(RoomBase.templates.get(IDX_GATE)));
+	            } else {
+	                // 普通房间：只从 0..4 随机（不包含 GATE/EXIT）
+	                int idx = Dice.roll(0, NORMAL_COUNT - 1);
+	                map.put(c, new Room(RoomBase.templates.get(idx)));
+	            }
+	        }
+	    }
+	    return map;
 	}
 	
    /**

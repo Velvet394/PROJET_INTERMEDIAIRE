@@ -20,6 +20,7 @@ public class Game {
     private Ecran healEcran;
     private final Ecran menuEcran;
     private Ecran tresorEcran;
+    private Ecran lvupEcran;
 
 
     private Ecran currentEcran;
@@ -49,6 +50,11 @@ public class Game {
     public void goToTresor() {{ 
     	tresorEcran=new Game_Tresor(this, Generation.genererArticles(), hero);
     	currentEcran = tresorEcran; }}
+    
+    public void goTolvup() {
+    	lvupEcran=new Game_lvup(this, hero);
+    	currentEcran=lvupEcran;
+    }
 
     public void start() {
         Application.run(Color.BLACK, context -> {
@@ -57,6 +63,7 @@ public class Game {
             WINDOW_HEIGHT = screenInfo.height();
 
             while (true) {
+            	hero.getBackpack().interaction_refresh(hero);
                 Event e = context.pollEvent();
                 if (e != null) {
                     switch (e) {

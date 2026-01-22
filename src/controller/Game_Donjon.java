@@ -40,6 +40,14 @@ public class Game_Donjon implements Ecran {
 
     private static int selectedX = 0;
     private static int selectedY = 0;
+    
+    
+    
+    
+    private Weapon heldWeapon = null;
+    private Coord heldOldOffset = null;
+    private java.util.List<Coord> heldOldForme = null;
+    private int heldOldRot = 0;
 	
 	public Game_Donjon(Hero h,Donjon d,Game g) {
 		Objects.requireNonNull(h);
@@ -155,19 +163,21 @@ public class Game_Donjon implements Ecran {
 	        int px = backpackOriginX + gx * CELL_SIZE;
 	        int py = backpackOriginY + gy * CELL_SIZE;
 	        
-	        if(i.image()!=null) {
-	        	//g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
-	        	
-	        	Image img = i.image();
-	            int w = img.getWidth(null);
-	            int h = img.getHeight(null);
-	            g.drawImage(img, px, py, px + w, py + h, 0, 0, w, h, null);
-	        }
-	        else {
-                // 没有图片时备用显示方式：画名字
-                g.setColor(Color.WHITE);
-                g.drawString(i.nom(), px + 5, py + 20);
-            }
+	        
+	        drawWeaponImage(g, i, px, py);
+//	        if(i.image()!=null) {
+//	        	//g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
+//	        	
+//	        	Image img = i.image();
+//	            int w = img.getWidth(null);
+//	            int h = img.getHeight(null);
+//	            g.drawImage(img, px, py, px + w, py + h, 0, 0, w, h, null);
+//	        }
+//	        else {
+//                // 没有图片时备用显示方式：画名字
+//                g.setColor(Color.WHITE);
+//                g.drawString(i.nom(), px + 5, py + 20);
+//            }
 	    	
 	    }
 	    
@@ -213,18 +223,29 @@ public class Game_Donjon implements Ecran {
 
             // Boucle principale du jeu
             while (true) {
+            
             	Event e = context.pollEvent();
             	if(e!=null) {
             	switch(e) {
+            	/*
             	case KeyboardEvent _ -> {
             		//gererDeplacement(e);
                     //gererSelection(e);
+
             	}
+            	
             	
             	case PointerEvent _ -> {
             		gererClique((PointerEvent)e);
             	}
-            	
+            	*/
+            	case KeyboardEvent k -> {
+            		handleKeyboard(k);
+                  }
+                  case PointerEvent p -> {
+                    //gererClique(p);
+                	  gererClique(p);
+                  }
             	default -> {}
             	
             	
@@ -296,111 +317,111 @@ public class Game_Donjon implements Ecran {
 	    sac = new Button(exitX, exitY, buttonWidth, buttonHeight, "Sac");
 	}
 	
-	@Override
-	public void gererClique(PointerEvent p) {
-		Objects.requireNonNull(p);
-		
-		if (p.action() != PointerEvent.Action.POINTER_DOWN) return;
-		
-		int x=p.location().x();
-		int y=p.location().y();
-		
-		if(exit.isInside(x, y)) {
-			exit();
-			return;
-		}
-		
-		if(sac.isInside(x, y)) {
-			/*
-			context.renderFrame(g -> {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-                afficheSac(g);
-            });*/
-			/*
-			if(viewState==ViewState.BACKPACK) {
-				viewState=ViewState.DUNGEON;
-			}
-			else if(viewState==ViewState.DUNGEON) {
-				viewState=ViewState.BACKPACK;
-			}*/
-			/*
-			 * 
-			viewState = (viewState == ViewState.DUNGEON)
-	                ? ViewState.BACKPACK
-	                : ViewState.DUNGEON;
-	                */
-			
-			switch (viewState) {
-	        case DUNGEON -> viewState = ViewState.BACKPACK;
-	        case BACKPACK -> viewState = ViewState.DUNGEON;
-	    }
-	        return;
-		}
-		/*
-		if(x>=100 && x<=WINDOW_WIDTH-100 && y>=100 && y<=WINDOW_HEIGHT-100) {
-			for(int i=0;i<7;i++) {
-				for(int j=0;j<5;j++) {
-					if(x>=(100+i*30) && x<=(WINDOW_WIDTH-100-)) {}
-				}
-			}
-		}*/
-		 // 2. 计算地图区域的位置（和渲染时同样的公式）
-	    int dungeonPixelWidth  = DONJON_WIDTH * ROOM_SIZE;
-	    int dungeonPixelHeight = DONJON_HEIGHT * ROOM_SIZE;
-	    int dungeonOriginX = (Game.windowWidth()  - dungeonPixelWidth)  / 2;
-	    int dungeonOriginY = (Game.windowHeight() - dungeonPixelHeight) / 2;
-
-	    // 3. 判断点击是否在地图区域外
-	    if (x < dungeonOriginX || x >= dungeonOriginX + dungeonPixelWidth ||
-	        y < dungeonOriginY || y >= dungeonOriginY + dungeonPixelHeight) {
-	        // 点击在地图外（比如空白背景），什么都不做
-	        return;
-	    }
-
-	    // 4. 计算点击的格子坐标 (gridX, gridY)
-	    int gridX = (x - dungeonOriginX) / ROOM_SIZE;  // 0..DONJON_WIDTH-1
-	    int gridY = (y - dungeonOriginY) / ROOM_SIZE;  // 0..DONJON_HEIGHT-1
-	    
-	    Coord target = new Coord(gridX, gridY);
-
-	    // 3. 通过 Donjon 来访问房间（用你已有的合法性判断）
-	    var r=donjon.moveSalle(hero, target);
-	    if(r!=null) {
-	    switch(r) {
-	    case ENEMY -> {game.goToCombat();}
-	    case EMPTY -> {}
-	    case HEALER -> {hero.heal(Dice.roll(3, 10));}
-	    case GATE -> {donjon.moveEtape();}
-	    case MERCHANT -> {game.goToMarket();}
-	    case TREASURE -> {game.goToTresor();}
-	    case EXIT -> {System.exit(0);}
-	    default -> {}
-	    }
-	    }
-	    // 如果你想更新 selectedX/selectedY 用于高亮，可以在这里同步一下
-	    selectedX = gridX;
-	    selectedY = gridY;
-	    
-
-	    
-	    // 5. 用 (gridX, gridY) 去访问你的 Donjon / Etape / Room
-//	    var etape = donjon.getEtape(/* 当前楼层编号，例如 0 或 hero 所在楼层 */ 0);
-//	    var room = etape.getSalle(new Coord(gridX, gridY));
-//	    if (room == null) {
-//	        return; // 没有房间，可能是空的区域
+//	@Override
+//	public void gererClique(PointerEvent p) {
+//		Objects.requireNonNull(p);
+//		
+//		if (p.action() != PointerEvent.Action.POINTER_DOWN) return;
+//		
+//		int x=p.location().x();
+//		int y=p.location().y();
+//		
+//		if(exit.isInside(x, y)) {
+//			exit();
+//			return;
+//		}
+//		
+//		if(sac.isInside(x, y)) {
+//			/*
+//			context.renderFrame(g -> {
+//                g.setColor(Color.BLACK);
+//                g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+//                afficheSac(g);
+//            });*/
+//			/*
+//			if(viewState==ViewState.BACKPACK) {
+//				viewState=ViewState.DUNGEON;
+//			}
+//			else if(viewState==ViewState.DUNGEON) {
+//				viewState=ViewState.BACKPACK;
+//			}*/
+//			/*
+//			 * 
+//			viewState = (viewState == ViewState.DUNGEON)
+//	                ? ViewState.BACKPACK
+//	                : ViewState.DUNGEON;
+//	                */
+//			
+//			switch (viewState) {
+//	        case DUNGEON -> viewState = ViewState.BACKPACK;
+//	        case BACKPACK -> viewState = ViewState.DUNGEON;
 //	    }
-
-	    // 6. 标记当前选中房间（如果你想画高亮）
+//	        return;
+//		}
+//		/*
+//		if(x>=100 && x<=WINDOW_WIDTH-100 && y>=100 && y<=WINDOW_HEIGHT-100) {
+//			for(int i=0;i<7;i++) {
+//				for(int j=0;j<5;j++) {
+//					if(x>=(100+i*30) && x<=(WINDOW_WIDTH-100-)) {}
+//				}
+//			}
+//		}*/
+//		 // 2. 计算地图区域的位置（和渲染时同样的公式）
+//	    int dungeonPixelWidth  = DONJON_WIDTH * ROOM_SIZE;
+//	    int dungeonPixelHeight = DONJON_HEIGHT * ROOM_SIZE;
+//	    int dungeonOriginX = (Game.windowWidth()  - dungeonPixelWidth)  / 2;
+//	    int dungeonOriginY = (Game.windowHeight() - dungeonPixelHeight) / 2;
+//
+//	    // 3. 判断点击是否在地图区域外
+//	    if (x < dungeonOriginX || x >= dungeonOriginX + dungeonPixelWidth ||
+//	        y < dungeonOriginY || y >= dungeonOriginY + dungeonPixelHeight) {
+//	        // 点击在地图外（比如空白背景），什么都不做
+//	        return;
+//	    }
+//
+//	    // 4. 计算点击的格子坐标 (gridX, gridY)
+//	    int gridX = (x - dungeonOriginX) / ROOM_SIZE;  // 0..DONJON_WIDTH-1
+//	    int gridY = (y - dungeonOriginY) / ROOM_SIZE;  // 0..DONJON_HEIGHT-1
+//	    
+//	    Coord target = new Coord(gridX, gridY);
+//
+//	    // 3. 通过 Donjon 来访问房间（用你已有的合法性判断）
+//	    var r=donjon.moveSalle(hero, target);
+//	    if(r!=null) {
+//	    switch(r) {
+//	    case ENEMY -> {game.goToCombat();}
+//	    case EMPTY -> {}
+//	    case HEALER -> {hero.heal(Dice.roll(3, 10));}
+//	    case GATE -> {donjon.moveEtape();}
+//	    case MERCHANT -> {game.goToMarket();}
+//	    case TREASURE -> {game.goToTresor();}
+//	    case EXIT -> {System.exit(0);}
+//	    default -> {}
+//	    }
+//	    }
+//	    // 如果你想更新 selectedX/selectedY 用于高亮，可以在这里同步一下
 //	    selectedX = gridX;
 //	    selectedY = gridY;
-
-	    // 7. 按你的逻辑访问房间
-//	    room.visiter(hero); // 这里会触发 Enter.apply(...)
-	    // 如果是敌人房间，你可以在 visiter() 里启动战斗，或者这里判断 room.getType()
-		
-		
-	}
+//	    
+//
+//	    
+//	    // 5. 用 (gridX, gridY) 去访问你的 Donjon / Etape / Room
+////	    var etape = donjon.getEtape(/* 当前楼层编号，例如 0 或 hero 所在楼层 */ 0);
+////	    var room = etape.getSalle(new Coord(gridX, gridY));
+////	    if (room == null) {
+////	        return; // 没有房间，可能是空的区域
+////	    }
+//
+//	    // 6. 标记当前选中房间（如果你想画高亮）
+////	    selectedX = gridX;
+////	    selectedY = gridY;
+//
+//	    // 7. 按你的逻辑访问房间
+////	    room.visiter(hero); // 这里会触发 Enter.apply(...)
+//	    // 如果是敌人房间，你可以在 visiter() 里启动战斗，或者这里判断 room.getType()
+//		
+//		
+//	}
 	
 	//public void afficheDonjon(Graphics2D g) {}
 	public void renderDonjon(Graphics2D g) {
@@ -503,12 +524,236 @@ public class Game_Donjon implements Ecran {
 	    g.setFont(new Font("Arial", Font.PLAIN, 18));
 	    String heroInfo = "HP: " + hero.hp() + "/" + hero.maxHp()
 	        + "  |  Mana: " + hero.mana() + "/" + hero.maxMana()
-	        + "  |  Or: " + hero.or();
+	        + "  |  Or: " + hero.or()
+	        + "  |  exp: " + hero.exp();
 	    g.drawString(heroInfo, 10, 100);
 
 	    g.drawString("Étape : " + donjon.etape() + " (ESC pour retourner au menu)", 20, 120);
 
 	}
+	
+	
+	// ver 2
+	
+	public void handleKeyboard(KeyboardEvent k) {
+		  Objects.requireNonNull(k);
+
+		  if (viewState != ViewState.BACKPACK) return;
+		  if (heldWeapon == null) return;
+
+		  if (k.action() == KeyboardEvent.Action.KEY_PRESSED && k.key() == KeyboardEvent.Key.R) {
+		    heldWeapon.rotation();
+		  }
+		}
+		
+		public void gererClique(PointerEvent p) {
+			  Objects.requireNonNull(p);
+			  if (p.action() != PointerEvent.Action.POINTER_DOWN) return;
+
+			  int x = p.location().x();
+			  int y = p.location().y();
+			  
+			  System.out.println("gererPointer: state=" + viewState + " x=" + x + " y=" + y
+					    + " exit=" + exit.x()+","+exit.y()+","+exit.width()+","+exit.height()
+					    + " sac=" + sac.x()+","+sac.y()+","+sac.width()+","+sac.height());
+
+
+			  // buttons
+			  if (exit.isInside(x, y)) { 
+				  System.out.println("HIT EXIT");
+				  exit(); return; }
+
+			  if (sac.isInside(x, y)) {
+				  System.out.println("HIT SAC (toggle)");
+			    viewState = (viewState == ViewState.DUNGEON) ? ViewState.BACKPACK : ViewState.DUNGEON;
+			    return;
+			  }
+
+			  // If we are in BACKPACK view -> handle backpack click, and STOP.
+			  if (viewState == ViewState.BACKPACK) {
+			    handleBackpackClick(x, y);
+			    return;
+			  }
+
+			  // Otherwise, keep your original dungeon click logic:
+			  gererCliqueDonjon(x, y);
+			}
+		
+		
+		private void gererCliqueDonjon(int x, int y) {
+
+			  // 2. 计算地图区域的位置（和渲染时同样的公式）
+			  int dungeonPixelWidth  = DONJON_WIDTH * ROOM_SIZE;
+			  int dungeonPixelHeight = DONJON_HEIGHT * ROOM_SIZE;
+			  int dungeonOriginX = (Game.windowWidth()  - dungeonPixelWidth)  / 2;
+			  int dungeonOriginY = (Game.windowHeight() - dungeonPixelHeight) / 2;
+
+			  // 3. 判断点击是否在地图区域外
+			  if (x < dungeonOriginX || x >= dungeonOriginX + dungeonPixelWidth ||
+			      y < dungeonOriginY || y >= dungeonOriginY + dungeonPixelHeight) {
+			    return;
+			  }
+
+			  // 4. 计算点击的格子坐标 (gridX, gridY)
+			  int gridX = (x - dungeonOriginX) / ROOM_SIZE;
+			  int gridY = (y - dungeonOriginY) / ROOM_SIZE;
+
+			  Coord target = new Coord(gridX, gridY);
+
+			  // 5. 访问房间逻辑（你原样保留）
+			  var r = donjon.moveSalle(hero, target);
+			  if (r != null) {
+			    switch (r) {
+			      case ENEMY -> { game.goToCombat(); }
+			      case EMPTY -> { }
+			      case HEALER -> { hero.heal(Dice.roll(3, 10)); }
+			      case GATE -> { donjon.moveEtape(); }
+			      case MERCHANT -> { game.goToMarket(); }
+			      case TREASURE -> { game.goToTresor(); }
+			      case EXIT -> { System.exit(0); }
+			      default -> { }
+			    }
+			  }
+
+			  selectedX = gridX;
+			  selectedY = gridY;
+			}
+		
+		
+		private void handleBackpackClick(int x, int y) {
+			  // 背包区域位置：必须与你 afficheSac 里画格子的公式一致
+			  int backpackPixelWidth  = GRID_WIDTH  * CELL_SIZE;
+			  int backpackPixelHeight = GRID_HEIGHT * CELL_SIZE;
+			  int backpackOriginX = (Game.windowWidth()  - backpackPixelWidth)  / 2;
+			  int backpackOriginY = (Game.windowHeight() - backpackPixelHeight) / 2;
+
+			  var bp = hero.getBackpack();
+
+			  // 点击在背包区域外：如果正拿着武器，则取消移动（放回原位）
+			  if (x < backpackOriginX || x >= backpackOriginX + backpackPixelWidth ||
+			      y < backpackOriginY || y >= backpackOriginY + backpackPixelHeight) {
+			    if (heldWeapon != null) {
+			      restoreHeldWeapon(bp);
+			    }
+			    return;
+			  }
+
+			  // 点击到的格子坐标（背包格子）
+			  int gridX = (x - backpackOriginX) / CELL_SIZE;
+			  int gridY = (y - backpackOriginY) / CELL_SIZE;
+			  Coord cell = new Coord(gridX, gridY);
+
+			  // 如果你要高亮格子（可选）
+			  selectedX = gridX;
+			  selectedY = gridY;
+
+			  // 1) 没拿东西：点到武器 => 拿起
+			  if (heldWeapon == null) {
+			    Item clicked = bp.getItemAt(cell);
+			    if (clicked instanceof Weapon w) {
+			      heldWeapon = w;
+
+			      // 备份：用于取消/放不下时恢复
+			      heldOldOffset = w.offsetCoord();
+			      heldOldForme  = new java.util.ArrayList<>(w.forme());
+			      heldOldRot    = w.rotationQuarterTurns();
+
+			      // 从背包中移除该武器占用的所有格子
+			      bp.retirer(w);
+			    }
+			    return;
+			  }
+
+			  // 2) 手上有武器：尝试放到 cell 这个位置
+			  heldWeapon.translate(cell);
+
+			  if (bp.peutPlacer(heldWeapon)) {
+			    bp.placer(heldWeapon);
+			    clearHeld();
+			  } else {
+			    // 放不下：回到“拿着但位置恢复”为原 offset（避免武器 offset 被污染）
+			    heldWeapon.translate(heldOldOffset);
+			  }
+			}
+		
+		
+		private void restoreHeldWeapon(Backpack bp) {
+			  // 恢复形状
+			  heldWeapon.forme().clear();
+			  heldWeapon.forme().addAll(heldOldForme);
+
+			  // 恢复旋转计数（不再用 while rotation() 破坏形状）
+			  heldWeapon.setRotationQuarterTurns(heldOldRot);
+
+			  // 恢复位置并放回背包
+			  heldWeapon.translate(heldOldOffset);
+			  bp.placer(heldWeapon);
+
+			  clearHeld();
+			}
+		
+		private void clearHeld() {
+			  heldWeapon = null;
+			  heldOldOffset = null;
+			  heldOldForme = null;
+			  heldOldRot = 0;
+			}
+		
+		
+		
+		private void drawWeaponImage(Graphics2D g, Weapon w, int px, int py) {
+			  Image img = w.image();
+			  if (img == null) {
+			    g.setColor(Color.WHITE);
+			    g.drawString(w.nom(), px + 5, py + 20);
+			    return;
+			  }
+
+			  // 计算武器占用格子范围（forme 的 bounding box）
+			  int maxX = 0, maxY = 0;
+			  for (var c : w.forme()) {
+			    maxX = Math.max(maxX, c.x());
+			    maxY = Math.max(maxY, c.y());
+			  }
+			  int cellsW = maxX + 1;
+			  int cellsH = maxY + 1;
+
+			  int targetW = cellsW * CELL_SIZE;
+			  int targetH = cellsH * CELL_SIZE;
+
+			  int iw = img.getWidth(null);
+			  int ih = img.getHeight(null);
+			  if (iw <= 0 || ih <= 0) return;
+
+			  int turns = w.rotationQuarterTurns() & 3;
+			  double theta = (Math.PI / 2.0) * turns;
+
+			  // ✅关键：90°/270° 时，图片旋转后的“有效宽高”要交换
+			  int effW = ((turns & 1) == 0) ? iw : ih;
+			  int effH = ((turns & 1) == 0) ? ih : iw;
+
+			  // 缩放到目标区域（保持比例）
+			  double sx = (double) targetW / effW;
+			  double sy = (double) targetH / effH;
+			  double s = Math.min(sx, sy);
+
+			  var oldTx = g.getTransform();
+			  try {
+			    // 把原点移到目标矩形中心
+			    double cx = px + targetW / 2.0;
+			    double cy = py + targetH / 2.0;
+
+			    g.translate(cx, cy);
+			    g.rotate(theta);
+			    g.scale(s, s);
+
+			    // 绘制时让图片中心对齐原点（用原始 iw/ih）
+			    g.drawImage(img, -iw / 2, -ih / 2, null);
+			  } finally {
+			    g.setTransform(oldTx);
+			  }
+			}
+
 }
 
 

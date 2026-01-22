@@ -39,19 +39,26 @@ public class Hero {
     //private boolean estProteger;
     private int or = 20;
     
+    private int hpstk;
+    private int manastk;
+    private int hporigine;
+    private int manaorigine;
+    
     /**
      * Tests if the hero should level up and, if so, increases backpack capacity.
      */
-    public void testLevelUp() {
+    public int testLevelUp() {
     	if(exp>=expMax) {
     		niveau++;
-    		var r=Dice.roll(1, 3);
-    		for(int i=0;i<r;i++) {
-    			sac.allouerCase(null);
-    		}
+//    		var r=Dice.roll(1, 3);
+//    		for(int i=0;i<r;i++) {
+//    			sac.allouerCase(null);
+//    		}
     		exp=0;
     		expMax=(niveau^niveau)*10;
+    		return 1;
     	}
+    	return 0;
     }
     
     /**
@@ -61,6 +68,10 @@ public class Hero {
     public Hero() {
         position = new Position(0, new Coord(0,0));
         sac  = new Backpack();
+        hpstk=maxHp;
+        manastk=maxMana;
+        hporigine=maxHp;
+        manaorigine=maxMana;
     }
     
     /**
@@ -306,6 +317,38 @@ public class Hero {
      */
 	public void updateStatsFromBackpack() {
 	    updateMaxManaFromBackpack();
+	}
+	
+	public void updateStats() {
+		if((hpstk+hporigine)>maxHp) {
+			hp=hp+hpstk+hporigine-maxHp;
+		}
+		else {hp=Math.min(hp,hpstk+hporigine);}
+		if((manastk+manaorigine)>maxMana) {
+			mana=mana+manastk+manaorigine-maxMana;
+		}
+		else {mana=Math.min(mana,manastk+manaorigine);}
+		maxHp=hpstk+hporigine;
+		maxMana=manastk+manaorigine;
+	}
+	
+	public void interrefresh() {
+		hpstk=0;
+		manastk=0;
+	}
+	public void interhp(int x) {
+		hpstk=hpstk+x;
+	}
+	public void intermana(int x) {
+		manastk=manastk+x;
+	}
+	
+	public void expup() {
+		exp=exp+20;
+	}
+	
+	public int exp() {
+		return exp;
 	}
 
 }

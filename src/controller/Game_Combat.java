@@ -118,7 +118,13 @@ public class Game_Combat implements Ecran {
 		}
 		
 		if(state==CombatState.FINISHED) {
-			game.goToDonjon();
+			combat.getHero().expup();
+			if(combat.getHero().testLevelUp()==1) {
+				game.goTolvup();
+			}
+			else {game.goToTresor();
+//			game.goToDonjon();
+			}
 			return;
 		}
 		
@@ -285,19 +291,21 @@ public class Game_Combat implements Ecran {
 	        int px = backpackOriginX + gx * CELL_SIZE;
 	        int py = backpackOriginY + gy * CELL_SIZE;
 	        
-	        if(i.image()!=null) {
-	        	//g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
-	        	
-	        	Image img = i.image();
-	            int w = img.getWidth(null);
-	            int h = img.getHeight(null);
-	            g.drawImage(img, px, py, px + w, py + h, 0, 0, w, h, null);
-	        }
-	        else {
-                // 没有图片时备用显示方式：画名字
-                g.setColor(Color.WHITE);
-                g.drawString(i.nom(), px + 5, py + 20);
-            }
+	        
+	        drawWeaponImage(g, i, px, py);
+//	        if(i.image()!=null) {
+//	        	//g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
+//	        	
+//	        	Image img = i.image();
+//	            int w = img.getWidth(null);
+//	            int h = img.getHeight(null);
+//	            g.drawImage(img, px, py, px + w, py + h, 0, 0, w, h, null);
+//	        }
+//	        else {
+//                // 没有图片时备用显示方式：画名字
+//                g.setColor(Color.WHITE);
+//                g.drawString(i.nom(), px + 5, py + 20);
+//            }
 	        
 	        g.setColor(Color.RED);
 		    g.fillRect(tourTermine.x(), tourTermine.y(), tourTermine.width(), tourTermine.height());
@@ -390,5 +398,62 @@ public class Game_Combat implements Ecran {
             }
         }
     }*/
+    
+    
+    // v2
+    
+    private void drawWeaponImage(Graphics2D g, Weapon w, int px, int py) {
+    	  Image img = w.image();
+    	  if (img == null) {
+    	    g.setColor(Color.WHITE);
+    	    g.drawString(w.nom(), px + 5, py + 20);
+    	    return;
+    	  }
+
+    	  // 计算武器占用格子范围（forme 的 bounding box）
+    	  int maxX = 0, maxY = 0;
+    	  for (var c : w.forme()) {
+    	    maxX = Math.max(maxX, c.x());
+    	    maxY = Math.max(maxY, c.y());
+    	  }
+    	  int cellsW = maxX + 1;
+    	  int cellsH = maxY + 1;
+
+    	  int targetW = cellsW * CELL_SIZE;
+    	  int targetH = cellsH * CELL_SIZE;
+
+    	  int iw = img.getWidth(null);
+    	  int ih = img.getHeight(null);
+    	  if (iw <= 0 || ih <= 0) return;
+
+    	  int turns = w.rotationQuarterTurns() & 3;
+    	  double theta = (Math.PI / 2.0) * turns;
+
+    	  // ✅关键：90°/270° 时，图片旋转后的“有效宽高”要交换
+    	  int effW = ((turns & 1) == 0) ? iw : ih;
+    	  int effH = ((turns & 1) == 0) ? ih : iw;
+
+    	  // 缩放到目标区域（保持比例）
+    	  double sx = (double) targetW / effW;
+    	  double sy = (double) targetH / effH;
+    	  double s = Math.min(sx, sy);
+
+    	  var oldTx = g.getTransform();
+    	  try {
+    	    // 把原点移到目标矩形中心
+    	    double cx = px + targetW / 2.0;
+    	    double cy = py + targetH / 2.0;
+
+    	    g.translate(cx, cy);
+    	    g.rotate(theta);
+    	    g.scale(s, s);
+
+    	    // 绘制时让图片中心对齐原点（用原始 iw/ih）
+    	    g.drawImage(img, -iw / 2, -ih / 2, null);
+    	  } finally {
+    	    g.setTransform(oldTx);
+    	  }
+    	}
+
     
 }
