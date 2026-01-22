@@ -32,6 +32,27 @@ public class Game_Combat implements Ecran {
     
     private int ptr=0;
     
+    
+    
+ // ====== Mode déplacement (comme Donjon) ======
+    private Weapon heldWeapon = null;
+    private Coord heldOldOffset = null;
+    private java.util.List<Coord> heldOldForme = null;
+    private int heldOldRot = 0;
+    private boolean deplacerMode = false;
+
+    // ====== Gestion des malédictions à placer ======
+    private boolean resolvingCurse = false;
+    private ItemMaldiction currentCurse = null;
+
+    // (optionnel) bouton pour refuser / bouton déplacer
+    private Button deplacerBtn;
+    private Button refuserBtn;
+    
+    
+    
+    
+    
     public Game_Combat(Combat c, Game g) {
     	Objects.requireNonNull(g);
     	Objects.requireNonNull(c);
@@ -49,6 +70,9 @@ public class Game_Combat implements Ecran {
 	    state=CombatState.HERO_TURN;
 	    
 	    tourTermine = new Button(exitX, exitY, buttonWidth, buttonHeight, "Termine");
+	    
+	    deplacerBtn = new Button(exitX - 150, exitY, buttonWidth, buttonHeight, "Deplacer");
+	    refuserBtn  = new Button(exitX + 150, exitY, buttonWidth, buttonHeight, "Refuser");
     }
     
     public void Combat_start() {
@@ -97,6 +121,17 @@ public class Game_Combat implements Ecran {
     	        }
     	        case ENEMY_TURN -> {
     	            combat.tourEnnemis();
+    	            
+    	         // 如果敌人触发了诅咒：进入“必须放诅咒”模式
+    	            if (combat.hasPendingMaledictions()) {
+    	                resolvingCurse = true;
+    	                currentCurse = combat.pollMalediction();
+    	                // 强制进入移动/放置逻辑
+    	                deplacerMode = true;
+    	                heldWeapon = null; // 避免同时拿着武器
+    	            }
+    	            
+    	            
     	            if (combat.estCombatTermine()!=1) state = CombatState.FINISHED;
     	            else state = CombatState.HERO_TURN;
     	        }
@@ -111,11 +146,11 @@ public class Game_Combat implements Ecran {
     public void gererClique(PointerEvent p) {
 		Objects.requireNonNull(p);
 		
-		if(state==CombatState.ENEMY_TURN) {
-			combat.tourEnnemis();
-            if (combat.estCombatTermine()!=1) state = CombatState.FINISHED;
-            else {state = CombatState.HERO_TURN;combat.getHero().rechargerCombat();}
-		}
+//		if(state==CombatState.ENEMY_TURN) {
+//			combat.tourEnnemis();
+//            if (combat.estCombatTermine()!=1) state = CombatState.FINISHED;
+//            else {state = CombatState.HERO_TURN;combat.getHero().rechargerCombat();}
+//		}
 		
 		if(state==CombatState.FINISHED) {
 			combat.getHero().expup();
@@ -132,14 +167,83 @@ public class Game_Combat implements Ecran {
 		
 		int x=p.location().x();
 		int y=p.location().y();
-		if(tourTermine.isInside(x, y)) {
-			switch (state) {
-	        case ENEMY_TURN -> state = CombatState.ENEMY_TURN;
-	        case HERO_TURN -> state = CombatState.ENEMY_TURN;
-	        case FINISHED -> state = CombatState.FINISHED;
-	    }
-	        return;
+//		if(tourTermine.isInside(x, y)) {
+//			switch (state) {
+//	        case ENEMY_TURN -> state = CombatState.ENEMY_TURN;
+//	        case HERO_TURN -> state = CombatState.ENEMY_TURN;
+//	        case FINISHED -> state = CombatState.FINISHED;
+//	    }
+//	        return;
+//		}
+		if (tourTermine.isInside(x, y)) {
+		    // 正在放诅咒时，不允许结束回合
+		    if (resolvingCurse) return;
+
+		    if (state == CombatState.HERO_TURN) {
+		        state = CombatState.ENEMY_TURN;
+
+		        // 让敌人行动一次
+		        combat.tourEnnemis();
+
+		        //  敌人行动后立刻检查是否产生诅咒
+		        if (combat.hasPendingMaledictions()) {
+		            resolvingCurse = true;
+		            currentCurse = combat.pollMalediction();
+		            deplacerMode = true;
+		            heldWeapon = null;
+		        }
+
+		        if (combat.estCombatTermine() != 1) {
+		            state = CombatState.FINISHED;
+		        } else {
+		            state = CombatState.HERO_TURN;
+		            combat.getHero().rechargerCombat();
+		        }
+		    }
+		    return;
 		}
+		
+		
+		
+		
+		if (deplacerBtn.isInside(x, y)) {
+		    deplacerMode = !deplacerMode;
+		    // 切换时如果手上拿着武器，直接放回去（避免丢失）
+		    if (!deplacerMode && heldWeapon != null) {
+		        restoreHeldWeapon(combat.getHero().getBackpack());
+		    }
+		    return;
+		}
+
+//		if (resolvingCurse && refuserBtn.isInside(x, y)) {
+//		    int dmg = getRefusMaledictionDamage(combat.getHero());
+//		    combat.getHero().damage(dmg);
+//
+//		    // 丢弃当前诅咒，若队列还有继续，否则退出
+//		    currentCurse = null;
+//		    if (combat.hasPendingMaledictions()) {
+//		        currentCurse = combat.pollMalediction();
+//		    } else {
+//		        resolvingCurse = false;
+//		    }
+//		    return;
+//		}
+		if (resolvingCurse && refuserBtn.isInside(x, y)) {
+		    // ✅ 用 Hero 的新方法：自增计数 + 扣血
+		    int dmg = combat.getHero().refuserMalediction();
+
+		    // 丢弃当前诅咒，若还有下一个则继续，否则退出 curse 模式
+		    currentCurse = null;
+		    if (combat.hasPendingMaledictions()) {
+		        currentCurse = combat.pollMalediction();
+		    } else {
+		        resolvingCurse = false;
+		    }
+		    return;
+		}
+		
+		
+		
 		
 		for(int i=0;i<combat.getEnnemis().size();i++) {
 			int margin=30;
@@ -162,15 +266,84 @@ public class Game_Combat implements Ecran {
 		 int gridX = (x - sacOriginX) / CELL_SIZE;
 		 int gridY = (y - sacOriginY) / CELL_SIZE;
 		 
-		 Coord target = new Coord(gridX, gridY);
+//		 Coord target = new Coord(gridX, gridY);
+		  
 		 
-		 var i=combat.getHero().getBackpack().contenu().getOrDefault(target, null);
-		 if(i!=null && i instanceof Weapon w) {
-			 w.utiliser(combat.getHero(),combat.getEnnemi(ptr),combat);
-			 combat.RefreshListEnnemis();
-			 ptr=0;
+		 
+//		 var i=combat.getHero().getBackpack().contenu().getOrDefault(target, null);
+//		 if(i!=null && i instanceof Weapon w) {
+//			 w.utiliser(combat.getHero(),combat.getEnnemi(ptr),combat);
+//			 combat.RefreshListEnnemis();
+//			 ptr=0;
+//			 
+//		 }
+		 
+		 Coord cell = new Coord(gridX, gridY);
+		 var bp = combat.getHero().getBackpack();
+
+		 // A) 如果正在处理诅咒：点击格子就是放诅咒
+		 if (resolvingCurse && currentCurse != null) {
+//		     currentCurse.translate(cell);
+//
+//		     // 关键：诅咒“会挤占冲突格子里的物品”等逻辑应在 Backpack.placer(Item) 内实现
+//		     // 如果 placer 只有 Weapon 版本，在 Backpack 加一个 placer(Item) 或 placer(ItemMaldiction)
+//		     bp.PlacerMalediction(currentCurse);
+//
+//		     // 放完一个，看还有没有下一个
+//		     currentCurse = null;
+//		     if (combat.hasPendingMaledictions()) {
+//		         currentCurse = combat.pollMalediction();
+//		     } else {
+//		         resolvingCurse = false;
+//		     }
+//		     return;
 			 
+			// 记录旧 offset，放不下时要恢复
+			 Coord old = currentCurse.offsetCoord();
+
+			 // 先把诅咒移动到玩家点击的位置（作为 offset）
+			 currentCurse.translate(cell);
+
+			 //  放置前先检查边界
+			 if (!bp.peutPlacerMalediction(currentCurse)) {
+			     // 放不下：恢复旧 offset，不消耗诅咒，让玩家重新点
+			     currentCurse.translate(old);
+			     return;
+			 }
+
+			 //  真正放置（会顶掉冲突物品）
+			 bp.PlacerMalediction(currentCurse);
+
+			 // 后续：记录接受、切换到下一个、退出 resolvingCurse...
+			 combat.getHero().addMalediction(1);
+
+			 currentCurse = null;
+			 if (combat.hasPendingMaledictions()) currentCurse = combat.pollMalediction();
+			 else resolvingCurse = false;
+			 return;
 		 }
+		 
+		// B) 移动模式：像 Donjon 一样拿起/放下武器
+		 if (deplacerMode) {
+		     handleBackpackMoveClick(cell);
+		     return;
+		 }
+
+		 // C) 非移动模式：点击武器=使用（保持你原行为）
+		 Item clicked = bp.contenu().getOrDefault(cell, null);
+		 if (clicked instanceof Weapon w) {
+		     w.utiliser(combat.getHero(), combat.getEnnemi(ptr), combat);
+		     combat.RefreshListEnnemis();
+		     
+		     if (combat.estCombatTermine() != 1 || combat.getEnnemis().isEmpty()) {
+		    	    state = CombatState.FINISHED;
+		    	    return;
+		    	}
+		     
+		     ptr = 0;
+		 }
+		 
+		 
 		 
 		 
     }
@@ -188,6 +361,9 @@ public class Game_Combat implements Ecran {
             .toList();
 
         Ennemi ennemi = ennemisVivants.isEmpty() ? null : ennemisVivants.get(0);*/
+        
+        int remaining = (currentCurse == null ? 0 : 1) + combat.pendingMaledictionsCount();
+        g.drawString("Restant: " + remaining, 20, 120);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -272,6 +448,23 @@ public class Game_Combat implements Ecran {
 		        }
 		    }
 		}
+		
+		
+		for (var entry : combat.getHero().getBackpack().contenu().entrySet()) {
+		    Coord c = entry.getKey();
+		    Item it = entry.getValue();
+		    if (!(it instanceof ItemMaldiction)) continue;
+
+		    int px = backpackOriginX + c.x() * CELL_SIZE;
+		    int py = backpackOriginY + c.y() * CELL_SIZE;
+
+		    g.setColor(new Color(120, 0, 120));
+		    g.fillRect(px + 4, py + 4, CELL_SIZE - 8, CELL_SIZE - 8);
+		    g.setColor(Color.WHITE);
+		    g.drawString("C", px + CELL_SIZE/2 - 4, py + CELL_SIZE/2 + 6);
+		}
+		
+		
 		
 		Map<Coord, Item> contenu = combat.getHero().getBackpack().contenu();
 		Set<Weapon> set=new HashSet<>();
@@ -377,6 +570,31 @@ public class Game_Combat implements Ecran {
         g.setColor(Color.WHITE);
         g.drawRect(btnX, btnY, btnWidth, btnHeight);
         g.drawString("Fin du tour", btnX + 25, btnY + 25);*/
+	    
+	 // --- boutons ---
+	    g.setColor(Color.RED);
+	    g.fillRect(tourTermine.x(), tourTermine.y(), tourTermine.width(), tourTermine.height());
+	    g.setColor(Color.WHITE);
+	    g.drawString("Termine", tourTermine.x() + 20, tourTermine.y() + 25);
+
+	    // Déplacer toggle
+	    g.setColor(deplacerMode ? Color.GREEN : Color.DARK_GRAY);
+	    g.fillRect(deplacerBtn.x(), deplacerBtn.y(), deplacerBtn.width(), deplacerBtn.height());
+	    g.setColor(Color.WHITE);
+	    g.drawString("Deplacer", deplacerBtn.x() + 15, deplacerBtn.y() + 25);
+
+	    // Curse overlay
+	    if (resolvingCurse) {
+	        int dmg = getRefusMaledictionDamage(combat.getHero());
+	        g.setColor(Color.ORANGE);
+	        g.drawString("MALEDICTION ! Placez-la dans le sac.", 20, 80);
+	        g.drawString("Ou Refuser : -" + dmg + " HP", 20, 100);
+
+	        g.setColor(Color.GRAY);
+	        g.fillRect(refuserBtn.x(), refuserBtn.y(), refuserBtn.width(), refuserBtn.height());
+	        g.setColor(Color.WHITE);
+	        g.drawString("Refuser", refuserBtn.x() + 20, refuserBtn.y() + 25);
+	    }
       }
 /*
     public void tourHero() {
@@ -454,6 +672,67 @@ public class Game_Combat implements Ecran {
     	    g.setTransform(oldTx);
     	  }
     	}
+    
+    
+    
+    
+    
+    
+    //v2
+    
+    
+    private void handleBackpackMoveClick(Coord cell) {
+        var bp = combat.getHero().getBackpack();
+
+        if (heldWeapon == null) {
+            Item clicked = bp.getItemAt(cell);
+            if (clicked instanceof Weapon w) {
+                heldWeapon = w;
+                heldOldOffset = w.offsetCoord();
+                heldOldForme  = new java.util.ArrayList<>(w.forme());
+                heldOldRot    = w.rotationQuarterTurns();
+                bp.retirer(w);
+            }
+            return;
+        }
+
+        heldWeapon.translate(cell);
+        if (bp.peutPlacer(heldWeapon)) {
+            bp.placer(heldWeapon);
+            clearHeld();
+        } else {
+            heldWeapon.translate(heldOldOffset);
+        }
+    }
+
+    private void restoreHeldWeapon(Backpack bp) {
+        // 还原形状与旋转信息（按你 Donjon 里写的方式）
+        heldWeapon.forme().clear();
+        heldWeapon.forme().addAll(heldOldForme);
+        heldWeapon.setRotationQuarterTurns(heldOldRot);
+        heldWeapon.translate(heldOldOffset);
+        bp.placer(heldWeapon);
+        clearHeld();
+    }
+
+    private void clearHeld() {
+        heldWeapon = null;
+        heldOldOffset = null;
+        heldOldForme = null;
+        heldOldRot = 0;
+    }
+
+    // 读取 Hero.private int refusMalediction：不想新 class，那就用反射读取
+    private static int getRefusMaledictionDamage(Hero hero) {
+        try {
+            var f = hero.getClass().getDeclaredField("refusMalediction");
+            f.setAccessible(true);
+            return (int) f.get(hero);
+        } catch (ReflectiveOperationException e) {
+            // 如果字段名不一致或被改了，给个兜底值避免崩
+            return 1;
+        }
+    }
 
     
 }

@@ -350,5 +350,19 @@ public class Hero {
 	public int exp() {
 		return exp;
 	}
+	
+	/** Hero refuses a curse: increments refusal count and applies damage. */
+	public int refuserMalediction() {
+	    refusMalediction++;          // 累计拒绝次数
+	    int dmg = refusMalediction;  // 本次拒绝造成的伤害 = 当前拒绝次数
+	    damage(dmg);
+	    IO.println("Le hero refuse la malédiction (" + refusMalediction + " refus) et perd " + dmg + " PV.");
+	    return dmg;
+	}
+	
+	/** For UI */
+	public int refusMaledictionCount() {
+	    return refusMalediction;
+	}
 
 }

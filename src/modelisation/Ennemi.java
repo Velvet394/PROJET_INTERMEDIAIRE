@@ -165,7 +165,8 @@ public class Ennemi {
     	}
     }
     /** Executes the ennemy's action */
-    public void executerAction(Hero hero) {
+//    public void executerAction(Hero hero) {
+    public void executerAction(Hero hero, Combat combat) {
     	Objects.requireNonNull(hero);
         for(var i:intentions) {
         	switch (i) {
@@ -179,7 +180,8 @@ public class Ennemi {
                 heal();
                 break;
             case CURSE:
-                curse(hero);
+//                curse(hero);
+            	curse(hero, combat);
                 break;
             case BUFF:
                 buff();
@@ -222,11 +224,19 @@ public class Ennemi {
     }
     
     /** Curse the hero */
-    private void curse(Hero hero) {
-    	Objects.requireNonNull(hero);
-        int curseStrength = 1;
-        hero.addMalediction(curseStrength);
-        IO.println(name + " applique une malédiction au héros.");
+//    private void curse(Hero hero) {
+//    	Objects.requireNonNull(hero);
+//        int curseStrength = 1;
+//        hero.addMalediction(curseStrength);
+//        IO.println(name + " applique une malédiction au héros.");
+//    }
+    private void curse(Hero hero, Combat combat) {
+        Objects.requireNonNull(hero);
+        Objects.requireNonNull(combat);
+
+        // 放入诅咒   不要忘了！！！把放入写在app里面
+        combat.enqueueMalediction(combat.randomMalediction());
+        IO.println(name + " tente d'imposer une malédiction (à placer dans le sac).");
     }
     
     /** Protection */

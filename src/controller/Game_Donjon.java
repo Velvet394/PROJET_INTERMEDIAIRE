@@ -145,6 +145,21 @@ public class Game_Donjon implements Ecran {
 		    }
 		}
 		
+		
+		for (var entry : hero.getBackpack().contenu().entrySet()) {
+		    Coord c = entry.getKey();
+		    Item it = entry.getValue();
+		    if (!(it instanceof ItemMaldiction)) continue;
+
+		    int px = backpackOriginX + c.x() * CELL_SIZE;
+		    int py = backpackOriginY + c.y() * CELL_SIZE;
+
+		    g.setColor(new Color(120, 0, 120));
+		    g.fillRect(px + 4, py + 4, CELL_SIZE - 8, CELL_SIZE - 8);
+		    g.setColor(Color.WHITE);
+		    g.drawString("C", px + CELL_SIZE/2 - 4, py + CELL_SIZE/2 + 6);
+		}
+		
 		Map<Coord, Item> contenu = hero.getBackpack().contenu();
 		Set<Weapon> set=new HashSet<>();
 	    for (var entry : contenu.entrySet()) {

@@ -64,32 +64,61 @@ public class Backpack {
     /**
      * Places a curse item, removing displaced items.
      */
+//    public void PlacerMalediction(Item item) {
+//    	Objects.requireNonNull(item);
+//    	if(!peutPlacerMalediction(item)) {
+//    		throw new IllegalArgumentException("error");
+//    	}
+//    	ArrayList<Item> list=new ArrayList<>();
+//    	//if (item.estMalediction()) {
+//    		for (Coord c : item.forme()) {
+//    			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
+//    			if (contenu.get(abs) != null) {
+//    				var res=contenu.get(abs);
+//    				if (!list.contains(res)) {
+//    					list.add(contenu.get(abs));
+//    				}
+//    			}
+//    		}
+//    		for(var i:list) {
+//    			//contenu().entrySet().removeIf(entry -> entry.getValue()==i);
+//    			for(var e:contenu.entrySet()) {
+//   				 if(e.getValue()==i) {
+//   					 e.setValue(item);
+//   				 }
+//   			 }
+//    		}
+//    		
+//    	//}
+//    }
     public void PlacerMalediction(Item item) {
-    	Objects.requireNonNull(item);
-    	if(!peutPlacerMalediction(item)) {
-    		throw new IllegalArgumentException("error");
-    	}
-    	ArrayList<Item> list=new ArrayList<>();
-    	//if (item.estMalediction()) {
-    		for (Coord c : item.forme()) {
-    			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
-    			if (contenu.get(abs) != null) {
-    				var res=contenu.get(abs);
-    				if (!list.contains(res)) {
-    					list.add(contenu.get(abs));
-    				}
-    			}
-    		}
-    		for(var i:list) {
-    			//contenu().entrySet().removeIf(entry -> entry.getValue()==i);
-    			for(var e:contenu.entrySet()) {
-   				 if(e.getValue()==i) {
-   					 e.setValue(item);
-   				 }
-   			 }
-    		}
-    		
-    	//}
+        Objects.requireNonNull(item);
+
+        // 越界/未解锁格子：不允许
+        if (!peutPlacerMalediction(item)) {
+            throw new IllegalArgumentException("curse out of bounds");
+        }
+
+        // 1) 找到冲突物品（只在诅咒占用范围内检测）
+        ArrayList<Item> conflicts = new ArrayList<>();
+        for (Coord c : item.forme()) {
+            Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
+            Item cur = contenu.get(abs);
+            if (cur != null && cur != item && !conflicts.contains(cur)) {
+                conflicts.add(cur);
+            }
+        }
+
+        // 2) 顶掉：整件移除，但保持 key（retirer 会 setValue(null)）
+        for (Item conflict : conflicts) {
+            retirer(conflict);
+        }
+
+        // 3) 放诅咒：只占用自己的形状格子
+        for (Coord c : item.forme()) {
+            Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
+            contenu.put(abs, item); // key 一定存在（peutPlacerMalediction 已保证 containsKey）
+        }
     }
     
     /**

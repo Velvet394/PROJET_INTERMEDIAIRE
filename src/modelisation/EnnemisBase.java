@@ -13,7 +13,8 @@ public class EnnemisBase {
     static {
         templates.add(new Ennemi("Slime", 30, 5,3,10,40,15,10,15,15,"./image/ennemis/slime.png")); //nom, hp, dmg, blockpoint, healpoint tendance att, skill, def, heal , buff
         templates.add(new Ennemi("BigRat", 50, 10, 5,3,40,10,15,10,15,"./image/ennemis/bigrat.png"));
-        templates.add(new Ennemi("Rat", 10, 3, 2, 2, 60,5,15,10,10,"./image/ennemis/rat.png"));
+//        templates.add(new Ennemi("Rat", 10, 3, 2, 2, 60,5,15,10,10,"./image/ennemis/rat.png"));
+        templates.add(new Ennemi("Rat", 10, 3, 2, 2, 0,0,0,0,0,"./image/ennemis/rat.png"));
     }
 
 }

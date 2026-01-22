@@ -10,7 +10,25 @@ import java.io.*;
 public class Combat {
     private final Hero hero;
     private final List<Ennemi> ennemis;
+    
+    private final Deque<ItemMaldiction> maledictionsEnAttente = new ArrayDeque<>();
+    
+    
+    /////////////
+    ///
+    ///attention utilise static final
 
+    private static final List<List<Coord>> CURSE_SHAPES = List.of(
+    	    List.of(new Coord(0,0)),
+    	    List.of(new Coord(0,0), new Coord(1,0)),
+    	    List.of(new Coord(0,0), new Coord(0,1)),                
+    	    List.of(new Coord(0,0), new Coord(1,0), new Coord(0,1)),
+    	    List.of(new Coord(0,0), new Coord(1,0), new Coord(2,0)),
+    	    List.of(new Coord(0,0), new Coord(0,1), new Coord(0,2)), 
+    	    List.of(new Coord(0,0), new Coord(1,0), new Coord(0,1), new Coord(1,1)) // 2x2
+    	);
+    
+    
     public Combat(Hero h, List<Ennemi> e) {
         this.hero = h;
         this.ennemis = e;
@@ -73,7 +91,8 @@ public class Combat {
     			//EnnemyActionType a = e.choisirIntent(hero,random);
     			// a.executer()
     			e.Action();
-    			e.executerAction(hero);
+//    			e.executerAction(hero);
+    			e.executerAction(hero, this);
     			RefreshListEnnemis();
     		}
     	}
@@ -138,6 +157,34 @@ public class Combat {
     }
 
 
+
+    public ItemMaldiction randomMalediction() {
+    	
+    	int n = CURSE_SHAPES.size();
+    	if (n == 0) throw new IllegalStateException("CURSE_SHAPES is empty");
+    	
+    	int idx = Dice.roll(0, CURSE_SHAPES.size() - 1);
+        // 如果 Dice.roll 是含上界/不含上界不确定，可以改成 new Random().nextInt(CURSE_SHAPES.size())
+        var shape = CURSE_SHAPES.get(idx);
+        return new ItemMaldiction(shape);
+    }
+    	
+    	public void enqueueMalediction(ItemMaldiction m) {
+    	    Objects.requireNonNull(m);
+    	    maledictionsEnAttente.addLast(m);
+    	}
+
+    	public boolean hasPendingMaledictions() {
+    	    return !maledictionsEnAttente.isEmpty();
+    	}
+
+    	public ItemMaldiction pollMalediction() {
+    	    return maledictionsEnAttente.pollFirst();
+    	}
+    	
+    	public int pendingMaledictionsCount() {
+    		return maledictionsEnAttente.size();
+    	}
 
 	
 }
