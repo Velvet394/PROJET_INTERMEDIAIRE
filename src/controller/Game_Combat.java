@@ -361,6 +361,7 @@ public class Game_Combat implements Ecran {
             .toList();
 
         Ennemi ennemi = ennemisVivants.isEmpty() ? null : ennemisVivants.get(0);*/
+        g.setColor(Color.WHITE);
         
         int remaining = (currentCurse == null ? 0 : 1) + combat.pendingMaledictionsCount();
         g.drawString("Restant: " + remaining, 20, 120);
@@ -594,6 +595,40 @@ public class Game_Combat implements Ecran {
 	        g.fillRect(refuserBtn.x(), refuserBtn.y(), refuserBtn.width(), refuserBtn.height());
 	        g.setColor(Color.WHITE);
 	        g.drawString("Refuser", refuserBtn.x() + 20, refuserBtn.y() + 25);
+	        
+	     // --- preview de la forme à placer ---
+	        if (currentCurse != null) {
+	            final int previewCell = 18;
+	            final int ox = 20;
+	            final int oy = 140;
+
+	            int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+	            int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+	            for (var c : currentCurse.forme()) {
+	                minX = Math.min(minX, c.x());
+	                minY = Math.min(minY, c.y());
+	                maxX = Math.max(maxX, c.x());
+	                maxY = Math.max(maxY, c.y());
+	            }
+
+	            int w = (maxX - minX + 1) * previewCell + 10;
+	            int h = (maxY - minY + 1) * previewCell + 10;
+
+	            g.setColor(Color.WHITE);
+	            g.drawString("Forme:", ox, oy - 10);
+
+	            g.setColor(Color.DARK_GRAY);
+	            g.fillRect(ox, oy, w, h);
+	            g.setColor(Color.WHITE);
+	            g.drawRect(ox, oy, w, h);
+
+	            g.setColor(new Color(180, 0, 180));
+	            for (var c : currentCurse.forme()) {
+	                int px = ox + 5 + (c.x() - minX) * previewCell;
+	                int py = oy + 5 + (c.y() - minY) * previewCell;
+	                g.fillRect(px, py, previewCell - 2, previewCell - 2);
+	            }
+	        }
 	    }
       }
 /*

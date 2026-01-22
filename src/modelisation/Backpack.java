@@ -125,16 +125,28 @@ public class Backpack {
      * Checks if a curse can be placed.
      */
 
+//    public boolean peutPlacerMalediction(Item item) {
+//    	Objects.requireNonNull(item);
+//    	//if (item.estMalediction()) {
+//    		for (Coord c : item.forme()) {
+//    			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
+//    			if (!contenu.containsKey(abs)) return false;
+//    		}
+//    		
+//    		return true;
+//    	//}
+//    }
     public boolean peutPlacerMalediction(Item item) {
-    	Objects.requireNonNull(item);
-    	//if (item.estMalediction()) {
-    		for (Coord c : item.forme()) {
-    			Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
-    			if (!contenu.containsKey(abs)) return false;
-    		}
-    		
-    		return true;
-    	//}
+        Objects.requireNonNull(item);
+        for (Coord c : item.forme()) {
+            Coord abs = new Coord(item.offsetCoord().x() + c.x(), item.offsetCoord().y() + c.y());
+            if (!contenu.containsKey(abs)) return false;
+
+
+            Item cur = contenu.get(abs);
+            if (cur instanceof ItemMaldiction) return false;
+        }
+        return true;
     }
     /*
     public void ajouterMalediction(Item item) {
