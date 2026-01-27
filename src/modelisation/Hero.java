@@ -1,4 +1,7 @@
 package modelisation;
+import modelisation.HallOfFame;
+import modelisation.HallOfFameEntry;
+import modelisation.Hero;
 import java.util.*;
 import java.io.*;
 
@@ -365,5 +368,9 @@ public class Hero {
 	public int refusMaledictionCount() {
 	    return refusMalediction;
 	}
+	
+	public int niveau() {
+		  return niveau;
+		}
 
 }

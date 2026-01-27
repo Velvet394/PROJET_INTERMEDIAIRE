@@ -1,4 +1,5 @@
 package controller;
+import com.github.forax.zen.KeyboardEvent;
 
 
 import java.awt.Color;
@@ -34,6 +35,19 @@ public class Game_Tresor implements Ecran{
     private static final int CELL_SIZE = 60;
     
     private Button exit;
+    
+    
+    
+    
+ // --- Donjon ---
+    private Weapon heldWeapon = null;
+    private Coord heldOldOffset = null;
+    private java.util.List<Coord> heldOldForme = null;
+    private int heldOldRot = 0;
+
+    // 额外：区分“拿的是背包里的武器”还是“商店里的武器”
+    private boolean heldFromShop = false;
+    private int heldShopIndex = -1;
 	
 	public Game_Tresor(Game g,List<Weapon> a,Hero h) {
 		Objects.requireNonNull(g);
@@ -283,7 +297,26 @@ public class Game_Tresor implements Ecran{
 	    int cunt=0;
 	    for(int i=0;i<articles.size();i++) {
 	    	if(x>(ox+pilewid)&&x<=ox+pilewid+width.get(i)&&y>=oy&&y<=oy+height.get(i)) {
+	    		
+	    		 // 如果之前正拿着一个“商店物品”，先把它恢复原样再换
+	    	    if (heldWeapon != null) {
+	    	      restoreHeldWeapon(hero.getBackpack());
+	    	      // restoreHeldWeapon 会 clearHeld，所以这里继续设置新的 held
+	    	    }
+	    	    
 	    		choix=i;
+	    		
+	    		
+	    		 Weapon w = articles.get(i);
+	    		    heldWeapon = w;
+	    		    heldFromShop = true;
+	    		    heldShopIndex = i;
+
+	    		    heldOldOffset = w.offsetCoord();
+	    		    heldOldForme  = new java.util.ArrayList<>(w.forme());
+	    		    heldOldRot    = w.rotationQuarterTurns();
+
+	    		    return; // 点商店物品只负责“拿起”，不继续往下执行
 	    	}
 	    	pilewid+=width.get(i);
 	    }
@@ -298,28 +331,29 @@ public class Game_Tresor implements Ecran{
 			        return;
 			    }*/
 		
-		if (x > sacOriginX && x <= sacOriginX + sacPixelWidth &&
-		        y > sacOriginY && y <= sacOriginY + sacPixelHeight) {
-		 int gridX = (x - sacOriginX) / CELL_SIZE;
-		 int gridY = (y - sacOriginY) / CELL_SIZE;
-		 
-		 Coord target = new Coord(gridX, gridY);
-		 if(articles.isEmpty()) return;
-		 if(hero.getBackpack().contenu().containsKey(target)) {
-			 if(hero.getBackpack().contenu().getOrDefault(target, null)==null) {
-				 articles.get(choix).translate(target);
-				 if(hero.getBackpack().peutPlacer(articles.get(choix))){
-					 if(hero.or()>=0) {
-						 hero.getBackpack().placer(articles.get(choix));
-						 articles.remove(choix);
-						 width.remove(choix);
-						 height.remove(choix);
-						 choix=0;
-					 }
-				 }
-			 }
-		 }
-	  }
+//		if (x > sacOriginX && x <= sacOriginX + sacPixelWidth &&
+//		        y > sacOriginY && y <= sacOriginY + sacPixelHeight) {
+//		 int gridX = (x - sacOriginX) / CELL_SIZE;
+//		 int gridY = (y - sacOriginY) / CELL_SIZE;
+//		 
+//		 Coord target = new Coord(gridX, gridY);
+//		 if(articles.isEmpty()) return;
+//		 if(hero.getBackpack().contenu().containsKey(target)) {
+//			 if(hero.getBackpack().contenu().getOrDefault(target, null)==null) {
+//				 articles.get(choix).translate(target);
+//				 if(hero.getBackpack().peutPlacer(articles.get(choix))){
+//					 if(hero.or()>=0) {
+//						 hero.getBackpack().placer(articles.get(choix));
+//						 articles.remove(choix);
+//						 width.remove(choix);
+//						 height.remove(choix);
+//						 choix=0;
+//					 }
+//				 }
+//			 }
+//		 }
+//	  }
+		handleBackpackClick(x, y);
 	    /*
 	    int startX = 60;
 	    int startY = 360;
@@ -410,6 +444,130 @@ public class Game_Tresor implements Ecran{
 		  } finally {
 		    g.setTransform(oldTx);
 		  }
+		}
+	  
+	  //ver2
+	  
+	  public void handleKeyboard(KeyboardEvent k) {
+		  Objects.requireNonNull(k);
+		  if (heldWeapon == null) return;
+
+		  if (k.action() == KeyboardEvent.Action.KEY_PRESSED && k.key() == KeyboardEvent.Key.R) {
+		    heldWeapon.rotation();
+		  }
+		}
+	  
+	  
+	  private void clearHeld() {
+		  heldWeapon = null;
+		  heldOldOffset = null;
+		  heldOldForme = null;
+		  heldOldRot = 0;
+		  heldFromShop = false;
+		  heldShopIndex = -1;
+		}
+	  
+	  private void restoreHeldWeapon(Backpack bp) {
+		  // 恢复形状
+		  heldWeapon.forme().clear();
+		  heldWeapon.forme().addAll(heldOldForme);
+
+		  // 恢复旋转计数
+		  heldWeapon.setRotationQuarterTurns(heldOldRot);
+
+		  // 恢复位置
+		  heldWeapon.translate(heldOldOffset);
+
+		  // 如果是从背包拿起的，要放回背包
+		  if (!heldFromShop) {
+		    bp.placer(heldWeapon);
+		  }
+		  clearHeld();
+		}
+	  
+	  
+	  private void handleBackpackClick(int x, int y) {
+		  int backpackPixelWidth  = GRID_WIDTH  * CELL_SIZE;
+		  int backpackPixelHeight = GRID_HEIGHT * CELL_SIZE;
+		  int backpackOriginX = (Game.windowWidth()  - backpackPixelWidth)  / 2;
+		  int backpackOriginY = (Game.windowHeight() - backpackPixelHeight) / 2;
+
+		  var bp = hero.getBackpack();
+
+		  // 点击在背包外：如果手上有东西 -> 取消（恢复）
+		  if (x < backpackOriginX || x >= backpackOriginX + backpackPixelWidth ||
+		      y < backpackOriginY || y >= backpackOriginY + backpackPixelHeight) {
+		    if (heldWeapon != null) {
+		      restoreHeldWeapon(bp);
+		    }
+		    return;
+		  }
+
+		  int gridX = (x - backpackOriginX) / CELL_SIZE;
+		  int gridY = (y - backpackOriginY) / CELL_SIZE;
+		  Coord cell = new Coord(gridX, gridY);
+
+		  // 1) 手上没东西：点背包里的武器 -> 拿起
+		  if (heldWeapon == null) {
+		    Item clicked = bp.getItemAt(cell);
+		    if (clicked instanceof Weapon w) {
+		      heldWeapon = w;
+		      heldFromShop = false;
+
+		      heldOldOffset = w.offsetCoord();
+		      heldOldForme  = new java.util.ArrayList<>(w.forme());
+		      heldOldRot    = w.rotationQuarterTurns();
+
+		      bp.retirer(w);   // 从背包里拿起（临时移除）
+		    }
+		    return;
+		  }
+
+		  // 2) 手上有武器：尝试放到 cell
+		  heldWeapon.translate(cell);
+
+		  if (!bp.peutPlacer(heldWeapon)) {
+		    // 放不下：恢复 translate（但仍保持“拿着”状态）
+		    heldWeapon.translate(heldOldOffset);
+		    return;
+		  }
+
+		  // 放得下：分两种情况
+		  if (!heldFromShop) {
+		    // (A) 背包里拿起的武器：直接放下
+		    bp.placer(heldWeapon);
+		    clearHeld();
+		    return;
+		  }
+
+		  // (B) 商店里拿起的武器：需要买得起才放下 + 从商店移除
+		  int price = heldWeapon.price();
+		  if (hero.or() < 0) {
+		    // 买不起：不放下，恢复 translate
+		    heldWeapon.translate(heldOldOffset);
+		    return;
+		  }
+
+		  // 真正购买
+		  hero.useOr(0);
+		  bp.placer(heldWeapon);
+
+		  // 从商店列表移除（用 heldShopIndex 保证删对）
+		  int idx = heldShopIndex;
+		  if (idx >= 0 && idx < articles.size()) {
+		    articles.remove(idx);
+		    if (idx < width.size())  width.remove(idx);
+		    if (idx < height.size()) height.remove(idx);
+		  }
+
+		  // choix 也修正到合法范围
+		  if (articles.isEmpty()) {
+		    choix = 0;
+		  } else {
+		    choix = Math.min(choix, articles.size() - 1);
+		  }
+
+		  clearHeld();
 		}
 
 }

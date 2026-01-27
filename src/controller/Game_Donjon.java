@@ -95,7 +95,7 @@ public class Game_Donjon implements Ecran {
 	public void exit() {System.exit(0);}
 	
 	public void afficheSac(Graphics2D g) {
-		
+
 		g.setColor(Color.RED);
 	    g.fillRect(exit.x(), exit.y(), exit.width(), exit.height());
 	    g.setColor(Color.WHITE);
@@ -180,6 +180,11 @@ public class Game_Donjon implements Ecran {
 	        
 	        
 	        drawWeaponImage(g, i, px, py);
+	        if(i.name().equals("Gold")) {
+	        	g.setColor(Color.WHITE);
+	    	    g.setFont(new Font("Arial", Font.PLAIN, 18));
+	    	    g.drawString(""+hero.or(), px, py+60);
+	        }
 //	        if(i.image()!=null) {
 //	        	//g.drawImage(i.image(), px, py, CELL_SIZE, CELL_SIZE, null);
 //	        	
@@ -196,9 +201,9 @@ public class Game_Donjon implements Ecran {
 	    	
 	    }
 	    
-	    g.setColor(Color.WHITE);
-	    g.setFont(new Font("Arial", Font.PLAIN, 18));
-	    g.drawString(""+hero.or(), backpackOriginX+CELL_SIZE, backpackOriginY+2*CELL_SIZE+50);
+//	    g.setColor(Color.WHITE);
+//	    g.setFont(new Font("Arial", Font.PLAIN, 18));
+//	    g.drawString(""+hero.or(), backpackOriginX+CELL_SIZE, backpackOriginY+2*CELL_SIZE+50);
 	    
 
 	        //int gx = c.x();
@@ -638,7 +643,7 @@ public class Game_Donjon implements Ecran {
 			      case HEALER -> { hero.heal(Dice.roll(3, 10)); }
 			      case GATE -> { 
 			    	  //donjon.moveEtape();
-			    	  if(donjon.moveEtape()==3) {game.goToGagne();/*System.exit(0);*/}
+			    	  if(donjon.etape()==donjon.maxEtape||donjon.moveEtape()==3) {game.goToGagne();/*System.exit(0);*/}
 			    	  }
 			      case MERCHANT -> { game.goToMarket(); }
 			      case TREASURE -> { game.goToTresor(); }

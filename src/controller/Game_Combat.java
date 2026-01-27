@@ -153,6 +153,7 @@ public class Game_Combat implements Ecran {
 //		}
 		
 		if(state==CombatState.FINISHED) {
+			combat.getHero().addOr(Dice.roll(5, 15));
 			combat.getHero().expup();
 			if(combat.getHero().testLevelUp()==1) {
 				game.goTolvup();

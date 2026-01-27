@@ -315,6 +315,17 @@ public class Backpack {
     	};
     }
     
+    public static boolean isweapon(Item i) {
+    	Objects.requireNonNull(i);
+    	return switch(i) {
+    	case ItemMaldiction m ->false;
+    	case Weapon w -> true;
+    	case Argent a -> false;
+    	case Or o -> false;
+    	case Gold g -> false;
+    	};
+    }
+    
     public void decmal() {
     	contenu.entrySet()
     	.stream()

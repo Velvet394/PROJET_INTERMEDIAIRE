@@ -19,7 +19,14 @@ public class Generation {
 		var num=Dice.roll(1, 5);//nombres des ennemis max [1,5] tous inclus
 		ArrayList<Ennemi> list=new ArrayList<>();
 		for(int i=0;i<num;i++) {
-			list.add(new Ennemi(EnnemisBase.templates.get(Dice.roll(0, EnnemisBase.NUMENN-1))));
+			int j=Dice.roll(0, 100);
+			if(j<75) {
+				list.add(new Ennemi(EnnemisBase.templates.get(Dice.roll(0, 1))));
+			}
+			else if(j<95) {
+				list.add(new Ennemi(EnnemisBase.templates.get(Dice.roll(2, 3))));
+			}
+			else{list.add(new Ennemi(EnnemisBase.templates.get(Dice.roll(4, 5))));}
 		}
 		return list;
 	}
@@ -68,8 +75,8 @@ public class Generation {
 
 	    // RoomBase 里你的模板顺序是：
 	    // 0 ENEMY, 1 TREASURE, 2 MERCHANT, 3 HEALER, 4 EMPTY, 5 GATE, 6 EXIT (noublier pas les nouvelle room comme decmal)
-	    final int IDX_GATE = 5;
-	    final int IDX_EXIT = 6;
+	    final int IDX_GATE = RoomBase.NUMROOM - 2;
+	    final int IDX_EXIT = RoomBase.NUMROOM - 1;
 	    final int NORMAL_COUNT = RoomBase.NUMROOM - 2; // 只随机 0..4，不包含 GATE/EXIT
 
 	    // ---- 随机选出 1 个 EXIT + 2 个 GATE 的坐标（确保互不相同）----

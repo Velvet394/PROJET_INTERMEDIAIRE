@@ -18,7 +18,7 @@ public class Donjon {
      * Updates the current floor in the Dungeon 
      * */
     public int moveEtape() {
-    	if(etape==maxEtape) {
+    	if(etape>=maxEtape) {
     		//Jeu.jeuTermine();
     		return 3;
     	}
@@ -34,7 +34,7 @@ public class Donjon {
      * Gets the current floor of the dungeon
      * */
     public Etape getetape() {
-    	if(etape>=maxEtape) {
+    	if(etape>maxEtape) {
     		throw new IllegalArgumentException("etape error");
     	}
     	

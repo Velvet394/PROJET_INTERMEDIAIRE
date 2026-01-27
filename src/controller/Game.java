@@ -1,5 +1,6 @@
 package controller;
 
+
 import java.awt.Color;
 
 import com.github.forax.zen.*;
@@ -63,8 +64,10 @@ public class Game {
     }
     
     public void goToGagne() {
-    	GagneEcran=new Game_Gagne(this);
-    	currentEcran=GagneEcran;
+//    	GagneEcran=new Game_Gagne(this);
+//    	currentEcran=GagneEcran;
+    	GagneEcran = new Game_Gagne(this, hero);
+    	currentEcran = GagneEcran;
     }
 
     public void start() {
