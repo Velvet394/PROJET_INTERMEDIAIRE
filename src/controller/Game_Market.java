@@ -260,7 +260,6 @@ public class Game_Market implements Ecran{
 	      return;
 	    }
 	    initExit();
-	    
 	    int x=p.location().x();
 		int y=p.location().y();
 	    
@@ -271,6 +270,7 @@ public class Game_Market implements Ecran{
 
 	    // Bouton "Retour"
 
+	    if(articles.isEmpty()||width.isEmpty()||height.isEmpty()) return;
 
 	    // Détection clic sur un item (coordonnées cohérentes avec renderMerchant)
 	    int ox=180+30;
@@ -300,18 +300,18 @@ public class Game_Market implements Ecran{
 		 int gridY = (y - sacOriginY) / CELL_SIZE;
 		 
 		 Coord target = new Coord(gridX, gridY);
-		 
+		 if(articles.isEmpty()) return;
 		 if(hero.getBackpack().contenu().containsKey(target)) {
 			 if(hero.getBackpack().contenu().getOrDefault(target, null)==null) {
 				 articles.get(choix).translate(target);
 				 if(hero.getBackpack().peutPlacer(articles.get(choix))){
-					 if(hero.or()>=10) {
+					 if(hero.or()>=articles.get(choix).price()) {
 						 hero.getBackpack().placer(articles.get(choix));
 						 articles.remove(choix);
 						 width.remove(choix);
 						 height.remove(choix);
 						 choix=0;
-						 hero.useOr(10);
+						 hero.useOr(articles.get(choix).price());
 					 }
 				 }
 			 }

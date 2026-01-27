@@ -273,6 +273,8 @@ public class Game_Tresor implements Ecran{
 
 	    // Bouton "Retour"
 
+	    
+	    if(articles.isEmpty()||width.isEmpty()||height.isEmpty()) return;
 
 	    // Détection clic sur un item (coordonnées cohérentes avec renderMerchant)
 	    int ox=180+30;
@@ -302,7 +304,7 @@ public class Game_Tresor implements Ecran{
 		 int gridY = (y - sacOriginY) / CELL_SIZE;
 		 
 		 Coord target = new Coord(gridX, gridY);
-		 
+		 if(articles.isEmpty()) return;
 		 if(hero.getBackpack().contenu().containsKey(target)) {
 			 if(hero.getBackpack().contenu().getOrDefault(target, null)==null) {
 				 articles.get(choix).translate(target);

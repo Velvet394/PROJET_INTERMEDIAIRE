@@ -465,13 +465,18 @@ public class Game_Donjon implements Ecran {
 	            int py = dungeonOriginY + gy * ROOM_SIZE;  // 屏幕上的 y
 
 	            // 用 (px, py) 作为这个房间格子的左上角
-	            g.setColor(Color.DARK_GRAY);
-	            g.fillRect(px, py, ROOM_SIZE, ROOM_SIZE);
+	            if(donjon.getetape().getSalles().get(new Coord(gx, gy)).estVisite()) {
+	            	g.setColor(Color.BLACK);
+    	            g.fillRect(px, py, ROOM_SIZE, ROOM_SIZE);
+	            }
+	            else{g.setColor(Color.DARK_GRAY);
+	            g.fillRect(px, py, ROOM_SIZE, ROOM_SIZE);}
 
 	            g.setColor(Color.WHITE);
 	            g.drawRect(px, py, ROOM_SIZE, ROOM_SIZE);
 	            
-	            
+
+	    	            
 	            if(donjon.getetape().sallesNeighborNonVisite().containsKey(new Coord(gx, gy))) {
 	            	if(donjon.getetape().sallesNeighborNonVisite().get(new Coord(gx, gy)).getType()==RoomType.ENEMY) {
 	            		if (ImagesBase.ennemi != null) {
@@ -633,12 +638,12 @@ public class Game_Donjon implements Ecran {
 			      case HEALER -> { hero.heal(Dice.roll(3, 10)); }
 			      case GATE -> { 
 			    	  //donjon.moveEtape();
-			    	  if(donjon.moveEtape()==3) {System.exit(0);}
+			    	  if(donjon.moveEtape()==3) {game.goToGagne();/*System.exit(0);*/}
 			    	  }
 			      case MERCHANT -> { game.goToMarket(); }
 			      case TREASURE -> { game.goToTresor(); }
 			      case DECMAL -> { hero.getBackpack().decmal();}
-			      case EXIT -> { System.exit(0); }
+			      case EXIT -> { game.goToMenu();/*System.exit(0);*/ }
 			      default -> { }
 			    }
 			  }

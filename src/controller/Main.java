@@ -26,7 +26,8 @@ public class Main {
 	    	        List.<Coord>of(new Coord(0,0)), // 形状只有 1 格
 	    	        List.<Effect>of(),          // 没有效果
 	    	        "./image/weapons/gold.png",  // 你可以改路径
-	    	        (h,c)->{}
+	    	        (h,c)->{},
+	    	        0
 	    	    );
 	     
 	     Hero hero = new Hero();

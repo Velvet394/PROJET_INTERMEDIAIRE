@@ -193,9 +193,14 @@ public class Game_Combat implements Ecran {
 		            heldWeapon = null;
 		        }
 
-		        if (combat.estCombatTermine() != 1) {
+		        if (combat.estCombatTermine() ==3 ) {
 		            state = CombatState.FINISHED;
-		        } else {
+		            game.goToMort();
+		        }
+		        if (combat.estCombatTermine() == 2) {
+		            state = CombatState.FINISHED;
+		        }
+		        else {
 		            state = CombatState.HERO_TURN;
 		            combat.getHero().rechargerCombat();
 		        }
@@ -335,10 +340,17 @@ public class Game_Combat implements Ecran {
 		     w.utiliser(combat.getHero(), combat.getEnnemi(ptr), combat);
 		     combat.RefreshListEnnemis();
 		     
-		     if (combat.estCombatTermine() != 1 || combat.getEnnemis().isEmpty()) {
-		    	    state = CombatState.FINISHED;
-		    	    return;
-		    	}
+		   //  if (combat.estCombatTermine() != 1 || combat.getEnnemis().isEmpty()) {
+		   // 	    state = CombatState.FINISHED;
+		   // 	    return;
+		   // 	}
+		     if (combat.estCombatTermine() ==3 ) {
+		            state = CombatState.FINISHED;
+		            game.goToMort();
+		        }
+		        if (combat.estCombatTermine() == 2) {
+		            state = CombatState.FINISHED;
+		        }
 		     
 		     ptr = 0;
 		 }

@@ -31,7 +31,9 @@ public final class Weapon implements Item {
 	
 	BiConsumer<Hero,Integer> interaction;
 	
-	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e,String imagePath,BiConsumer<Hero,Integer> inter) {
+	private final int price;
+	
+	public Weapon (String n, int c, int m, boolean b, List<Coord> f, List<Effect> e,String imagePath,BiConsumer<Hero,Integer> inter,int p) {
 		Objects.requireNonNull(f);
 		Objects.requireNonNull(e);
 		name=n;
@@ -41,6 +43,7 @@ public final class Weapon implements Item {
 		forme=new ArrayList<>(Objects.requireNonNull(f));
 		effects=new ArrayList<>(Objects.requireNonNull(e));
 		interaction=inter;
+		price=p;
 		
 		 try {
 	            image = ImageIO.read(new File(imagePath));
@@ -61,6 +64,7 @@ public final class Weapon implements Item {
 		interaction=w.interaction;
 		image=w.image;
 		rotationQuarterTurns=w.rotationQuarterTurns;
+		price=w.price;
 	}
 	
 	 public String nom() { return name; }
@@ -208,4 +212,6 @@ public final class Weapon implements Item {
 		  rotationQuarterTurns = t & 3;
 		}
 	 public int rotationQuarterTurns() { return rotationQuarterTurns; }
+	 
+	 public int price() {return price;}
 }

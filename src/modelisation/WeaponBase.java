@@ -8,12 +8,13 @@ import java.util.List;
  * */
 public class WeaponBase {
 	public static final List<Weapon> templates = new ArrayList<>();
-	public static final int NUMITM = 3;
+	public static final int NUMITM = 4;
 	
 	static {
-        templates.add(new Weapon("Durandal", 2, 5,false,List.<Coord>of(new Coord(0,0),new Coord(0,1),new Coord(0,2)),List.<Effect>of(new Effect_Puncture(12, 4), new Effect_Heal(4)),"./image/weapons/durantal.png",(h,c)->h.intermana(c*5))); // name, cost, manacost, estconsomme, listforme, listeffect
-        templates.add(new Weapon("Shield", 1, 0,false,List.<Coord>of(new Coord(0,0),new Coord(0,1),new Coord(1,0),new Coord(1,1)),List.<Effect>of(new Effect_Def(4)),"./image/weapons/shield.png",(h,c)->h.interhp(c*5)));
-        templates.add(new Weapon("ManaStone", 0, 0,true,List.<Coord>of(new Coord(0,0),new Coord(0,1)),List.<Effect>of(new Effect_Charge(10)),"./image/weapons/manastone.png",(h,c)->{}));
+        templates.add(new Weapon("Durandal", 2, 1,false,List.<Coord>of(new Coord(0,0),new Coord(0,1),new Coord(0,2)),List.<Effect>of(new Effect_Puncture(12, 4), new Effect_Heal(4)),"./image/weapons/durantal.png",(h,c)->h.intermana(c*5),20)); // name, cost, manacost, estconsomme, listforme, listeffect
+        templates.add(new Weapon("Shield", 1, 0,false,List.<Coord>of(new Coord(0,0),new Coord(0,1),new Coord(1,0),new Coord(1,1)),List.<Effect>of(new Effect_Def(4)),"./image/weapons/shield.png",(h,c)->h.interhp(c*5),15));
+        templates.add(new Weapon("ManaStone", 0, 0,true,List.<Coord>of(new Coord(0,0),new Coord(0,1)),List.<Effect>of(new Effect_Charge(10)),"./image/weapons/manastone.png",(h,c)->{},5));
+        templates.add(new Weapon("Rubyciel", 2, 10,false,List.<Coord>of(new Coord(0,0)),List.<Effect>of(new Effect_Aoe(20),new Effect_Heal(10)),"./image/weapons/rubyciel.png",(h,c)->h.interhp(c*3),20));
 	}
 }
 //path image: "./image/weapons/x"

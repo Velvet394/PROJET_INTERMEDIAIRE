@@ -21,6 +21,8 @@ public class Game {
     private final Ecran menuEcran;
     private Ecran tresorEcran;
     private Ecran lvupEcran;
+    private Ecran MortEcran;
+    private Ecran GagneEcran;
 
 
     private Ecran currentEcran;
@@ -54,6 +56,15 @@ public class Game {
     public void goTolvup() {
     	lvupEcran=new Game_lvup(this, hero);
     	currentEcran=lvupEcran;
+    }
+    public void goToMort() {
+    	MortEcran=new Game_Mort(this);
+    	currentEcran=MortEcran;
+    }
+    
+    public void goToGagne() {
+    	GagneEcran=new Game_Gagne(this);
+    	currentEcran=GagneEcran;
     }
 
     public void start() {
