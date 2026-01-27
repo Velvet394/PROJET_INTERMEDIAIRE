@@ -66,5 +66,11 @@ public record Argent(int num,Coord set) implements Item {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void interaction(Hero h, Integer i) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Gold implements Item {
+public final class Gold implements Item {
 	private int num;
 	private Coord set;
 	
@@ -70,6 +70,13 @@ public class Gold implements Item {
 	
 	public int num() {
 		return num;
+	}
+
+
+	@Override
+	public void interaction(Hero h, Integer i) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
