@@ -262,9 +262,10 @@ public class Hero {
     	or += a;
     }
     
-    public void useOr(int a) {
-    	if(a>or) {return;}
+    public int useOr(int a) {
+    	if(a>or) {return 0;}
     	or-=a;
+    	return 1;
     }
     
     public void tresor(List<Item> list) {}

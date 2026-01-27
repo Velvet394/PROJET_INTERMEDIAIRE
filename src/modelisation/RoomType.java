@@ -9,5 +9,6 @@ public enum RoomType {
     EXIT,
     GATE,
     EVENT, 
-    HALLWAY
+    HALLWAY,
+    DECMAL
 }

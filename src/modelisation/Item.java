@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 /**
  * Base interface for all items that can be stored in the backpack.
  */
-public interface Item {
+public sealed interface Item permits Argent, Or, Gold, ItemMaldiction, Weapon {
 	List<Coord> forme();
 	/**
 	   * Returns the current offset (top-left absolute coordinate) in the backpack.

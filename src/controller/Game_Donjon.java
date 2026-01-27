@@ -527,6 +527,15 @@ public class Game_Donjon implements Ecran {
 		                    g.drawString("T", px + 10, py + 20); 
 		                }
 		            }
+	            	
+		            else if(donjon.getetape().sallesNeighborNonVisite().get(new Coord(gx, gy)).getType()==RoomType.DECMAL) {
+		            	if (ImagesBase.demal != null) {
+		                    g.drawImage(ImagesBase.demal, px, py, ROOM_SIZE, ROOM_SIZE, null);
+		                } else {
+		                    g.setColor(Color.RED);
+		                    g.drawString("D", px + 10, py + 20); 
+		                }
+		            }
 		            
 		            
 		            else {
@@ -622,9 +631,13 @@ public class Game_Donjon implements Ecran {
 			      case ENEMY -> { game.goToCombat(); }
 			      case EMPTY -> { }
 			      case HEALER -> { hero.heal(Dice.roll(3, 10)); }
-			      case GATE -> { donjon.moveEtape(); }
+			      case GATE -> { 
+			    	  //donjon.moveEtape();
+			    	  if(donjon.moveEtape()==3) {System.exit(0);}
+			    	  }
 			      case MERCHANT -> { game.goToMarket(); }
 			      case TREASURE -> { game.goToTresor(); }
+			      case DECMAL -> { hero.getBackpack().decmal();}
 			      case EXIT -> { System.exit(0); }
 			      default -> { }
 			    }

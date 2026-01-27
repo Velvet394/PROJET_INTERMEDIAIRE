@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Represents a curse item placed in the backpack.
  */
-public class ItemMaldiction implements Item {
+public final class ItemMaldiction implements Item {
 	private final String name="Maldiction";
 	private final List<Coord> forme;
 	private Coord offsetCoord=new Coord(0,0);

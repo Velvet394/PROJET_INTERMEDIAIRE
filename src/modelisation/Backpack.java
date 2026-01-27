@@ -303,4 +303,24 @@ public class Backpack {
     	    }
     	  }
     	}
+    
+    public static boolean ismal(Item i) {
+    	Objects.requireNonNull(i);
+    	return switch(i) {
+    	case ItemMaldiction m ->true;
+    	case Weapon w -> false;
+    	case Argent a -> false;
+    	case Or o -> false;
+    	case Gold g -> false;
+    	};
+    }
+    
+    public void decmal() {
+    	contenu.entrySet()
+    	.stream()
+    	.filter(s->s.getValue()!=null)
+    	.filter(s->Backpack.ismal(s.getValue()))
+    	.forEach(e->e.setValue(null))
+    	;
+    }
 }

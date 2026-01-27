@@ -17,13 +17,17 @@ public class Donjon {
     /**
      * Updates the current floor in the Dungeon 
      * */
-    public void moveEtape() {
+    public int moveEtape() {
     	if(etape==maxEtape) {
-    		Jeu.jeuTermine();
-    		return;
+    		//Jeu.jeuTermine();
+    		return 3;
     	}
-    	if(!etapes.containsKey(etape+1)) {Jeu.jeuTermine();}
+    	if(!etapes.containsKey(etape+1)) {
+    		//Jeu.jeuTermine();
+    		return 3;
+    		}
     	etape++;
+    	return 1;
     }
     
     /**

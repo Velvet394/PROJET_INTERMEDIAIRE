@@ -67,23 +67,24 @@ public class Generation {
 	    var map = new HashMap<Coord, Room>();
 
 	    // RoomBase 里你的模板顺序是：
-	    // 0 ENEMY, 1 TREASURE, 2 MERCHANT, 3 HEALER, 4 EMPTY, 5 GATE, 6 EXIT
+	    // 0 ENEMY, 1 TREASURE, 2 MERCHANT, 3 HEALER, 4 EMPTY, 5 GATE, 6 EXIT (noublier pas les nouvelle room comme decmal)
 	    final int IDX_GATE = 5;
 	    final int IDX_EXIT = 6;
 	    final int NORMAL_COUNT = RoomBase.NUMROOM - 2; // 只随机 0..4，不包含 GATE/EXIT
 
 	    // ---- 随机选出 1 个 EXIT + 2 个 GATE 的坐标（确保互不相同）----
 	    Coord exit = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));
+	    while(exit.equals(new Coord(0,0))) {exit = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));}
 
 	    Coord gate1;
 	    do {
 	        gate1 = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));
-	    } while (gate1.equals(exit));
+	    } while (gate1.equals(exit)||gate1.equals(new Coord(0,0)));
 
 	    Coord gate2;
 	    do {
 	        gate2 = new Coord(Dice.roll(0, W - 1), Dice.roll(0, H - 1));
-	    } while (gate2.equals(exit) || gate2.equals(gate1));
+	    } while (gate2.equals(exit) || gate2.equals(gate1)||gate2.equals(new Coord(0,0)));
 
 	    // ---- 填充整层 ----
 	    for (int i = 0; i < W; i++) {
@@ -96,7 +97,7 @@ public class Generation {
 	                map.put(c, new Room(RoomBase.templates.get(IDX_GATE)));
 	            } else {
 	                // 普通房间：只从 0..4 随机（不包含 GATE/EXIT）
-	                int idx = Dice.roll(0, NORMAL_COUNT - 1);
+	                int idx = Dice.roll(0, NORMAL_COUNT);
 	                map.put(c, new Room(RoomBase.templates.get(idx)));
 	            }
 	        }

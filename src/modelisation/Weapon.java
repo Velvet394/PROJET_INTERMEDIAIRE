@@ -16,7 +16,7 @@ import java.io.IOException;
  * Represents a weapon or usable item placed inside the backpack.
  * A weapon has a shape, a cost, optional mana consumption and applies effects.
  */
-public class Weapon implements Item {
+public final class Weapon implements Item {
 	private final String name;
 	private final int cost;
 	private final int mana;
